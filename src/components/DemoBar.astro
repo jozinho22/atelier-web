@@ -1,6 +1,8 @@
 ---
 // Bandeau affiché au-dessus des modèles de démonstration
 // pour revenir au site principal.
+import { withBase } from '../lib/paths';
+
 interface Props {
   label: string;
 }
@@ -10,9 +12,9 @@ const { label } = Astro.props;
 
 <div class="demo-bar">
   <div class="demo-bar-inner">
-    <a class="demo-back" href="/#modeles">← Atelier Web</a>
+    <a class="demo-back" href={withBase('#modeles')}>← Atelier Web</a>
     <p class="demo-label">Modèle de démonstration — {label}</p>
-    <a class="demo-cta" href="/#contact">Je veux ce site</a>
+    <a class="demo-cta" href={withBase('#contact')}>Je veux ce site</a>
   </div>
 </div>
 

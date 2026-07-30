@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import { withBase } from '../../lib/paths';
 
 const title = 'Modèle association sportive & culturelle — AS Les Cigales | Atelier Web';
 const description =
@@ -167,7 +168,7 @@ const actus = [
     <footer class="a-footer">
       <div class="wrap a-footer-inner">
         <p>© 2026 AS Les Cigales — Association loi 1901</p>
-        <p>Site réalisé par <a href="/">Atelier Web</a></p>
+        <p>Site réalisé par <a href={withBase()}>Atelier Web</a></p>
       </div>
     </footer>
   </div>

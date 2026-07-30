@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import { withBase } from '../../lib/paths';
 
 const title = "Modèle blog d'artiste — Claire Aubry, peintre | Atelier Web";
 const description =
@@ -167,7 +168,7 @@ const expos = [
     <footer class="r-footer">
       <div class="wrap r-footer-inner">
         <p>© 2026 Claire Aubry — Toutes les œuvres sont protégées</p>
-        <p>Site réalisé par <a href="/">Atelier Web</a></p>
+        <p>Site réalisé par <a href={withBase()}>Atelier Web</a></p>
       </div>
     </footer>
   </div>

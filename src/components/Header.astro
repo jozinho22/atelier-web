@@ -1,16 +1,18 @@
 ---
 // En-tête du site principal.
+import { withBase } from '../lib/paths';
+
 const links = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#modeles', label: 'Modèles' },
-  { href: '/#methode', label: 'Méthode' },
-  { href: '/#tarifs', label: 'Tarifs' },
+  { href: withBase('#services'), label: 'Services' },
+  { href: withBase('#modeles'), label: 'Modèles' },
+  { href: withBase('#methode'), label: 'Méthode' },
+  { href: withBase('#tarifs'), label: 'Tarifs' },
 ];
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label="Atelier Web — accueil">
+    <a class="brand" href={withBase()} aria-label="Atelier Web — accueil">
       <span class="brand-mark" aria-hidden="true"></span>
       Atelier<strong>Web</strong>
     </a>
@@ -21,7 +23,7 @@ const links = [
         ))}
       </ul>
     </nav>
-    <a class="btn btn-primary header-cta" href="/#contact">Discutons-en</a>
+    <a class="btn btn-primary header-cta" href={withBase('#contact')}>Discutons-en</a>
   </div>
 </header>
 

@@ -1,5 +1,7 @@
 ---
 // Pied de page du site principal.
+import { withBase } from '../lib/paths';
+
 const year = new Date().getFullYear();
 ---
 
@@ -14,10 +16,10 @@ const year = new Date().getFullYear();
     <nav class="footer-nav" aria-label="Pied de page">
       <p class="footer-heading">Modèles</p>
       <ul>
-        <li><a href="/modeles/association">Association sportive &amp; culturelle</a></li>
-        <li><a href="/modeles/batiment">Métiers du bâtiment</a></li>
-        <li><a href="/modeles/esthetique">Beauté &amp; bien-être</a></li>
-        <li><a href="/modeles/artiste">Blog d'artiste</a></li>
+        <li><a href={withBase('modeles/association')}>Association sportive &amp; culturelle</a></li>
+        <li><a href={withBase('modeles/batiment')}>Métiers du bâtiment</a></li>
+        <li><a href={withBase('modeles/esthetique')}>Beauté &amp; bien-être</a></li>
+        <li><a href={withBase('modeles/artiste')}>Blog d'artiste</a></li>
       </ul>
     </nav>
     <div class="footer-contact">
@@ -30,7 +32,7 @@ const year = new Date().getFullYear();
   </div>
   <div class="container footer-legal">
     <p>© {year} Atelier Web — Tous droits réservés.</p>
-    <a href="/mentions-legales">Mentions légales</a>
+    <a href={withBase('mentions-legales')}>Mentions légales</a>
   </div>
 </footer>
 

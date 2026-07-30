@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import { withBase } from '../../lib/paths';
 
 const title = 'Modèle métiers du bâtiment — Moreau Rénovation | Atelier Web';
 const description =
@@ -183,7 +184,7 @@ const realisations = [
     <footer class="b-footer">
       <div class="wrap b-footer-inner">
         <p>© 2026 Moreau Rénovation — SIRET 000 000 000 00000</p>
-        <p>Site réalisé par <a href="/">Atelier Web</a></p>
+        <p>Site réalisé par <a href={withBase()}>Atelier Web</a></p>
       </div>
     </footer>
   </div>

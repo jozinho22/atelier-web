@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { withBase } from '../lib/paths';
 
 const title = 'Atelier Web — Sites vitrines pour artisans, indépendants et associations';
 const description =
@@ -13,7 +14,7 @@ const jsonLd = {
   '@type': 'ProfessionalService',
   name: 'Atelier Web',
   description,
-  url: 'https://www.atelier-web.example',
+  url: new URL(withBase(), Astro.site).href,
   email: 'contact@atelier-web.example',
   telephone: '+33600000000',
   priceRange: '€€',
@@ -29,28 +30,28 @@ const metiers = [
 
 const modeles = [
   {
-    href: '/modeles/association',
+    href: withBase('modeles/association'),
     tag: 'Associations',
     name: 'Sport & culture',
     desc: 'Actualités, horaires des entraînements, adhésions : tout ce qu’un club doit montrer.',
     theme: 'assoc',
   },
   {
-    href: '/modeles/batiment',
+    href: withBase('modeles/batiment'),
     tag: 'Artisans',
     name: 'Métiers du bâtiment',
     desc: 'Un site solide comme vos chantiers : réalisations, zone d’intervention, devis en un clic.',
     theme: 'batiment',
   },
   {
-    href: '/modeles/esthetique',
+    href: withBase('modeles/esthetique'),
     tag: 'Beauté',
     name: 'Esthétique & bien-être',
     desc: 'Une vitrine douce et raffinée pour instituts, salons et praticiennes indépendantes.',
     theme: 'esthetique',
   },
   {
-    href: '/modeles/artiste',
+    href: withBase('modeles/artiste'),
     tag: 'Artistes',
     name: 'Blog & portfolio d’artiste',
     desc: 'Vos œuvres en pleine lumière, un journal de bord pour raconter votre démarche.',

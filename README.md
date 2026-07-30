@@ -35,10 +35,26 @@ npm run preview  # prévisualiser le build
 - HTML sémantique, un seul `h1` par page, `lang="fr"`
 - Polices auto-hébergées (Fontsource), zéro requête externe
 
-## Avant la mise en ligne — à personnaliser
+## Déploiement — GitHub Pages
 
-1. **Nom de domaine** : remplacer `https://www.atelier-web.example` dans
-   [astro.config.mjs](astro.config.mjs) et [public/robots.txt](public/robots.txt)
+Le site est déployé sur `https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/`
+par le workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml),
+déclenché à chaque push sur `main`.
+
+Prérequis (une seule fois) : dans le dépôt GitHub, **Settings → Pages →
+Source = « GitHub Actions »** (et non « Deploy from a branch », qui lance le
+pipeline Jekyll par défaut et échoue sur un projet Astro).
+
+Les liens internes passent par `withBase()` ([src/lib/paths.ts](src/lib/paths.ts))
+pour supporter le sous-chemin `/site-vitrine-ventes-de-sites-web/`. Le jour où le
+site aura son propre domaine : mettre à jour `site` et supprimer `base` dans
+[astro.config.mjs](astro.config.mjs) — les liens `withBase()` fonctionneront tels
+quels.
+
+## Avant la mise en ligne définitive — à personnaliser
+
+1. **Nom de domaine** : voir la section Déploiement ci-dessus
+   ([astro.config.mjs](astro.config.mjs) et [public/robots.txt](public/robots.txt))
 2. **Identité** : nom « Atelier Web », e-mail `contact@atelier-web.example` et
    téléphone `06 00 00 00 00` (présents dans le header, footer, page d'accueil
    et mentions légales)

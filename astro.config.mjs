@@ -2,10 +2,18 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// TODO : remplacer par le vrai nom de domaine avant la mise en ligne
-// (utilisé pour le sitemap, les URL canoniques et les balises Open Graph).
+// TODO : le jour où un vrai nom de domaine remplacera GitHub Pages,
+// mettre à jour `site` et supprimer `base` (utilisés pour le sitemap,
+// les URL canoniques, les balises Open Graph et les liens internes).
 export default defineConfig({
-  site: 'https://www.atelier-web.example',
+  site: 'https://jozinho22.github.io',
+  base: '/site-vitrine-ventes-de-sites-web',
   output: 'static',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // Avec `base`, l'intégration ajoute la racine sans slash final en plus
+      // de la page d'accueil : on écarte ce doublon qui redirige.
+      filter: (page) => page !== 'https://jozinho22.github.io/site-vitrine-ventes-de-sites-web',
+    }),
+  ],
 });

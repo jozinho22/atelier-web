@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import { withBase } from '../../lib/paths';
 
 const title = "Modèle beauté & bien-être — L'Écrin de Soi | Atelier Web";
 const description =
@@ -156,7 +157,7 @@ const temoignages = [
     <footer class="e-footer">
       <div class="wrap e-footer-inner">
         <p>© 2026 L'Écrin de Soi — Institut de beauté</p>
-        <p>Site réalisé par <a href="/">Atelier Web</a></p>
+        <p>Site réalisé par <a href={withBase()}>Atelier Web</a></p>
       </div>
     </footer>
   </div>

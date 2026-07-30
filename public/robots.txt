@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
 
-# TODO : remplacer par le vrai nom de domaine avant la mise en ligne.
-Sitemap: https://www.atelier-web.example/sitemap-index.xml
+# NB : sur GitHub Pages en sous-chemin, ce fichier n'est pas lu par les robots
+# (il faudrait qu'il soit à la racine de jozinho22.github.io). Il redeviendra
+# utile le jour où le site aura son propre nom de domaine — penser alors à
+# mettre à jour l'URL ci-dessous. En attendant, soumettre le sitemap
+# directement dans Google Search Console.
+Sitemap: https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/sitemap-index.xml
