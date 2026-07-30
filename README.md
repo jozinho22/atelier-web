@@ -46,10 +46,18 @@ Source = « GitHub Actions »** (et non « Deploy from a branch », qui lance le
 pipeline Jekyll par défaut et échoue sur un projet Astro).
 
 Les liens internes passent par `withBase()` ([src/lib/paths.ts](src/lib/paths.ts))
-pour supporter le sous-chemin `/site-vitrine-ventes-de-sites-web/`. Le jour où le
-site aura son propre domaine : mettre à jour `site` et supprimer `base` dans
-[astro.config.mjs](astro.config.mjs) — les liens `withBase()` fonctionneront tels
-quels.
+pour supporter le sous-chemin `/site-vitrine-ventes-de-sites-web/`.
+
+Le même code se déploie aussi sur un domaine personnalisé, **sans toucher aux
+chemins** : il suffit de définir `SITE_URL` au moment du build et le site est
+généré pour la racine du domaine.
+
+```bash
+SITE_URL=https://www.mondomaine.fr npm run build
+```
+
+Sans `SITE_URL`, le build vise GitHub Pages (comportement par défaut, utilisé
+par le workflow).
 
 ## Avant la mise en ligne définitive — à personnaliser
 

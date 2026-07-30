@@ -12,7 +12,9 @@ interface Props {
 }
 
 const { title, description, jsonLd } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Slash final systématique : c'est l'URL réellement servie (pages en
+// dossiers) et celle listée dans le sitemap.
+const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
 ---
 
 <!doctype html>
