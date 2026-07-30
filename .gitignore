@@ -1,0 +1,15 @@
+# Dépendances
+node_modules/
+
+# Build
+dist/
+
+# Caches Astro
+.astro/
+
+# Réglages locaux Claude Code (propres à chaque machine)
+.claude/settings.local.json
+
+# Divers
+*.log
+.DS_Store

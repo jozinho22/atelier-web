@@ -1,0 +1,1065 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Atelier Web — Sites vitrines pour artisans, indépendants et associations';
+const description =
+  "Création de sites vitrines élégants et rapides pour professionnels et associations : soyez visible sur Google et joignable en un clic. Devis gratuit, à partir de 490 €.";
+
+// Données structurées schema.org pour le référencement local.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Atelier Web',
+  description,
+  url: 'https://www.atelier-web.example',
+  email: 'contact@atelier-web.example',
+  telephone: '+33600000000',
+  priceRange: '€€',
+  areaServed: 'France',
+  serviceType: 'Création de sites vitrines',
+};
+
+const metiers = [
+  'Plombier', 'Club de foot', 'Institut de beauté', 'Peintre', 'Électricien',
+  'École de musique', 'Coiffeuse', 'Maçon', 'Céramiste', 'Association de quartier',
+  'Photographe', 'Menuisier', 'Prof de yoga', 'Chorale', 'Carreleur',
+];
+
+const modeles = [
+  {
+    href: '/modeles/association',
+    tag: 'Associations',
+    name: 'Sport & culture',
+    desc: 'Actualités, horaires des entraînements, adhésions : tout ce qu’un club doit montrer.',
+    theme: 'assoc',
+  },
+  {
+    href: '/modeles/batiment',
+    tag: 'Artisans',
+    name: 'Métiers du bâtiment',
+    desc: 'Un site solide comme vos chantiers : réalisations, zone d’intervention, devis en un clic.',
+    theme: 'batiment',
+  },
+  {
+    href: '/modeles/esthetique',
+    tag: 'Beauté',
+    name: 'Esthétique & bien-être',
+    desc: 'Une vitrine douce et raffinée pour instituts, salons et praticiennes indépendantes.',
+    theme: 'esthetique',
+  },
+  {
+    href: '/modeles/artiste',
+    tag: 'Artistes',
+    name: 'Blog & portfolio d’artiste',
+    desc: 'Vos œuvres en pleine lumière, un journal de bord pour raconter votre démarche.',
+    theme: 'artiste',
+  },
+];
+
+const etapes = [
+  {
+    num: '01',
+    title: 'On échange',
+    desc: 'Un appel ou un café pour comprendre votre activité, vos clients et ce que votre site doit raconter.',
+  },
+  {
+    num: '02',
+    title: 'Je conçois',
+    desc: 'Maquette sur mesure à partir du modèle qui vous plaît : vos couleurs, vos photos, vos mots.',
+  },
+  {
+    num: '03',
+    title: 'On ajuste',
+    desc: 'Vous relisez, on affine ensemble. Deux allers-retours inclus, sans jargon technique.',
+  },
+  {
+    num: '04',
+    title: 'On met en ligne',
+    desc: 'Nom de domaine, hébergement, référencement Google : je m’occupe de tout, vous êtes visible.',
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <Header />
+  <main>
+    <!-- ============================== HERO ============================== -->
+    <section class="hero" aria-label="Introduction">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+        <span class="blob blob-3"></span>
+        <span class="hero-grid"></span>
+      </div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="hero-kicker">Création de sites vitrines</p>
+          <h1 class="hero-title">
+            Un site qui donne envie<br />
+            <em>de vous appeler.</em>
+          </h1>
+          <p class="hero-lede">
+            Artisans, indépendants, associations : je crée des sites vitrines élégants et
+            rapides, pensés pour que vos clients vous trouvent sur Google — et vous
+            contactent en un clic.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#modeles">Voir les modèles</a>
+            <a class="btn btn-ghost hero-ghost" href="#contact">Demander un devis gratuit</a>
+          </div>
+          <ul class="hero-proof" aria-label="Points forts">
+            <li>Livré en 3 semaines</li>
+            <li>Optimisé Google</li>
+            <li>Sans abonnement obligatoire</li>
+          </ul>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="mock-browser">
+            <div class="mock-chrome">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="mock-body">
+              <div class="mock-hero"></div>
+              <div class="mock-row">
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+                <div class="mock-card"></div>
+              </div>
+              <div class="mock-lines">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+          <div class="float-chip chip-call">📞 Appeler</div>
+          <div class="float-chip chip-seo">1<sup>re</sup> page Google</div>
+          <div class="float-chip chip-star">★★★★★</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ MARQUEE ============================= -->
+    <section class="marquee-strip" aria-hidden="true">
+      <div class="marquee-track">
+        {[...metiers, ...metiers].map((m) => <span class="marquee-item">{m}</span>)}
+      </div>
+    </section>
+
+    <!-- =========================== SERVICES ============================ -->
+    <section id="services" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Pourquoi un site vitrine ?</p>
+          <h2 class="section-title">Votre meilleure carte de visite, ouverte 24 h/24</h2>
+          <p class="section-lede">
+            Pas d'usine à gaz : un site simple, beau et efficace, qui fait exactement ce
+            que vos clients attendent de lui.
+          </p>
+        </div>
+        <div class="service-grid">
+          <article class="service-card reveal">
+            <div class="service-icon" aria-hidden="true">🔍</div>
+            <h3>Être trouvé sur Google</h3>
+            <p>
+              Référencement soigné dès la conception : votre activité, votre ville, vos
+              services. Vos futurs clients vous cherchent — ils vous trouvent.
+            </p>
+          </article>
+          <article class="service-card reveal" style="--reveal-delay: 0.1s">
+            <div class="service-icon" aria-hidden="true">📱</div>
+            <h3>Être joint en un clic</h3>
+            <p>
+              Téléphone, e-mail, itinéraire : chaque page guide le visiteur vers le
+              contact. Sur mobile, un clic suffit pour vous appeler.
+            </p>
+          </article>
+          <article class="service-card reveal" style="--reveal-delay: 0.2s">
+            <div class="service-icon" aria-hidden="true">✨</div>
+            <h3>Faire bonne impression</h3>
+            <p>
+              Un design sur mesure, à votre image. Parce qu'avant de pousser votre porte,
+              vos clients visitent votre site.
+            </p>
+          </article>
+          <article class="service-card reveal" style="--reveal-delay: 0.3s">
+            <div class="service-icon" aria-hidden="true">⚡</div>
+            <h3>Rapide et sans entretien</h3>
+            <p>
+              Sites statiques ultra-rapides, sécurisés par conception : pas de mises à
+              jour, pas de pannes, pas de mauvaises surprises.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ MODÈLES ============================ -->
+    <section id="modeles" class="section modeles-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Les modèles</p>
+          <h2 class="section-title">Quatre univers, un site à votre image</h2>
+          <p class="section-lede">
+            Chaque modèle est une vraie démonstration, pensée pour un métier. Cliquez,
+            explorez — puis imaginez-le à vos couleurs.
+          </p>
+        </div>
+        <div class="modele-grid">
+          {modeles.map((m, i) => (
+            <a class={`modele-card reveal theme-${m.theme}`} href={m.href} style={`--reveal-delay: ${i * 0.08}s`}>
+              <div class="modele-preview" aria-hidden="true">
+                <div class="mp-chrome"><span></span><span></span><span></span></div>
+                <div class="mp-hero">
+                  <span class="mp-title-line"></span>
+                  <span class="mp-title-line short"></span>
+                </div>
+                <div class="mp-cards"><span></span><span></span><span></span></div>
+              </div>
+              <div class="modele-info">
+                <p class="modele-tag">{m.tag}</p>
+                <h3 class="modele-name">{m.name}</h3>
+                <p class="modele-desc">{m.desc}</p>
+                <span class="modele-link">Voir la démonstration <span class="arrow">→</span></span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ MÉTHODE ============================ -->
+    <section id="methode" class="section methode-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">La méthode</p>
+          <h2 class="section-title">Simple pour vous, du début à la fin</h2>
+        </div>
+        <ol class="etapes">
+          {etapes.map((e, i) => (
+            <li class="etape reveal" style={`--reveal-delay: ${i * 0.1}s`}>
+              <span class="etape-num" aria-hidden="true">{e.num}</span>
+              <h3>{e.title}</h3>
+              <p>{e.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================ TARIFS ============================= -->
+    <section id="tarifs" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Tarifs</p>
+          <h2 class="section-title">Des prix clairs, sans surprise</h2>
+          <p class="section-lede">
+            Un investissement unique — votre site vous appartient. Pas d'abonnement
+            caché, pas de frais surprises.
+          </p>
+        </div>
+        <div class="tarif-grid">
+          <article class="tarif-card reveal">
+            <h3 class="tarif-name">Essentiel</h3>
+            <p class="tarif-price"><span>490&nbsp;€</span></p>
+            <ul class="tarif-list">
+              <li>Site une page (vitrine complète)</li>
+              <li>Design personnalisé à vos couleurs</li>
+              <li>Référencement Google optimisé</li>
+              <li>Contact en un clic (téléphone, e-mail)</li>
+              <li>Mise en ligne incluse</li>
+            </ul>
+            <a class="btn btn-ghost tarif-btn" href="#contact">Demander un devis</a>
+          </article>
+          <article class="tarif-card tarif-featured reveal" style="--reveal-delay: 0.12s">
+            <p class="tarif-badge">Le plus choisi</p>
+            <h3 class="tarif-name">Sur mesure</h3>
+            <p class="tarif-price"><span>à partir de 890&nbsp;€</span></p>
+            <ul class="tarif-list">
+              <li>Plusieurs pages (services, galerie, actus…)</li>
+              <li>Design entièrement sur mesure</li>
+              <li>Textes travaillés pour le référencement</li>
+              <li>Google Business Profile configuré</li>
+              <li>Formation à la prise en main</li>
+              <li>Accompagnement 3 mois inclus</li>
+            </ul>
+            <a class="btn btn-primary tarif-btn" href="#contact">Demander un devis</a>
+          </article>
+        </div>
+        <p class="tarif-note reveal">
+          Nom de domaine et hébergement : environ 5&nbsp;€/mois, réglés directement par
+          vous — vous restez propriétaire de tout.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ CONTACT ============================ -->
+    <section id="contact" class="section contact-section">
+      <div class="container contact-inner reveal">
+        <h2 class="contact-title">Et si on parlait de <em>votre</em> site&nbsp;?</h2>
+        <p class="contact-lede">
+          Racontez-moi votre activité, je vous réponds sous 24&nbsp;h avec des idées
+          concrètes. Le devis est gratuit, le café aussi.
+        </p>
+        <div class="contact-actions">
+          <a class="btn btn-primary contact-btn" href="mailto:contact@atelier-web.example">
+            ✉️ contact@atelier-web.example
+          </a>
+          <a class="btn btn-ghost contact-btn contact-tel" href="tel:+33600000000">
+            📞 06 00 00 00 00
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  /* ------------------------------- Hero -------------------------------- */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+    padding-block: clamp(4.5rem, 10vw, 8rem) clamp(4rem, 9vw, 7rem);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.55;
+    will-change: transform;
+  }
+
+  .blob-1 {
+    width: 34rem;
+    height: 34rem;
+    top: -12rem;
+    right: -8rem;
+    background: radial-gradient(circle, #5352d1, transparent 65%);
+    animation: float 14s ease-in-out infinite;
+  }
+
+  .blob-2 {
+    width: 26rem;
+    height: 26rem;
+    bottom: -10rem;
+    left: -6rem;
+    background: radial-gradient(circle, #ff6b57, transparent 65%);
+    opacity: 0.35;
+    animation: drift 18s ease-in-out infinite;
+  }
+
+  .blob-3 {
+    width: 18rem;
+    height: 18rem;
+    top: 30%;
+    left: 38%;
+    background: radial-gradient(circle, #f2b705, transparent 65%);
+    opacity: 0.2;
+    animation: float 22s ease-in-out infinite reverse;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 75%);
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .hero-kicker {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8d8cf0;
+    animation: hero-in 0.8s var(--ease-out) both;
+  }
+
+  .hero-title {
+    margin-top: 1.1rem;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    animation: hero-in 0.8s var(--ease-out) 0.12s both;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(100deg, #8d8cf0, #ff8a76 55%, #f2b705);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-lede {
+    margin-top: 1.4rem;
+    max-width: 34rem;
+    font-size: 1.15rem;
+    color: #b9bacd;
+    animation: hero-in 0.8s var(--ease-out) 0.24s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.2rem;
+    animation: hero-in 0.8s var(--ease-out) 0.36s both;
+  }
+
+  .hero-ghost {
+    color: #fff;
+    border-color: rgb(255 255 255 / 0.35);
+  }
+
+  .hero-ghost:hover {
+    border-color: #fff;
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  .hero-proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    list-style: none;
+    margin: 2.4rem 0 0;
+    padding: 0;
+    font-size: 0.9rem;
+    color: #8f90ab;
+    animation: hero-in 0.8s var(--ease-out) 0.48s both;
+  }
+
+  .hero-proof li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .hero-proof li::before {
+    content: '✓';
+    color: #6ee7a0;
+    font-weight: 700;
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Maquette flottante du hero */
+
+  .hero-visual {
+    position: relative;
+    animation: hero-in 1s var(--ease-out) 0.4s both;
+  }
+
+  .mock-browser {
+    background: #1c1e30;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
+    transform: rotate(2deg);
+    animation: float 9s ease-in-out infinite;
+  }
+
+  .mock-chrome {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .mock-chrome span {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.18);
+  }
+
+  .mock-chrome span:first-child {
+    background: #ff6b57;
+  }
+
+  .mock-body {
+    padding: 1rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .mock-hero {
+    height: 5.2rem;
+    border-radius: 10px;
+    background: linear-gradient(120deg, #5352d1, #7a5cd6 55%, #ff6b57);
+    background-size: 200% 200%;
+    animation: mock-gradient 8s ease-in-out infinite;
+  }
+
+  @keyframes mock-gradient {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .mock-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+  }
+
+  .mock-card {
+    height: 3.4rem;
+    border-radius: 8px;
+    background: rgb(255 255 255 / 0.07);
+  }
+
+  .mock-lines {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .mock-lines span {
+    height: 0.5rem;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .mock-lines span:nth-child(2) {
+    width: 80%;
+  }
+
+  .mock-lines span:nth-child(3) {
+    width: 55%;
+  }
+
+  .float-chip {
+    position: absolute;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-m);
+    white-space: nowrap;
+  }
+
+  .chip-call {
+    top: -1.2rem;
+    left: -1.6rem;
+    animation: float 7s ease-in-out infinite;
+  }
+
+  .chip-seo {
+    bottom: 22%;
+    right: -1.8rem;
+    background: #6ee7a0;
+    animation: float 8s ease-in-out 1s infinite;
+  }
+
+  .chip-star {
+    bottom: -1.1rem;
+    left: 18%;
+    color: var(--gold);
+    animation: float 9s ease-in-out 0.5s infinite;
+  }
+
+  /* ------------------------------ Marquee ------------------------------- */
+
+  .marquee-strip {
+    overflow: hidden;
+    background: var(--accent);
+    color: #fff;
+    padding-block: 0.85rem;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 2.6rem;
+    width: max-content;
+    animation: marquee 36s linear infinite;
+  }
+
+  .marquee-item {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 2.6rem;
+  }
+
+  .marquee-item::after {
+    content: '✳';
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+
+  /* ------------------------------ Services ------------------------------ */
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.4rem;
+  }
+
+  .service-card {
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.06);
+    border-radius: var(--radius-m);
+    padding: 1.8rem 1.6rem;
+    box-shadow: var(--shadow-s);
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-m);
+  }
+
+  .service-icon {
+    font-size: 1.7rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    margin-bottom: 1.1rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.55rem;
+  }
+
+  .service-card p {
+    font-size: 0.97rem;
+    color: var(--muted);
+  }
+
+  /* ------------------------------ Modèles ------------------------------- */
+
+  .modeles-section {
+    background: linear-gradient(var(--paper), #efeee8);
+  }
+
+  .modele-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
+  }
+
+  .modele-card {
+    display: grid;
+    text-decoration: none;
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.07);
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    box-shadow: var(--shadow-s);
+    transition:
+      transform 0.4s var(--ease-out),
+      box-shadow 0.4s var(--ease-out);
+  }
+
+  .modele-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-m);
+  }
+
+  /* Mini-aperçu façon navigateur, décliné par thème */
+
+  .modele-preview {
+    padding: 1.1rem 1.1rem 0;
+    background: var(--mp-bg, #eee);
+    transition: background 0.4s;
+  }
+
+  .mp-chrome {
+    display: flex;
+    gap: 0.35rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .mp-chrome span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--mp-dot, rgb(0 0 0 / 0.2));
+  }
+
+  .mp-hero {
+    border-radius: 10px 10px 0 0;
+    background: var(--mp-hero, #ccc);
+    padding: 1.3rem 1.1rem 1rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .mp-title-line {
+    display: block;
+    height: 0.7rem;
+    width: 70%;
+    border-radius: 4px;
+    background: var(--mp-line, rgb(255 255 255 / 0.85));
+  }
+
+  .mp-title-line.short {
+    width: 45%;
+    opacity: 0.65;
+  }
+
+  .mp-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    padding: 0.8rem 0.6rem 0;
+    background: var(--mp-body, #fff);
+  }
+
+  .mp-cards span {
+    height: 2.6rem;
+    border-radius: 6px 6px 0 0;
+    background: var(--mp-card, #e5e5e5);
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .modele-card:hover .mp-cards span {
+    transform: translateY(-4px);
+  }
+
+  .modele-card:hover .mp-cards span:nth-child(2) {
+    transition-delay: 0.05s;
+  }
+
+  .modele-card:hover .mp-cards span:nth-child(3) {
+    transition-delay: 0.1s;
+  }
+
+  .theme-assoc {
+    --mp-bg: #dcefe2;
+    --mp-hero: linear-gradient(120deg, #1a7a4c, #2ba05f);
+    --mp-body: #f4faf6;
+    --mp-card: #ffd166;
+  }
+
+  .theme-batiment {
+    --mp-bg: #e3e4e8;
+    --mp-hero: linear-gradient(120deg, #22252e, #3a3f4d);
+    --mp-body: #f4f4f6;
+    --mp-card: #f2b705;
+  }
+
+  .theme-esthetique {
+    --mp-bg: #f6e8e2;
+    --mp-hero: linear-gradient(120deg, #c98a7d, #e0b0a4);
+    --mp-body: #fdf8f5;
+    --mp-card: #e8cfc4;
+  }
+
+  .theme-artiste {
+    --mp-bg: #e4e0f0;
+    --mp-hero: linear-gradient(120deg, #191627, #4630a0 60%, #d84f9a);
+    --mp-body: #f6f4fb;
+    --mp-card: #cfc4ee;
+  }
+
+  .modele-info {
+    padding: 1.6rem 1.7rem 1.8rem;
+  }
+
+  .modele-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .modele-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .modele-desc {
+    margin-top: 0.55rem;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .modele-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .modele-link .arrow {
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .modele-card:hover .modele-link .arrow {
+    transform: translateX(5px);
+  }
+
+  /* ------------------------------ Méthode ------------------------------- */
+
+  .methode-section {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .methode-section .section-title {
+    color: #fff;
+  }
+
+  .etapes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: etape;
+  }
+
+  .etape {
+    position: relative;
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: var(--radius-m);
+    padding: 1.7rem 1.5rem;
+    transition:
+      transform 0.35s var(--ease-out),
+      background-color 0.35s;
+  }
+
+  .etape:hover {
+    transform: translateY(-5px);
+    background: rgb(255 255 255 / 0.09);
+  }
+
+  .etape-num {
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(120deg, #8d8cf0, #ff8a76);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .etape h3 {
+    margin-top: 0.9rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .etape p {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #b9bacd;
+  }
+
+  /* ------------------------------- Tarifs ------------------------------- */
+
+  .tarif-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 1.8rem;
+    max-width: 52rem;
+  }
+
+  .tarif-card {
+    position: relative;
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.08);
+    border-radius: var(--radius-l);
+    padding: 2.2rem 2rem;
+    box-shadow: var(--shadow-s);
+    display: flex;
+    flex-direction: column;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+
+  .tarif-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-m);
+  }
+
+  .tarif-featured {
+    border: 2px solid var(--accent);
+  }
+
+  .tarif-badge {
+    position: absolute;
+    top: -0.85rem;
+    left: 2rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+  }
+
+  .tarif-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .tarif-price {
+    margin-top: 0.7rem;
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .tarif-list {
+    list-style: none;
+    margin: 1.4rem 0 1.8rem;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+    font-size: 0.97rem;
+    color: var(--ink-soft);
+  }
+
+  .tarif-list li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+
+  .tarif-list li::before {
+    content: '✓';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .tarif-btn {
+    margin-top: auto;
+  }
+
+  .tarif-card .btn-ghost {
+    color: var(--accent);
+  }
+
+  .tarif-note {
+    margin-top: 1.8rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 40rem;
+  }
+
+  /* ------------------------------- Contact ------------------------------ */
+
+  .contact-section {
+    background:
+      radial-gradient(60% 120% at 15% 0%, rgb(83 82 209 / 0.14), transparent 60%),
+      radial-gradient(50% 100% at 90% 100%, rgb(255 107 87 / 0.12), transparent 60%),
+      #efeee8;
+  }
+
+  .contact-inner {
+    text-align: center;
+    max-width: 46rem;
+  }
+
+  .contact-title {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .contact-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .contact-lede {
+    margin-top: 1.1rem;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2.2rem;
+  }
+
+  .contact-btn {
+    font-size: 1.05rem;
+  }
+
+  .contact-tel {
+    color: var(--ink);
+  }
+
+  /* ----------------------------- Responsive ----------------------------- */
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-visual {
+      max-width: 26rem;
+    }
+
+    .modele-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,131 @@
+---
+// En-tête du site principal.
+const links = [
+  { href: '/#services', label: 'Services' },
+  { href: '/#modeles', label: 'Modèles' },
+  { href: '/#methode', label: 'Méthode' },
+  { href: '/#tarifs', label: 'Tarifs' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Atelier Web — accueil">
+      <span class="brand-mark" aria-hidden="true"></span>
+      Atelier<strong>Web</strong>
+    </a>
+    <nav aria-label="Navigation principale">
+      <ul class="nav-list">
+        {links.map((link) => (
+          <li><a class="nav-link" href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="btn btn-primary header-cta" href="/#contact">Discutons-en</a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(247 246 242 / 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgb(18 19 31 / 0.07);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.9rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .brand strong {
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .brand-mark {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 4px;
+    background: conic-gradient(from 210deg, var(--accent), var(--coral), var(--gold), var(--accent));
+    transform: rotate(12deg);
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .brand:hover .brand-mark {
+    transform: rotate(102deg);
+  }
+
+  nav {
+    margin-left: auto;
+  }
+
+  .nav-list {
+    display: flex;
+    gap: 1.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    position: relative;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.98rem;
+    color: var(--ink-soft);
+    transition: color 0.2s;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .nav-link:hover {
+    color: var(--ink);
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .header-cta {
+    padding: 0.55rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 760px) {
+    nav {
+      display: none;
+    }
+
+    .header-inner {
+      justify-content: space-between;
+    }
+  }
+</style>

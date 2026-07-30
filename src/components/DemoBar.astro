@@ -1,0 +1,77 @@
+---
+// Bandeau affiché au-dessus des modèles de démonstration
+// pour revenir au site principal.
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="demo-bar">
+  <div class="demo-bar-inner">
+    <a class="demo-back" href="/#modeles">← Atelier Web</a>
+    <p class="demo-label">Modèle de démonstration — {label}</p>
+    <a class="demo-cta" href="/#contact">Je veux ce site</a>
+  </div>
+</div>
+
+<style>
+  .demo-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #12131f;
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+  }
+
+  .demo-bar-inner {
+    width: min(72rem, 100% - 2rem);
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.55rem;
+  }
+
+  .demo-bar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .demo-back {
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+
+  .demo-back:hover {
+    opacity: 1;
+  }
+
+  .demo-label {
+    color: #b9bacd;
+    text-align: center;
+  }
+
+  .demo-cta {
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    background: #5352d1;
+    transition: background-color 0.2s;
+  }
+
+  .demo-cta:hover {
+    background: #6f6ee0;
+  }
+
+  @media (max-width: 640px) {
+    .demo-label {
+      display: none;
+    }
+  }
+</style>

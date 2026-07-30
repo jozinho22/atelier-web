@@ -1,0 +1,761 @@
+---
+import Base from '../../layouts/Base.astro';
+import DemoBar from '../../components/DemoBar.astro';
+
+const title = 'Modèle association sportive & culturelle — AS Les Cigales | Atelier Web';
+const description =
+  "Exemple de site vitrine pour association sportive et culturelle : activités, horaires, actualités et adhésion. Un modèle Atelier Web personnalisable aux couleurs de votre club.";
+
+const sections = [
+  { icon: '⚽', name: 'Football', detail: 'Dès 6 ans — 4 équipes', jours: 'Mer. & Sam.' },
+  { icon: '🏀', name: 'Basket', detail: 'Ados & adultes', jours: 'Mar. & Jeu.' },
+  { icon: '🎭', name: 'Théâtre', detail: 'Ateliers tous niveaux', jours: 'Lun. & Mer.' },
+  { icon: '🎶', name: 'Chorale', detail: 'Répertoire varié', jours: 'Ven.' },
+];
+
+const actus = [
+  {
+    date: '12 juillet 2026',
+    tag: 'Tournoi',
+    titre: 'Les U11 champions du tournoi de la Métropole !',
+    texte: 'Une finale haletante remportée aux tirs au but. Bravo aux petits Cigales et merci aux bénévoles.',
+  },
+  {
+    date: '28 juin 2026',
+    tag: 'Spectacle',
+    titre: 'Le gala de fin d’année a fait salle comble',
+    texte: 'Théâtre, chorale et danse réunis sur scène devant 300 spectateurs. Revivez la soirée en photos.',
+  },
+  {
+    date: '15 juin 2026',
+    tag: 'Inscriptions',
+    titre: 'Les inscriptions 2026-2027 sont ouvertes',
+    texte: 'Permanences tous les mercredis de 17 h à 19 h à la maison des associations. Tarifs inchangés !',
+  },
+];
+---
+
+<Base title={title} description={description}>
+  <DemoBar label="Association sportive & culturelle" />
+  <div class="assoc">
+    <!-- ============================ EN-TÊTE ============================ -->
+    <header class="a-header">
+      <div class="wrap a-header-inner">
+        <a class="a-logo" href="#top" aria-label="AS Les Cigales — accueil">
+          <span class="a-logo-badge" aria-hidden="true">🦗</span>
+          AS <strong>Les Cigales</strong>
+        </a>
+        <nav aria-label="Navigation du club">
+          <ul class="a-nav">
+            <li><a href="#activites">Activités</a></li>
+            <li><a href="#actus">Actualités</a></li>
+            <li><a href="#infos">Infos pratiques</a></li>
+          </ul>
+        </nav>
+        <a class="a-btn a-btn-sun" href="#adhesion">Adhérer</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ============================= HERO ============================= -->
+      <section class="a-hero">
+        <div class="a-hero-shapes" aria-hidden="true">
+          <span class="a-ball a-ball-1"></span>
+          <span class="a-ball a-ball-2"></span>
+          <span class="a-stripe"></span>
+        </div>
+        <div class="wrap a-hero-inner">
+          <p class="a-hero-kicker">Sport &amp; culture depuis 1987</p>
+          <h1 class="a-hero-title">
+            Le club où l'on <span class="a-marker">joue</span>,<br />
+            où l'on <span class="a-marker a-marker-2">crée</span>, où l'on <span class="a-marker a-marker-3">vibre</span>.
+          </h1>
+          <p class="a-hero-lede">
+            Football, basket, théâtre, chorale : l'AS Les Cigales réunit petits et grands
+            autour du plaisir de faire ensemble. Rejoignez les 340 adhérents du club !
+          </p>
+          <div class="a-hero-actions">
+            <a class="a-btn a-btn-sun" href="#adhesion">Devenir membre</a>
+            <a class="a-btn a-btn-line" href="#activites">Découvrir les activités</a>
+          </div>
+        </div>
+        <svg class="a-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,60 C240,100 480,10 720,40 C960,70 1200,20 1440,50 L1440,90 L0,90 Z" fill="#f4faf6" />
+        </svg>
+      </section>
+
+      <!-- =========================== ACTIVITÉS =========================== -->
+      <section id="activites" class="a-section">
+        <div class="wrap">
+          <h2 class="a-title reveal">Nos activités</h2>
+          <p class="a-lede reveal">Une section pour chaque envie, encadrée par des animateurs passionnés.</p>
+          <div class="a-grid">
+            {sections.map((s, i) => (
+              <article class="a-card reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <span class="a-card-icon" aria-hidden="true">{s.icon}</span>
+                <h3>{s.name}</h3>
+                <p>{s.detail}</p>
+                <p class="a-card-jours">{s.jours}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ ACTUS ============================= -->
+      <section id="actus" class="a-section a-section-tinted">
+        <div class="wrap">
+          <h2 class="a-title reveal">La vie du club</h2>
+          <div class="a-actus">
+            {actus.map((a, i) => (
+              <article class="a-actu reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <p class="a-actu-meta">
+                  <span class="a-actu-tag">{a.tag}</span>
+                  <time>{a.date}</time>
+                </p>
+                <h3>{a.titre}</h3>
+                <p class="a-actu-texte">{a.texte}</p>
+                <span class="a-actu-lien">Lire la suite →</span>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================== ADHÉSION CTA ========================= -->
+      <section id="adhesion" class="a-cta">
+        <div class="wrap a-cta-inner reveal">
+          <h2>Envie de nous rejoindre&nbsp;?</h2>
+          <p>
+            L'adhésion, c'est à partir de <strong>60&nbsp;€ par an</strong>, et le premier
+            cours d'essai est gratuit. On vous attend&nbsp;!
+          </p>
+          <a class="a-btn a-btn-dark" href="tel:+33400000000">📞 04 00 00 00 00</a>
+        </div>
+      </section>
+
+      <!-- ======================== INFOS PRATIQUES ======================== -->
+      <section id="infos" class="a-section">
+        <div class="wrap a-infos">
+          <div class="reveal">
+            <h2 class="a-title">Infos pratiques</h2>
+            <ul class="a-infos-list">
+              <li>
+                <strong>📍 Où nous trouver</strong>
+                Maison des associations<br />12 rue des Oliviers, 13000 Marseille
+              </li>
+              <li>
+                <strong>🕐 Permanences</strong>
+                Mercredi 17 h – 19 h<br />Samedi 10 h – 12 h
+              </li>
+              <li>
+                <strong>✉️ Nous écrire</strong>
+                <a href="mailto:contact@lescigales.example">contact@lescigales.example</a>
+              </li>
+            </ul>
+          </div>
+          <div class="a-map reveal" aria-hidden="true">
+            <span class="a-map-pin">📍</span>
+            <span class="a-map-road a-road-1"></span>
+            <span class="a-map-road a-road-2"></span>
+            <span class="a-map-road a-road-3"></span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="a-footer">
+      <div class="wrap a-footer-inner">
+        <p>© 2026 AS Les Cigales — Association loi 1901</p>
+        <p>Site réalisé par <a href="/">Atelier Web</a></p>
+      </div>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  /* Palette du modèle : vert terrain, jaune soleil, énergie. */
+  .assoc {
+    --a-green: #1a7a4c;
+    --a-green-deep: #115c38;
+    --a-sun: #ffd166;
+    --a-sun-deep: #eab63e;
+    --a-ink: #133326;
+    --a-paper: #f4faf6;
+    --a-muted: #5b7367;
+    font-family: var(--font-sans);
+    color: var(--a-ink);
+    background: var(--a-paper);
+  }
+
+  .wrap {
+    width: min(70rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+
+  /* ------------------------------ En-tête ------------------------------- */
+
+  .a-header {
+    position: sticky;
+    top: 2.35rem;
+    z-index: 40;
+    background: rgb(244 250 246 / 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgb(19 51 38 / 0.08);
+  }
+
+  .a-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.8rem;
+  }
+
+  .a-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1.15rem;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .a-logo strong {
+    font-weight: 800;
+    color: var(--a-green);
+  }
+
+  .a-logo-badge {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: var(--a-sun);
+    font-size: 1.1rem;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .a-logo:hover .a-logo-badge {
+    transform: rotate(-14deg) scale(1.08);
+  }
+
+  .a-header nav {
+    margin-left: auto;
+  }
+
+  .a-nav {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .a-nav a {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--a-ink);
+    border-bottom: 3px solid transparent;
+    padding-bottom: 2px;
+    transition: border-color 0.25s;
+  }
+
+  .a-nav a:hover {
+    border-color: var(--a-sun);
+  }
+
+  /* ------------------------------ Boutons ------------------------------- */
+
+  .a-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      transform 0.25s var(--ease-out),
+      box-shadow 0.25s var(--ease-out),
+      background-color 0.25s;
+  }
+
+  .a-btn:hover {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+
+  .a-btn-sun {
+    background: var(--a-sun);
+    color: var(--a-ink);
+    box-shadow: 0 6px 18px rgb(255 209 102 / 0.45);
+  }
+
+  .a-btn-sun:hover {
+    background: var(--a-sun-deep);
+  }
+
+  .a-btn-line {
+    border: 2px solid rgb(255 255 255 / 0.6);
+    color: #fff;
+  }
+
+  .a-btn-line:hover {
+    border-color: #fff;
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  .a-btn-dark {
+    background: var(--a-ink);
+    color: #fff;
+  }
+
+  /* -------------------------------- Hero -------------------------------- */
+
+  .a-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--a-green-deep), var(--a-green) 55%, #2ba05f);
+    color: #fff;
+    padding: clamp(4rem, 9vw, 7rem) 0 clamp(5rem, 10vw, 8rem);
+  }
+
+  .a-hero-shapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .a-ball {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px dashed rgb(255 255 255 / 0.25);
+  }
+
+  .a-ball-1 {
+    width: 16rem;
+    height: 16rem;
+    top: -5rem;
+    right: 8%;
+    animation: a-spin 40s linear infinite;
+  }
+
+  .a-ball-2 {
+    width: 9rem;
+    height: 9rem;
+    bottom: 18%;
+    left: 4%;
+    border-color: rgb(255 209 102 / 0.5);
+    animation: a-spin 28s linear infinite reverse;
+  }
+
+  @keyframes a-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .a-stripe {
+    position: absolute;
+    width: 130%;
+    height: 5rem;
+    left: -15%;
+    bottom: 28%;
+    background: rgb(255 255 255 / 0.05);
+    transform: rotate(-6deg);
+  }
+
+  .a-hero-inner {
+    position: relative;
+    max-width: 44rem;
+  }
+
+  .a-hero-kicker {
+    display: inline-block;
+    background: rgb(255 255 255 / 0.14);
+    border-radius: 999px;
+    padding: 0.4rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    animation: a-pop 0.7s var(--ease-out) both;
+  }
+
+  .a-hero-title {
+    margin-top: 1.4rem;
+    font-size: clamp(2.3rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    animation: a-pop 0.7s var(--ease-out) 0.12s both;
+  }
+
+  .a-marker {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.15em;
+  }
+
+  .a-marker::before {
+    content: '';
+    position: absolute;
+    inset: 0.55em -0.05em 0.02em;
+    background: var(--a-sun);
+    z-index: -1;
+    transform: rotate(-1.5deg) scaleX(0);
+    transform-origin: left;
+    animation: a-highlight 0.5s var(--ease-out) 0.7s forwards;
+  }
+
+  .a-marker-2::before {
+    background: #ff8a5c;
+    animation-delay: 0.9s;
+  }
+
+  .a-marker-3::before {
+    background: #7fd8f7;
+    animation-delay: 1.1s;
+  }
+
+  @keyframes a-highlight {
+    to {
+      transform: rotate(-1.5deg) scaleX(1);
+    }
+  }
+
+  @keyframes a-pop {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .a-hero-lede {
+    margin-top: 1.3rem;
+    font-size: 1.15rem;
+    color: rgb(255 255 255 / 0.88);
+    animation: a-pop 0.7s var(--ease-out) 0.24s both;
+  }
+
+  .a-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    animation: a-pop 0.7s var(--ease-out) 0.36s both;
+  }
+
+  .a-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  /* ------------------------------ Sections ------------------------------ */
+
+  .a-section {
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .a-section-tinted {
+    background: #e8f4ec;
+  }
+
+  .a-title {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .a-lede {
+    margin-top: 0.7rem;
+    color: var(--a-muted);
+    max-width: 36rem;
+  }
+
+  /* Cartes activités */
+
+  .a-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.3rem;
+    margin-top: 2.5rem;
+  }
+
+  .a-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.7rem 1.5rem;
+    border: 1px solid rgb(19 51 38 / 0.07);
+    box-shadow: 0 2px 10px rgb(19 51 38 / 0.05);
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+
+  .a-card:hover {
+    transform: translateY(-6px) rotate(-1deg);
+    box-shadow: 0 14px 30px rgb(19 51 38 / 0.12);
+  }
+
+  .a-card-icon {
+    font-size: 2.2rem;
+    display: inline-block;
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .a-card:hover .a-card-icon {
+    transform: scale(1.2) rotate(8deg);
+  }
+
+  .a-card h3 {
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+
+  .a-card p {
+    margin-top: 0.3rem;
+    color: var(--a-muted);
+    font-size: 0.95rem;
+  }
+
+  .a-card-jours {
+    display: inline-block;
+    margin-top: 0.7rem;
+    background: var(--a-sun);
+    color: var(--a-ink);
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+  }
+
+  /* Actualités */
+
+  .a-actus {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.4rem;
+    margin-top: 2.5rem;
+  }
+
+  .a-actu {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.7rem 1.5rem;
+    border: 1px solid rgb(19 51 38 / 0.07);
+    display: flex;
+    flex-direction: column;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+
+  .a-actu:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgb(19 51 38 / 0.12);
+  }
+
+  .a-actu-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--a-muted);
+  }
+
+  .a-actu-tag {
+    background: #dcefe2;
+    color: var(--a-green-deep);
+    font-weight: 700;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+  }
+
+  .a-actu h3 {
+    margin-top: 0.9rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .a-actu-texte {
+    margin-top: 0.6rem;
+    color: var(--a-muted);
+    font-size: 0.95rem;
+    flex-grow: 1;
+  }
+
+  .a-actu-lien {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: var(--a-green);
+    font-size: 0.95rem;
+  }
+
+  /* CTA adhésion */
+
+  .a-cta {
+    background: var(--a-sun);
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  .a-cta-inner {
+    text-align: center;
+    max-width: 38rem;
+  }
+
+  .a-cta h2 {
+    font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .a-cta p {
+    margin-top: 0.9rem;
+    font-size: 1.1rem;
+  }
+
+  .a-cta .a-btn {
+    margin-top: 1.6rem;
+    font-size: 1.05rem;
+  }
+
+  /* Infos pratiques */
+
+  .a-infos {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .a-infos-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .a-infos-list strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 1.05rem;
+  }
+
+  .a-infos-list a {
+    color: var(--a-green);
+    font-weight: 600;
+  }
+
+  /* Fausse carte stylisée */
+
+  .a-map {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 24px;
+    background:
+      linear-gradient(rgb(19 51 38 / 0.04) 1px, transparent 1px) 0 0 / 100% 22px,
+      linear-gradient(90deg, rgb(19 51 38 / 0.04) 1px, transparent 1px) 0 0 / 22px 100%,
+      #dcefe2;
+    overflow: hidden;
+    border: 1px solid rgb(19 51 38 / 0.08);
+  }
+
+  .a-map-road {
+    position: absolute;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  .a-road-1 {
+    width: 140%;
+    height: 14px;
+    top: 40%;
+    left: -20%;
+    transform: rotate(-8deg);
+  }
+
+  .a-road-2 {
+    width: 10px;
+    height: 140%;
+    left: 58%;
+    top: -20%;
+    transform: rotate(12deg);
+  }
+
+  .a-road-3 {
+    width: 120%;
+    height: 8px;
+    top: 72%;
+    left: -10%;
+    transform: rotate(4deg);
+  }
+
+  .a-map-pin {
+    position: absolute;
+    top: 34%;
+    left: 52%;
+    font-size: 2.4rem;
+    filter: drop-shadow(0 6px 8px rgb(19 51 38 / 0.3));
+    animation: a-bounce 2.2s ease-in-out infinite;
+  }
+
+  @keyframes a-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* ------------------------------- Footer ------------------------------- */
+
+  .a-footer {
+    background: var(--a-ink);
+    color: #cfe3d7;
+    font-size: 0.9rem;
+  }
+
+  .a-footer-inner {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding-block: 1.4rem;
+  }
+
+  .a-footer a {
+    color: var(--a-sun);
+    font-weight: 600;
+  }
+
+  /* ----------------------------- Responsive ----------------------------- */
+
+  @media (max-width: 760px) {
+    .a-header nav {
+      display: none;
+    }
+
+    .a-header-inner {
+      justify-content: space-between;
+    }
+
+    .a-infos {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
