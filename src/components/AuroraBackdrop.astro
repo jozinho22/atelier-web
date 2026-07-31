@@ -1,0 +1,187 @@
+---
+// Fond animé « façon vidéo » : halos de couleur en dérive lente sur un canvas,
+// avec zoom cinématique et grain de pellicule. Aucun fichier vidéo : le canvas
+// est rendu en basse résolution et agrandi par le navigateur (flou naturel,
+// coût CPU/GPU quasi nul). Le parent doit être en position: relative.
+interface Props {
+  /** Couleurs des halos (hexadécimal #rrggbb). */
+  colors: string[];
+  /** Couleur de fond peinte derrière les halos. */
+  background: string;
+  /** 'lighter' : halos lumineux (fonds sombres). 'normal' : dégradé doux (fonds clairs). */
+  blend?: 'lighter' | 'normal';
+  /** Multiplicateur de vitesse (1 = lent, cinématique). */
+  speed?: number;
+  /** Opacité du grain de pellicule (0 pour le désactiver). */
+  grain?: number;
+}
+
+const { colors, background, blend = 'lighter', speed = 1, grain = 0.07 } = Astro.props;
+---
+
+<canvas
+  class="aurora"
+  data-aurora
+  data-colors={JSON.stringify(colors)}
+  data-background={background}
+  data-blend={blend}
+  data-speed={String(speed)}
+  aria-hidden="true"></canvas>
+{grain > 0 && <span class="aurora-grain" style={`opacity: ${grain}`} aria-hidden="true"></span>}
+
+<style>
+  .aurora {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    animation: aurora-zoom 40s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
+  }
+
+  .aurora-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px;
+  }
+</style>
+
+<script>
+  type Orb = {
+    color: [number, number, number];
+    r: number;
+    cx: number;
+    cy: number;
+    ax: number;
+    ay: number;
+    sx: number;
+    sy: number;
+    px: number;
+    py: number;
+  };
+
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Résolution interne volontairement basse : l'agrandissement par le
+  // navigateur lisse le rendu, comme un flou gratuit.
+  const SCALE = 1 / 6;
+
+  function hexToRgb(hex: string): [number, number, number] {
+    const n = parseInt(hex.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  function setup(canvas: HTMLCanvasElement): void {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const colors: string[] = JSON.parse(canvas.dataset.colors ?? '[]');
+    const background = canvas.dataset.background ?? '#000';
+    const blend = canvas.dataset.blend === 'normal' ? 'source-over' : 'lighter';
+    const speed = Number(canvas.dataset.speed ?? '1');
+    const alpha = blend === 'lighter' ? 0.55 : 0.6;
+
+    // Chaque halo suit une trajectoire de Lissajous qui lui est propre.
+    const orbs: Orb[] = colors.map((color) => ({
+      color: hexToRgb(color),
+      r: 0.4 + Math.random() * 0.3,
+      cx: 0.15 + Math.random() * 0.7,
+      cy: 0.15 + Math.random() * 0.7,
+      ax: 0.18 + Math.random() * 0.22,
+      ay: 0.18 + Math.random() * 0.22,
+      sx: 0.5 + Math.random() * 0.7,
+      sy: 0.5 + Math.random() * 0.7,
+      px: Math.random() * Math.PI * 2,
+      py: Math.random() * Math.PI * 2,
+    }));
+
+    function draw(ms: number = performance.now()): void {
+      if (!ctx) return;
+      const w = canvas.width;
+      const h = canvas.height;
+      const t = ms * 0.00008 * speed;
+
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = background;
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = blend;
+
+      for (const o of orbs) {
+        const x = (o.cx + o.ax * Math.sin(t * o.sx + o.px)) * w;
+        const y = (o.cy + o.ay * Math.cos(t * o.sy + o.py)) * h;
+        const rad = o.r * Math.max(w, h);
+        const grd = ctx.createRadialGradient(x, y, 0, x, y, rad);
+        const [r, g, b] = o.color;
+        grd.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+        grd.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, w, h);
+      }
+    }
+
+    function resize(): void {
+      canvas.width = Math.max(2, Math.round(canvas.clientWidth * SCALE));
+      canvas.height = Math.max(2, Math.round(canvas.clientHeight * SCALE));
+      // Image immédiate : le fond est visible dès le chargement, sans
+      // attendre le premier requestAnimationFrame (onglet en arrière-plan…).
+      draw();
+    }
+
+    let raf = 0;
+    let inView = true;
+
+    function frame(ms: number): void {
+      draw(ms);
+      raf = requestAnimationFrame(frame);
+    }
+
+    function play(): void {
+      if (!raf && inView && !document.hidden) raf = requestAnimationFrame(frame);
+    }
+
+    function pause(): void {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+
+    // Mouvement réduit demandé : une seule image fixe (redessinée au resize).
+    if (REDUCED) return;
+
+    // Économie d'énergie : l'animation ne tourne que si le canvas est
+    // visible à l'écran et que l'onglet est actif.
+    new IntersectionObserver((entries) => {
+      inView = entries.some((e) => e.isIntersecting);
+      if (inView) {
+        play();
+      } else {
+        pause();
+      }
+    }).observe(canvas);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        pause();
+      } else {
+        play();
+      }
+    });
+
+    play();
+  }
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-aurora]').forEach(setup);
+</script>

@@ -65,6 +65,39 @@ const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
         );
         targets.forEach((el) => observer.observe(el));
       }
+
+      // Compteurs animés : tout élément [data-countup] s'incrémente de 0
+      // jusqu'à sa valeur quand il apparaît à l'écran. La valeur finale est
+      // déjà dans le HTML (SEO, absence de JavaScript, mouvement réduit).
+      const counters = document.querySelectorAll<HTMLElement>('[data-countup]');
+
+      if (counters.length > 0 && !prefersReduced && 'IntersectionObserver' in window) {
+        const animateCount = (el: HTMLElement): void => {
+          const target = parseFloat(el.dataset.countup ?? '0');
+          const duration = 1600;
+          const start = performance.now();
+          const tick = (now: number): void => {
+            const progress = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = String(Math.round(target * eased));
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+
+        const countObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                animateCount(entry.target as HTMLElement);
+                countObserver.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.5 }
+        );
+        counters.forEach((el) => countObserver.observe(el));
+      }
     </script>
   </body>
 </html>

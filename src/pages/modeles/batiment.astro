@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import AuroraBackdrop from '../../components/AuroraBackdrop.astro';
 import { withBase } from '../../lib/paths';
 
 const title = 'Modèle métiers du bâtiment — Moreau Rénovation | Atelier Web';
@@ -54,6 +55,12 @@ const realisations = [
       <!-- ============================= HERO ============================= -->
       <section class="b-hero">
         <div class="b-hero-bg" aria-hidden="true">
+          <AuroraBackdrop
+            colors={['#f2b705', '#4a6096', '#d97b29']}
+            background="#16181f"
+            speed={0.8}
+            grain={0.06}
+          />
           <span class="b-beam b-beam-1"></span>
           <span class="b-beam b-beam-2"></span>
           <span class="b-blueprint"></span>
@@ -85,7 +92,7 @@ const realisations = [
         <div class="wrap b-chiffres-grid">
           {chiffres.map((c, i) => (
             <div class="b-chiffre reveal" style={`--reveal-delay: ${i * 0.08}s`}>
-              <p class="b-chiffre-val">{c.valeur}<span>{c.unite}</span></p>
+              <p class="b-chiffre-val"><span data-countup={c.valeur}>{c.valeur}</span><span class="b-unite">{c.unite}</span></p>
               <p class="b-chiffre-label">{c.label}</p>
             </div>
           ))}
@@ -496,7 +503,7 @@ const realisations = [
     color: var(--b-ink-deep);
   }
 
-  .b-chiffre-val span {
+  .b-chiffre-val .b-unite {
     font-size: 1.3rem;
     margin-left: 0.15rem;
   }

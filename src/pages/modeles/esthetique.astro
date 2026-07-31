@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import AuroraBackdrop from '../../components/AuroraBackdrop.astro';
 import { withBase } from '../../lib/paths';
 
 const title = "Modèle beauté & bien-être — L'Écrin de Soi | Atelier Web";
@@ -44,6 +45,13 @@ const temoignages = [
       <!-- ============================= HERO ============================= -->
       <section class="e-hero">
         <div class="e-hero-deco" aria-hidden="true">
+          <AuroraBackdrop
+            colors={['#f0cfc2', '#e8b8a8', '#f6e3d0', '#f2d4dc']}
+            background="#fdf8f5"
+            blend="normal"
+            speed={0.7}
+            grain={0.04}
+          />
           <span class="e-petale p-1"></span>
           <span class="e-petale p-2"></span>
           <span class="e-petale p-3"></span>

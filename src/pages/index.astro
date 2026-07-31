@@ -2,11 +2,12 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AuroraBackdrop from '../components/AuroraBackdrop.astro';
 import { withBase } from '../lib/paths';
 
 const title = 'Atelier Web — Sites vitrines pour artisans, indépendants et associations';
 const description =
-  "Création de sites vitrines élégants et rapides pour professionnels et associations : soyez visible sur Google et joignable en un clic. Devis gratuit, à partir de 490 €.";
+  "Création de sites vitrines élégants et rapides pour professionnels et associations : soyez visible sur Google et joignable en un clic. Devis gratuit, à partir de 590 €.";
 
 // Données structurées schema.org pour le référencement local.
 const jsonLd = {
@@ -34,49 +35,57 @@ const modeles = [
     tag: 'Associations',
     name: 'Sport & culture',
     desc: 'Actualités, horaires des entraînements, adhésions : tout ce qu’un club doit montrer.',
-    theme: 'assoc',
+    image: 'association.webp',
+    accent: '#7fe0a8',
   },
   {
     href: withBase('modeles/batiment'),
     tag: 'Artisans',
     name: 'Métiers du bâtiment',
     desc: 'Un site solide comme vos chantiers : réalisations, zone d’intervention, devis en un clic.',
-    theme: 'batiment',
+    image: 'batiment.webp',
+    accent: '#f2b705',
   },
   {
     href: withBase('modeles/esthetique'),
     tag: 'Beauté',
     name: 'Esthétique & bien-être',
     desc: 'Une vitrine douce et raffinée pour instituts, salons et praticiennes indépendantes.',
-    theme: 'esthetique',
+    image: 'esthetique.webp',
+    accent: '#f3c9bd',
   },
   {
     href: withBase('modeles/artiste'),
     tag: 'Artistes',
     name: 'Blog & portfolio d’artiste',
     desc: 'Vos œuvres en pleine lumière, un journal de bord pour raconter votre démarche.',
-    theme: 'artiste',
+    image: 'artiste.webp',
+    accent: '#b9a8ff',
   },
 ];
 
 const etapes = [
   {
     num: '01',
+    icon: '☕',
     title: 'On échange',
     desc: 'Un appel ou un café pour comprendre votre activité, vos clients et ce que votre site doit raconter.',
   },
   {
     num: '02',
+    icon: '🎨',
     title: 'Je conçois',
     desc: 'Maquette sur mesure à partir du modèle qui vous plaît : vos couleurs, vos photos, vos mots.',
   },
   {
     num: '03',
+    icon: '✏️',
     title: 'On ajuste',
     desc: 'Vous relisez, on affine ensemble. Deux allers-retours inclus, sans jargon technique.',
   },
   {
     num: '04',
+    icon: '🚀',
     title: 'On met en ligne',
     desc: 'Nom de domaine, hébergement, référencement Google : je m’occupe de tout, vous êtes visible.',
   },
@@ -89,9 +98,11 @@ const etapes = [
     <!-- ============================== HERO ============================== -->
     <section class="hero" aria-label="Introduction">
       <div class="hero-bg" aria-hidden="true">
-        <span class="blob blob-1"></span>
-        <span class="blob blob-2"></span>
-        <span class="blob blob-3"></span>
+        <AuroraBackdrop
+          colors={['#5352d1', '#8a5cf5', '#ff6b57', '#f2b705', '#2f6fdb']}
+          background="#12131f"
+          speed={1.3}
+        />
         <span class="hero-grid"></span>
       </div>
       <div class="container hero-inner">
@@ -197,26 +208,42 @@ const etapes = [
 
     <!-- ============================ MODÈLES ============================ -->
     <section id="modeles" class="section modeles-section">
+      <div class="section-backdrop" aria-hidden="true">
+        <AuroraBackdrop
+          colors={['#dcdcf8', '#ffe0d8', '#f9ecc2']}
+          background="#f2f1eb"
+          blend="normal"
+          speed={0.6}
+          grain={0.04}
+        />
+      </div>
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Les modèles</p>
-          <h2 class="section-title">Quatre univers, un site à votre image</h2>
+          <h2 class="section-title">Quatre exemples, une infinité de métiers</h2>
           <p class="section-lede">
-            Chaque modèle est une vraie démonstration, pensée pour un métier. Cliquez,
-            explorez — puis imaginez-le à vos couleurs.
+            Ces quatre démonstrations ne sont qu'un aperçu du champ des possibles :
+            chaque site est dessiné sur mesure pour votre activité, vos couleurs et vos
+            clients. Explorez-les pour juger du soin apporté — puis imaginez le vôtre.
           </p>
         </div>
         <div class="modele-grid">
           {modeles.map((m, i) => (
-            <a class={`modele-card reveal theme-${m.theme}`} href={m.href} style={`--reveal-delay: ${i * 0.08}s`}>
-              <div class="modele-preview" aria-hidden="true">
-                <div class="mp-chrome"><span></span><span></span><span></span></div>
-                <div class="mp-hero">
-                  <span class="mp-title-line"></span>
-                  <span class="mp-title-line short"></span>
-                </div>
-                <div class="mp-cards"><span></span><span></span><span></span></div>
-              </div>
+            <a
+              class="modele-card reveal"
+              href={m.href}
+              style={`--reveal-delay: ${i * 0.08}s; --accent-card: ${m.accent}`}
+            >
+              <img
+                class="modele-photo"
+                src={withBase(`modeles/${m.image}`)}
+                alt=""
+                width="1600"
+                height="873"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="modele-overlay" aria-hidden="true"></div>
               <div class="modele-info">
                 <p class="modele-tag">{m.tag}</p>
                 <h3 class="modele-name">{m.name}</h3>
@@ -226,11 +253,24 @@ const etapes = [
             </a>
           ))}
         </div>
+        <p class="modele-note reveal">
+          Votre activité n'apparaît pas ici&nbsp;? C'est justement le principe : chaque
+          site est unique. <a href="#contact">Décrivez-moi votre métier</a>, je vous
+          montre ce qu'il pourrait donner.
+        </p>
       </div>
     </section>
 
     <!-- ============================ MÉTHODE ============================ -->
     <section id="methode" class="section methode-section">
+      <div class="section-backdrop" aria-hidden="true">
+        <AuroraBackdrop
+          colors={['#4a49c9', '#d84f9a', '#1f6fae']}
+          background="#12131f"
+          speed={0.7}
+          grain={0.05}
+        />
+      </div>
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">La méthode</p>
@@ -239,6 +279,7 @@ const etapes = [
         <ol class="etapes">
           {etapes.map((e, i) => (
             <li class="etape reveal" style={`--reveal-delay: ${i * 0.1}s`}>
+              <span class="etape-icon" aria-hidden="true">{e.icon}</span>
               <span class="etape-num" aria-hidden="true">{e.num}</span>
               <h3>{e.title}</h3>
               <p>{e.desc}</p>
@@ -262,7 +303,7 @@ const etapes = [
         <div class="tarif-grid">
           <article class="tarif-card reveal">
             <h3 class="tarif-name">Essentiel</h3>
-            <p class="tarif-price"><span>490&nbsp;€</span></p>
+            <p class="tarif-price"><span>590&nbsp;€</span></p>
             <ul class="tarif-list">
               <li>Site une page (vitrine complète)</li>
               <li>Design personnalisé à vos couleurs</li>
@@ -275,7 +316,7 @@ const etapes = [
           <article class="tarif-card tarif-featured reveal" style="--reveal-delay: 0.12s">
             <p class="tarif-badge">Le plus choisi</p>
             <h3 class="tarif-name">Sur mesure</h3>
-            <p class="tarif-price"><span>à partir de 890&nbsp;€</span></p>
+            <p class="tarif-price"><span>à partir de 990&nbsp;€</span></p>
             <ul class="tarif-list">
               <li>Plusieurs pages (services, galerie, actus…)</li>
               <li>Design entièrement sur mesure</li>
@@ -288,14 +329,23 @@ const etapes = [
           </article>
         </div>
         <p class="tarif-note reveal">
-          Nom de domaine et hébergement : environ 5&nbsp;€/mois, réglés directement par
-          vous — vous restez propriétaire de tout.
+          Hébergement, nom de domaine et maintenance : 49&nbsp;€/mois — votre site reste
+          votre propriété, sans engagement.
         </p>
       </div>
     </section>
 
     <!-- ============================ CONTACT ============================ -->
     <section id="contact" class="section contact-section">
+      <div class="section-backdrop" aria-hidden="true">
+        <AuroraBackdrop
+          colors={['#b9b8f0', '#ffc9be', '#f6e3a1']}
+          background="#efeee8"
+          blend="normal"
+          speed={0.8}
+          grain={0.05}
+        />
+      </div>
       <div class="container contact-inner reveal">
         <h2 class="contact-title">Et si on parlait de <em>votre</em> site&nbsp;?</h2>
         <p class="contact-lede">
@@ -330,44 +380,16 @@ const etapes = [
   .hero-bg {
     position: absolute;
     inset: 0;
+    overflow: hidden;
     pointer-events: none;
   }
 
-  .blob {
+  /* Conteneur des fonds animés de section (AuroraBackdrop). */
+  .section-backdrop {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.55;
-    will-change: transform;
-  }
-
-  .blob-1 {
-    width: 34rem;
-    height: 34rem;
-    top: -12rem;
-    right: -8rem;
-    background: radial-gradient(circle, #5352d1, transparent 65%);
-    animation: float 14s ease-in-out infinite;
-  }
-
-  .blob-2 {
-    width: 26rem;
-    height: 26rem;
-    bottom: -10rem;
-    left: -6rem;
-    background: radial-gradient(circle, #ff6b57, transparent 65%);
-    opacity: 0.35;
-    animation: drift 18s ease-in-out infinite;
-  }
-
-  .blob-3 {
-    width: 18rem;
-    height: 18rem;
-    top: 30%;
-    left: 38%;
-    background: radial-gradient(circle, #f2b705, transparent 65%);
-    opacity: 0.2;
-    animation: float 22s ease-in-out infinite reverse;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
 
   .hero-grid {
@@ -677,7 +699,13 @@ const etapes = [
   /* ------------------------------ Modèles ------------------------------- */
 
   .modeles-section {
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(var(--paper), #efeee8);
+  }
+
+  .modeles-section .container {
+    position: relative;
   }
 
   .modele-grid {
@@ -687,10 +715,12 @@ const etapes = [
   }
 
   .modele-card {
-    display: grid;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 24rem;
     text-decoration: none;
-    background: var(--paper-raised);
-    border: 1px solid rgb(18 19 31 / 0.07);
     border-radius: var(--radius-l);
     overflow: hidden;
     box-shadow: var(--shadow-s);
@@ -704,105 +734,38 @@ const etapes = [
     box-shadow: var(--shadow-m);
   }
 
-  /* Mini-aperçu façon navigateur, décliné par thème */
+  /* Photo du métier en fond de carte, léger zoom au survol */
 
-  .modele-preview {
-    padding: 1.1rem 1.1rem 0;
-    background: var(--mp-bg, #eee);
-    transition: background 0.4s;
+  .modele-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease-out);
   }
 
-  .mp-chrome {
-    display: flex;
-    gap: 0.35rem;
-    margin-bottom: 0.9rem;
+  .modele-card:hover .modele-photo {
+    transform: scale(1.06);
   }
 
-  .mp-chrome span {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--mp-dot, rgb(0 0 0 / 0.2));
-  }
+  /* Voile dégradé sombre pour la lisibilité du texte sur la photo */
 
-  .mp-hero {
-    border-radius: 10px 10px 0 0;
-    background: var(--mp-hero, #ccc);
-    padding: 1.3rem 1.1rem 1rem;
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .mp-title-line {
-    display: block;
-    height: 0.7rem;
-    width: 70%;
-    border-radius: 4px;
-    background: var(--mp-line, rgb(255 255 255 / 0.85));
-  }
-
-  .mp-title-line.short {
-    width: 45%;
-    opacity: 0.65;
-  }
-
-  .mp-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.6rem;
-    padding: 0.8rem 0.6rem 0;
-    background: var(--mp-body, #fff);
-  }
-
-  .mp-cards span {
-    height: 2.6rem;
-    border-radius: 6px 6px 0 0;
-    background: var(--mp-card, #e5e5e5);
-    transition: transform 0.35s var(--ease-out);
-  }
-
-  .modele-card:hover .mp-cards span {
-    transform: translateY(-4px);
-  }
-
-  .modele-card:hover .mp-cards span:nth-child(2) {
-    transition-delay: 0.05s;
-  }
-
-  .modele-card:hover .mp-cards span:nth-child(3) {
-    transition-delay: 0.1s;
-  }
-
-  .theme-assoc {
-    --mp-bg: #dcefe2;
-    --mp-hero: linear-gradient(120deg, #1a7a4c, #2ba05f);
-    --mp-body: #f4faf6;
-    --mp-card: #ffd166;
-  }
-
-  .theme-batiment {
-    --mp-bg: #e3e4e8;
-    --mp-hero: linear-gradient(120deg, #22252e, #3a3f4d);
-    --mp-body: #f4f4f6;
-    --mp-card: #f2b705;
-  }
-
-  .theme-esthetique {
-    --mp-bg: #f6e8e2;
-    --mp-hero: linear-gradient(120deg, #c98a7d, #e0b0a4);
-    --mp-body: #fdf8f5;
-    --mp-card: #e8cfc4;
-  }
-
-  .theme-artiste {
-    --mp-bg: #e4e0f0;
-    --mp-hero: linear-gradient(120deg, #191627, #4630a0 60%, #d84f9a);
-    --mp-body: #f6f4fb;
-    --mp-card: #cfc4ee;
+  .modele-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgb(18 19 31 / 0.02) 35%,
+      rgb(18 19 31 / 0.55) 65%,
+      rgb(18 19 31 / 0.93)
+    );
   }
 
   .modele-info {
+    position: relative;
     padding: 1.6rem 1.7rem 1.8rem;
+    color: #fff;
   }
 
   .modele-tag {
@@ -810,7 +773,7 @@ const etapes = [
     font-weight: 700;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--accent-card, var(--accent-soft));
   }
 
   .modele-name {
@@ -822,7 +785,7 @@ const etapes = [
 
   .modele-desc {
     margin-top: 0.55rem;
-    color: var(--muted);
+    color: rgb(255 255 255 / 0.82);
     font-size: 0.98rem;
   }
 
@@ -832,7 +795,7 @@ const etapes = [
     gap: 0.4rem;
     margin-top: 1.1rem;
     font-weight: 600;
-    color: var(--accent);
+    color: #fff;
   }
 
   .modele-link .arrow {
@@ -843,11 +806,31 @@ const etapes = [
     transform: translateX(5px);
   }
 
+  .modele-note {
+    margin-top: 2.2rem;
+    text-align: center;
+    max-width: 34rem;
+    margin-inline: auto;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .modele-note a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
   /* ------------------------------ Méthode ------------------------------- */
 
   .methode-section {
+    position: relative;
+    overflow: hidden;
     background: var(--ink);
     color: #fff;
+  }
+
+  .methode-section .container {
+    position: relative;
   }
 
   .methode-section .section-title {
@@ -880,6 +863,27 @@ const etapes = [
     background: rgb(255 255 255 / 0.09);
   }
 
+  .etape-icon {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.4rem;
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.08);
+    font-size: 1.4rem;
+    transition:
+      transform 0.35s var(--ease-out),
+      background-color 0.35s;
+  }
+
+  .etape:hover .etape-icon {
+    transform: scale(1.15) rotate(-6deg);
+    background: rgb(255 255 255 / 0.14);
+  }
+
   .etape-num {
     font-size: 2.6rem;
     font-weight: 800;
@@ -909,6 +913,7 @@ const etapes = [
     grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
     gap: 1.8rem;
     max-width: 52rem;
+    margin-inline: auto;
   }
 
   .tarif-card {
@@ -998,15 +1003,24 @@ const etapes = [
     font-size: 0.92rem;
     color: var(--muted);
     max-width: 40rem;
+    margin-inline: auto;
+    text-align: center;
   }
 
   /* ------------------------------- Contact ------------------------------ */
 
   .contact-section {
+    position: relative;
+    overflow: hidden;
+    /* Fond statique conservé : il sert de repli si JavaScript est désactivé. */
     background:
       radial-gradient(60% 120% at 15% 0%, rgb(83 82 209 / 0.14), transparent 60%),
       radial-gradient(50% 100% at 90% 100%, rgb(255 107 87 / 0.12), transparent 60%),
       #efeee8;
+  }
+
+  .contact-section .container {
+    position: relative;
   }
 
   .contact-inner {

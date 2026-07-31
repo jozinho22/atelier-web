@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import AuroraBackdrop from '../../components/AuroraBackdrop.astro';
 import { withBase } from '../../lib/paths';
 
 const title = "Modèle blog d'artiste — Claire Aubry, peintre | Atelier Web";
@@ -63,8 +64,12 @@ const expos = [
       <!-- ============================= HERO ============================= -->
       <section class="r-hero">
         <div class="r-hero-bg" aria-hidden="true">
-          <span class="r-brush r-brush-1"></span>
-          <span class="r-brush r-brush-2"></span>
+          <AuroraBackdrop
+            colors={['#7c5cff', '#d84f9a', '#e8a33d']}
+            background="#131020"
+            speed={0.9}
+            grain={0}
+          />
           <span class="r-grain"></span>
         </div>
         <div class="wrap r-hero-inner">
@@ -301,32 +306,6 @@ const expos = [
     position: absolute;
     inset: 0;
     pointer-events: none;
-  }
-
-  .r-brush {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.5;
-  }
-
-  .r-brush-1 {
-    width: 30rem;
-    height: 30rem;
-    top: -10rem;
-    right: -8rem;
-    background: radial-gradient(circle, var(--r-violet), transparent 65%);
-    animation: float 16s ease-in-out infinite;
-  }
-
-  .r-brush-2 {
-    width: 24rem;
-    height: 24rem;
-    bottom: -8rem;
-    left: -6rem;
-    background: radial-gradient(circle, var(--r-magenta), transparent 65%);
-    opacity: 0.35;
-    animation: drift 20s ease-in-out infinite;
   }
 
   .r-grain {

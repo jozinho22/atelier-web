@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../../components/DemoBar.astro';
+import AuroraBackdrop from '../../components/AuroraBackdrop.astro';
 import { withBase } from '../../lib/paths';
 
 const title = 'Modèle association sportive & culturelle — AS Les Cigales | Atelier Web';
@@ -61,6 +62,12 @@ const actus = [
       <!-- ============================= HERO ============================= -->
       <section class="a-hero">
         <div class="a-hero-shapes" aria-hidden="true">
+          <AuroraBackdrop
+            colors={['#2ba05f', '#ffd166', '#4fc3a1', '#7fd8f7']}
+            background="#15653e"
+            speed={1.1}
+            grain={0.06}
+          />
           <span class="a-ball a-ball-1"></span>
           <span class="a-ball a-ball-2"></span>
           <span class="a-stripe"></span>

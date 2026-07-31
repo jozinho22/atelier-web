@@ -78,7 +78,13 @@ peuvent pas être réutilisés sans autorisation.
 
 ## Animations
 
-Volontairement sobres : apparitions au défilement (`IntersectionObserver`),
-dégradés flottants dans les heros, micro-interactions au survol. Tout respecte
-`prefers-reduced-motion` (les animations sont désactivées pour les personnes
-qui le demandent).
+Apparitions au défilement (`IntersectionObserver`), micro-interactions au
+survol, **compteurs animés** (tout élément `[data-countup]` s'incrémente
+jusqu'à sa valeur à l'apparition — voir les chiffres clés du modèle bâtiment)
+et des **fonds animés « façon vidéo »**
+([src/components/AuroraBackdrop.astro](src/components/AuroraBackdrop.astro)) sur
+l'accueil et les heros des 4 modèles, chacun dans sa palette : halos de couleur
+en dérive lente sur canvas basse résolution, zoom cinématique et grain de
+pellicule — le rendu d'une boucle vidéo sans aucun fichier vidéo. L'animation
+se met en pause hors écran et onglet caché ; tout respecte
+`prefers-reduced-motion` (image fixe et valeurs finales affichées directement).
