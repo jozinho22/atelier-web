@@ -3,6 +3,7 @@ import '@fontsource-variable/outfit';
 import '@fontsource-variable/fraunces';
 import '../styles/global.css';
 import { withBase } from '../lib/paths';
+import { splitPath, localePath } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -12,19 +13,26 @@ interface Props {
 }
 
 const { title, description, jsonLd } = Astro.props;
+const { lang, rest } = splitPath(Astro.url.pathname);
 // Slash final systématique : c'est l'URL réellement servie (pages en
 // dossiers) et celle listée dans le sitemap.
 const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
+// Versions linguistiques de la page courante (hreflang).
+const frUrl = new URL(localePath('fr', rest).replace(/\/?$/, '/'), Astro.site);
+const enUrl = new URL(localePath('en', rest).replace(/\/?$/, '/'), Astro.site);
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="fr" href={frUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={frUrl} />
     <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
     <link rel="sitemap" href={withBase('sitemap-index.xml')} />
     <meta name="generator" content={Astro.generator} />
@@ -34,7 +42,7 @@ const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_US'} />
     <meta name="twitter:card" content="summary" />
 
     <meta name="theme-color" content="#12131f" />

@@ -9,14 +9,35 @@ aucun serveur nécessaire, hébergeable partout (Netlify, Cloudflare Pages, OVH,
 
 ## Pages
 
+Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes pages).
+
 | URL | Contenu |
 | --- | --- |
-| `/` | Site principal : hero animé, services, modèles, méthode, tarifs, contact |
-| `/modeles/association` | Démo « AS Les Cigales » — association sportive & culturelle |
-| `/modeles/batiment` | Démo « Moreau Rénovation » — métiers du bâtiment |
-| `/modeles/esthetique` | Démo « L'Écrin de Soi » — institut de beauté |
-| `/modeles/artiste` | Démo « Claire Aubry » — blog/portfolio d'artiste peintre |
-| `/mentions-legales` | Mentions légales (minimalistes, à compléter) |
+| `/` · `/en/` | Site principal : hero animé, services, modèles, méthode, tarifs, contact |
+| `/modeles/association` · `/en/…` | Démo « AS Les Cigales » — association sportive & culturelle |
+| `/modeles/batiment` · `/en/…` | Démo « Moreau Rénovation » — métiers du bâtiment |
+| `/modeles/esthetique` · `/en/…` | Démo « L'Écrin de Soi » — institut de beauté |
+| `/modeles/artiste` · `/en/…` | Démo « Claire Aubry » — blog/portfolio d'artiste peintre |
+| `/mentions-legales` · `/en/…` | Mentions légales (minimalistes, à compléter) |
+
+## Internationalisation (FR/EN)
+
+- **Textes** : un dictionnaire par page dans [src/i18n/](src/i18n/) (`{ fr: {...},
+  en: {...} }`), plus [common.ts](src/i18n/common.ts) pour l'en-tête, le pied de
+  page et le bandeau des démos.
+- **Gabarits** : chaque page est un composant unique dans
+  [src/components/pages/](src/components/pages/) qui déduit la langue de l'URL
+  (`splitPath`) ; les routes `src/pages/**` ne sont que des enveloppes de 3 lignes.
+- **Liens** : `localePath(lang, 'chemin')` ([src/lib/i18n.ts](src/lib/i18n.ts))
+  pour les pages, `withBase()` pour les fichiers de `public/`.
+- **Switch FR/EN** : [LanguageSwitch.astro](src/components/LanguageSwitch.astro),
+  présent dans l'en-tête et le bandeau des démos, pointe toujours vers la même
+  page dans l'autre langue.
+- **SEO** : `<html lang>`, `og:locale`, balises `hreflang` (fr / en / x-default)
+  et alternates dans le sitemap, générés automatiquement.
+
+Ajouter une langue : l'ajouter dans `LANGS` et `astro.config.mjs`, compléter
+les dictionnaires, dupliquer les enveloppes de routes.
 
 ## Commandes
 

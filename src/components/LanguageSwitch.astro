@@ -1,0 +1,63 @@
+---
+// Bascule FR/EN : pointe vers la même page dans l'autre langue.
+// S'adapte à la couleur du texte environnant (currentColor).
+import { splitPath, localePath } from '../lib/i18n';
+
+const { lang, rest } = splitPath(Astro.url.pathname);
+---
+
+<nav class="lang-switch" aria-label="Langue / Language">
+  <a
+    href={localePath('fr', rest)}
+    class:list={['lang-link', { 'is-active': lang === 'fr' }]}
+    aria-current={lang === 'fr' ? 'true' : undefined}
+    lang="fr"
+    hreflang="fr">FR</a
+  >
+  <span class="lang-sep" aria-hidden="true">/</span>
+  <a
+    href={localePath('en', rest)}
+    class:list={['lang-link', { 'is-active': lang === 'en' }]}
+    aria-current={lang === 'en' ? 'true' : undefined}
+    lang="en"
+    hreflang="en">EN</a
+  >
+</nav>
+
+<style>
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .lang-link {
+    text-decoration: none;
+    color: currentColor;
+    opacity: 0.45;
+    padding: 0.15rem 0.2rem;
+    border-radius: 6px;
+    transition:
+      opacity 0.2s,
+      transform 0.25s var(--ease-out);
+  }
+
+  .lang-link:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
+  }
+
+  .lang-link.is-active {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+  }
+
+  .lang-sep {
+    opacity: 0.3;
+  }
+</style>

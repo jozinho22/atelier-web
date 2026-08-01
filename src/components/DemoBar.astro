@@ -1,20 +1,28 @@
 ---
 // Bandeau affiché au-dessus des modèles de démonstration
 // pour revenir au site principal.
-import { withBase } from '../lib/paths';
+import { splitPath, localePath } from '../lib/i18n';
+import { common } from '../i18n/common';
+import LanguageSwitch from './LanguageSwitch.astro';
 
 interface Props {
   label: string;
 }
 
 const { label } = Astro.props;
+const { lang } = splitPath(Astro.url.pathname);
+const t = common[lang].demo;
+const home = localePath(lang, '');
 ---
 
 <div class="demo-bar">
   <div class="demo-bar-inner">
-    <a class="demo-back" href={withBase('#modeles')}>← Atelier Web</a>
-    <p class="demo-label">Modèle de démonstration — {label}</p>
-    <a class="demo-cta" href={withBase('#contact')}>Je veux ce site</a>
+    <a class="demo-back" href={`${home}#modeles`}>← Atelier Web</a>
+    <p class="demo-label">{t.label} — {label}</p>
+    <span class="demo-actions">
+      <LanguageSwitch />
+      <a class="demo-cta" href={`${home}#contact`}>{t.cta}</a>
+    </span>
   </div>
 </div>
 
@@ -58,6 +66,12 @@ const { label } = Astro.props;
   .demo-label {
     color: #b9bacd;
     text-align: center;
+  }
+
+  .demo-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
   }
 
   .demo-cta {

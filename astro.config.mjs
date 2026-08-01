@@ -36,11 +36,22 @@ export default defineConfig({
   site: SITE,
   base: BASE,
   output: 'static',
+  // Français à la racine (URLs historiques inchangées), anglais sous /en/.
+  i18n: {
+    defaultLocale: 'fr',
+    locales: ['fr', 'en'],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [
     sitemap({
       // Avec une base en sous-dossier, l'intégration ajoute la racine sans
       // slash final en plus de la page d'accueil : on écarte ce doublon.
       filter: (page) => page !== `${SITE}${BASE.replace(/\/$/, '')}`,
+      // Annotations hreflang dans le sitemap.
+      i18n: {
+        defaultLocale: 'fr',
+        locales: { fr: 'fr-FR', en: 'en-US' },
+      },
     }),
   ],
 });

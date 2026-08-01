@@ -1,7 +1,10 @@
 ---
 // Pied de page du site principal.
-import { withBase } from '../lib/paths';
+import { splitPath, localePath } from '../lib/i18n';
+import { common } from '../i18n/common';
 
+const { lang } = splitPath(Astro.url.pathname);
+const t = common[lang].footer;
 const year = new Date().getFullYear();
 ---
 
@@ -9,21 +12,19 @@ const year = new Date().getFullYear();
   <div class="container footer-inner">
     <div class="footer-brand">
       <p class="footer-logo">Atelier<strong>Web</strong></p>
-      <p class="footer-tagline">
-        Sites vitrines soignés pour artisans, indépendants et associations.
-      </p>
+      <p class="footer-tagline">{t.tagline}</p>
     </div>
-    <nav class="footer-nav" aria-label="Pied de page">
-      <p class="footer-heading">Modèles</p>
+    <nav class="footer-nav" aria-label={lang === 'fr' ? 'Pied de page' : 'Footer'}>
+      <p class="footer-heading">{t.modelsHeading}</p>
       <ul>
-        <li><a href={withBase('modeles/association')}>Association sportive &amp; culturelle</a></li>
-        <li><a href={withBase('modeles/batiment')}>Métiers du bâtiment</a></li>
-        <li><a href={withBase('modeles/esthetique')}>Beauté &amp; bien-être</a></li>
-        <li><a href={withBase('modeles/artiste')}>Blog d'artiste</a></li>
+        <li><a href={localePath(lang, 'modeles/association')}>{t.models.association}</a></li>
+        <li><a href={localePath(lang, 'modeles/batiment')}>{t.models.batiment}</a></li>
+        <li><a href={localePath(lang, 'modeles/esthetique')}>{t.models.esthetique}</a></li>
+        <li><a href={localePath(lang, 'modeles/artiste')}>{t.models.artiste}</a></li>
       </ul>
     </nav>
     <div class="footer-contact">
-      <p class="footer-heading">Contact</p>
+      <p class="footer-heading">{t.contactHeading}</p>
       <ul>
         <li><a href="mailto:contact@atelier-web.example">contact@atelier-web.example</a></li>
         <li><a href="tel:+33600000000">06 00 00 00 00</a></li>
@@ -31,8 +32,8 @@ const year = new Date().getFullYear();
     </div>
   </div>
   <div class="container footer-legal">
-    <p>© {year} Atelier Web — Tous droits réservés.</p>
-    <a href={withBase('mentions-legales')}>Mentions légales</a>
+    <p>© {year} Atelier Web — {t.rights}</p>
+    <a href={localePath(lang, 'mentions-legales')}>{t.legal}</a>
   </div>
 </footer>
 
