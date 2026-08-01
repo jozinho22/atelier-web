@@ -1,6 +1,4 @@
-# Construit le site Astro et le déploie sur GitHub Pages à chaque push sur main.
-# Nécessite : Settings → Pages → Source = « GitHub Actions ».
-name: Deploy to GitHub Pages
+name: Déployer sur GitHub Pages
 
 on:
   push:
@@ -12,14 +10,55 @@ permissions:
   pages: write
   id-token: write
 
+# Une seule publication à la fois, sans annuler celle en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # ┌──────────────────────────────────────────────────────────────────────┐
+  # │ SEULE VALEUR À CHANGER pour brancher le nom de domaine.              │
+  # │                                                                      │
+  # │ Vide        → site servi sur https://<utilisateur>.github.io/<depot>/ │
+  # │ mondomaine.fr → site servi à la racine du domaine, CNAME généré      │
+  # │                                                                      │
+  # │ ⚠️ Ne la renseigner qu'APRÈS avoir acheté le domaine et créé les      │
+  # │    enregistrements DNS : dès qu'un CNAME est publié, GitHub redirige  │
+  # │    l'ancienne URL vers le domaine, qui doit donc déjà répondre.      │
+  # └──────────────────────────────────────────────────────────────────────┘
+  DOMAINE: ''
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build Astro
-        uses: withastro/action@v3
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Construire le site
+        run: |
+          if [ -n "$DOMAINE" ]; then
+            echo "Cible : https://$DOMAINE (racine du domaine)"
+            SITE_URL="https://$DOMAINE" SITE_BASE="/" npm run build
+            # GitHub Pages lit ce fichier pour associer le domaine au site.
+            echo "$DOMAINE" > dist/CNAME
+          else
+            DEPOT="${GITHUB_REPOSITORY#*/}"
+            echo "Cible : https://${GITHUB_REPOSITORY_OWNER}.github.io/${DEPOT}/"
+            SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io" \
+            SITE_BASE="/${DEPOT}/" \
+            npm run build
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
   deploy:
     needs: build
@@ -28,6 +67,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4

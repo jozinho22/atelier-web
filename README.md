@@ -37,29 +37,38 @@ npm run preview  # prévisualiser le build
 
 ## Déploiement — trois cibles, un seul code
 
-Les liens internes passent par `withBase()` ([src/lib/paths.ts](src/lib/paths.ts))
-et [astro.config.mjs](astro.config.mjs) choisit `site`/`base` selon
-l'environnement — les URL canoniques, le sitemap et le `robots.txt` (généré au
-build par [src/pages/robots.txt.ts](src/pages/robots.txt.ts)) suivent
+Convention (commune à tous les projets Astro) : **le défaut décrit la cible
+finale** — site servi à la racine, dev local sur `/`. Le sous-chemin
+`github.io/<depot>/` n'existe que pendant la phase démo, géré par le workflow.
+Les liens internes passent par `withBase()`
+([src/lib/paths.ts](src/lib/paths.ts)) ; URL canoniques, sitemap et
+`robots.txt` ([src/pages/robots.txt.ts](src/pages/robots.txt.ts)) suivent
 automatiquement.
 
 | Cible | Comment | URL |
 | --- | --- | --- |
-| **Local** (développement) | `npm run dev` | `http://localhost:4321/site-vitrine-ventes-de-sites-web/` |
-| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml) | `https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/` |
-| **Vercel** (production) | importer le dépôt sur vercel.com, c'est tout | domaine de production du projet Vercel |
+| **Local** (développement) | `npm run dev` | `http://localhost:4321/` |
+| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml), `DOMAINE` vide | `https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/` |
+| **GitHub Pages + domaine** (production) | renseigner `DOMAINE` dans [deploy.yml](.github/workflows/deploy.yml) | `https://www.mondomaine.fr/` |
 
-Détails :
+Passage en production (domaine acheté chez un registrar) :
 
-- **GitHub Pages** — prérequis unique déjà en place : Settings → Pages →
-  Source = « GitHub Actions ».
-- **Vercel** — zéro configuration : l'environnement est détecté au build
-  (`VERCEL_PROJECT_PRODUCTION_URL`), le site est généré à la racine et le
-  canonical suit le domaine de production — y compris un domaine personnalisé
-  ajouté plus tard dans les réglages Vercel. [vercel.json](vercel.json) fixe le
-  framework et `trailingSlash` (aligné sur les URL canoniques).
-- **Autre hébergeur** — `SITE_URL=https://www.mondomaine.fr npm run build`
-  génère le site pour la racine de ce domaine.
+1. **DNS chez le registrar** : apex (`mondomaine.fr`) → 4 enregistrements A
+   vers `185.199.108.153`, `185.199.109.153`, `185.199.110.153`,
+   `185.199.111.153` ; `www` → CNAME vers `jozinho22.github.io`.
+2. **Workflow** : renseigner `DOMAINE: 'mondomaine.fr'` dans
+   [deploy.yml](.github/workflows/deploy.yml) — le build passe à la racine du
+   domaine et génère le fichier `CNAME` que GitHub Pages lit pour associer le
+   domaine. Mettre aussi à jour le domaine par défaut dans
+   [astro.config.mjs](astro.config.mjs) (utilisé par les builds locaux).
+3. **GitHub** : Settings → Pages → vérifier le domaine et cocher
+   « Enforce HTTPS » (certificat automatique).
+
+Note : un même dépôt sert soit la démo `github.io`, soit le domaine (l'URL
+github.io redirige vers le domaine une fois branché) — la phase démo précède
+simplement la mise en production. Pour reproduire localement le build démo :
+`SITE_URL=https://jozinho22.github.io SITE_BASE=/site-vitrine-ventes-de-sites-web/ npm run build`.
+Tout autre hébergeur statique reste possible via `SITE_URL=… npm run build`.
 
 ## Avant la mise en ligne définitive — à personnaliser
 
