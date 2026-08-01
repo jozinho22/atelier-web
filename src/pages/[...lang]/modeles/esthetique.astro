@@ -1,0 +1,11 @@
+---
+import EsthetiqueDemo from '../../../components/pages/EsthetiqueDemo.astro';
+
+// Une seule route pour les deux langues : `lang` vaut undefined en français
+// (URL à la racine) et 'en' en anglais (URL préfixée par /en/).
+export function getStaticPaths() {
+  return [{ params: { lang: undefined } }, { params: { lang: 'en' } }];
+}
+---
+
+<EsthetiqueDemo />

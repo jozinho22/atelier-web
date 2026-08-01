@@ -27,7 +27,10 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
   page et le bandeau des démos.
 - **Gabarits** : chaque page est un composant unique dans
   [src/components/pages/](src/components/pages/) qui déduit la langue de l'URL
-  (`splitPath`) ; les routes `src/pages/**` ne sont que des enveloppes de 3 lignes.
+  (`splitPath`).
+- **Routes** : un seul fichier par page sous `src/pages/[...lang]/`, dont le
+  `getStaticPaths()` émet les deux URL — `lang` vaut `undefined` en français
+  (servi à la racine) et `'en'` en anglais. Pas de fichier de route à dupliquer.
 - **Liens** : `localePath(lang, 'chemin')` ([src/lib/i18n.ts](src/lib/i18n.ts))
   pour les pages, `withBase()` pour les fichiers de `public/`.
 - **Switch FR/EN** : [LanguageSwitch.astro](src/components/LanguageSwitch.astro),
@@ -36,8 +39,10 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 - **SEO** : `<html lang>`, `og:locale`, balises `hreflang` (fr / en / x-default)
   et alternates dans le sitemap, générés automatiquement.
 
-Ajouter une langue : l'ajouter dans `LANGS` et `astro.config.mjs`, compléter
-les dictionnaires, dupliquer les enveloppes de routes.
+Ajouter une **page** : créer son dictionnaire, son gabarit, et un seul fichier
+de route sous `src/pages/[...lang]/`. Ajouter une **langue** : l'ajouter dans
+`LANGS`, dans `astro.config.mjs` et dans les `getStaticPaths()`, puis compléter
+les dictionnaires.
 
 ## Commandes
 
