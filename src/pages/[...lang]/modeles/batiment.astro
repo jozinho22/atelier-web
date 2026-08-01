@@ -1,11 +1,6 @@
 ---
 import BatimentDemo from '../../../components/pages/BatimentDemo.astro';
-
-// Une seule route pour les deux langues : `lang` vaut undefined en français
-// (URL à la racine) et 'en' en anglais (URL préfixée par /en/).
-export function getStaticPaths() {
-  return [{ params: { lang: undefined } }, { params: { lang: 'en' } }];
-}
+export { langStaticPaths as getStaticPaths } from '../../../lib/i18n';
 ---
 
 <BatimentDemo />
