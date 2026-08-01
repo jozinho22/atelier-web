@@ -35,34 +35,37 @@ npm run preview  # prévisualiser le build
 - HTML sémantique, un seul `h1` par page, `lang="fr"`
 - Polices auto-hébergées (Fontsource), zéro requête externe
 
-## Déploiement — GitHub Pages
-
-Le site est déployé sur `https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/`
-par le workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml),
-déclenché à chaque push sur `main`.
-
-Prérequis (une seule fois) : dans le dépôt GitHub, **Settings → Pages →
-Source = « GitHub Actions »** (et non « Deploy from a branch », qui lance le
-pipeline Jekyll par défaut et échoue sur un projet Astro).
+## Déploiement — trois cibles, un seul code
 
 Les liens internes passent par `withBase()` ([src/lib/paths.ts](src/lib/paths.ts))
-pour supporter le sous-chemin `/site-vitrine-ventes-de-sites-web/`.
+et [astro.config.mjs](astro.config.mjs) choisit `site`/`base` selon
+l'environnement — les URL canoniques, le sitemap et le `robots.txt` (généré au
+build par [src/pages/robots.txt.ts](src/pages/robots.txt.ts)) suivent
+automatiquement.
 
-Le même code se déploie aussi sur un domaine personnalisé, **sans toucher aux
-chemins** : il suffit de définir `SITE_URL` au moment du build et le site est
-généré pour la racine du domaine.
+| Cible | Comment | URL |
+| --- | --- | --- |
+| **Local** (développement) | `npm run dev` | `http://localhost:4321/site-vitrine-ventes-de-sites-web/` |
+| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml) | `https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/` |
+| **Vercel** (production) | importer le dépôt sur vercel.com, c'est tout | domaine de production du projet Vercel |
 
-```bash
-SITE_URL=https://www.mondomaine.fr npm run build
-```
+Détails :
 
-Sans `SITE_URL`, le build vise GitHub Pages (comportement par défaut, utilisé
-par le workflow).
+- **GitHub Pages** — prérequis unique déjà en place : Settings → Pages →
+  Source = « GitHub Actions ».
+- **Vercel** — zéro configuration : l'environnement est détecté au build
+  (`VERCEL_PROJECT_PRODUCTION_URL`), le site est généré à la racine et le
+  canonical suit le domaine de production — y compris un domaine personnalisé
+  ajouté plus tard dans les réglages Vercel. [vercel.json](vercel.json) fixe le
+  framework et `trailingSlash` (aligné sur les URL canoniques).
+- **Autre hébergeur** — `SITE_URL=https://www.mondomaine.fr npm run build`
+  génère le site pour la racine de ce domaine.
 
 ## Avant la mise en ligne définitive — à personnaliser
 
-1. **Nom de domaine** : voir la section Déploiement ci-dessus
-   ([astro.config.mjs](astro.config.mjs) et [public/robots.txt](public/robots.txt))
+1. **Nom de domaine** : rien à faire côté code — l'ajouter dans les réglages du
+   projet Vercel suffit (canonical, sitemap et robots.txt suivent au build
+   suivant)
 2. **Identité** : nom « Atelier Web », e-mail `contact@atelier-web.example` et
    téléphone `06 00 00 00 00` (présents dans le header, footer, page d'accueil
    et mentions légales)
