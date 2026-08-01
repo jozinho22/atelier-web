@@ -1,6 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { loadEnv } from 'vite';
+
+// Les fichiers .env ne sont pas chargés automatiquement dans la config Astro :
+// on les lit explicitement (voir .env.example), le shell restant prioritaire.
+const env = { ...loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), ''), ...process.env };
 
 /**
  * Hébergement : GitHub Pages.
@@ -14,11 +19,18 @@ import sitemap from '@astrojs/sitemap';
  *
  * Tous les liens internes passent par withBase() (src/lib/paths.ts) et
  * suivent automatiquement ; robots.txt et sitemap aussi.
+ *
+ * Un déploiement Vercel est aussi reconnu automatiquement (inerte sinon) :
+ * site généré à la racine, canonical sur le domaine de production du projet.
  */
+const vercelHost = env.VERCEL ? env.VERCEL_PROJECT_PRODUCTION_URL : undefined;
+
 // TODO : remplacer par le vrai domaine une fois acheté (n'affecte que les
 // builds locaux — en CI, le workflow passe toujours SITE_URL explicitement).
-const SITE = process.env.SITE_URL ?? 'https://www.atelier-web.example';
-const BASE = process.env.SITE_BASE ?? '/';
+// `||` et non `??` : une variable présente mais vide (SITE_URL=) compte
+// comme absente — le .env.example est ainsi copiable tel quel.
+const SITE = env.SITE_URL || (vercelHost ? `https://${vercelHost}` : 'https://www.atelier-web.example');
+const BASE = env.SITE_BASE || '/';
 
 export default defineConfig({
   site: SITE,

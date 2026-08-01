@@ -67,8 +67,15 @@ Passage en production (domaine acheté chez un registrar) :
 Note : un même dépôt sert soit la démo `github.io`, soit le domaine (l'URL
 github.io redirige vers le domaine une fois branché) — la phase démo précède
 simplement la mise en production. Pour reproduire localement le build démo :
-`SITE_URL=https://jozinho22.github.io SITE_BASE=/site-vitrine-ventes-de-sites-web/ npm run build`.
-Tout autre hébergeur statique reste possible via `SITE_URL=… npm run build`.
+`SITE_URL=https://jozinho22.github.io SITE_BASE=/site-vitrine-ventes-de-sites-web/ npm run build`
+— ou via un fichier `.env` (toutes les variables sont documentées dans
+[.env.example](.env.example), le shell restant prioritaire).
+
+Plan B déjà câblé : **Vercel** — importer le dépôt sur vercel.com suffit
+(environnement auto-détecté dans [astro.config.mjs](astro.config.mjs),
+[vercel.json](vercel.json) prêt) ; utile le jour où un projet gagne des
+besoins serveur. Tout autre hébergeur statique reste possible via
+`SITE_URL=… npm run build`.
 
 ## Avant la mise en ligne définitive — à personnaliser
 

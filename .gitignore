@@ -7,6 +7,11 @@ dist/
 # Caches Astro
 .astro/
 
+# Variables d'environnement locales (documentées dans .env.example)
+.env
+.env.*
+!.env.example
+
 # Réglages locaux Claude Code (propres à chaque machine)
 .claude/settings.local.json
 
