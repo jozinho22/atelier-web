@@ -161,6 +161,10 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           <p class="eyebrow">{t.modeles.eyebrow}</p>
           <h2 class="section-title">{t.modeles.title}</h2>
           <p class="section-lede">{t.modeles.lede}</p>
+          <p class="pack-chip pack-essentiel">
+            <span class="pack-dot" aria-hidden="true"></span>{t.modeles.packBadge}
+          </p>
+          <p class="pack-note">{t.modeles.packNote}</p>
         </div>
         <div class="modele-grid">
           {modeles.map((m, i) => (
@@ -179,6 +183,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
                 decoding="async"
               />
               <div class="modele-overlay" aria-hidden="true"></div>
+              <span class="modele-pack pack-essentiel">{t.modeles.packBadge}</span>
               <div class="modele-info">
                 <p class="modele-tag">{m.tag}</p>
                 <h3 class="modele-name">{m.name}</h3>
@@ -214,6 +219,9 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           </a>
 
           <div class="signature-texte">
+            <p class="pack-chip pack-signature">
+              <span class="pack-dot" aria-hidden="true"></span>{t.signature.packBadge}
+            </p>
             <p class="eyebrow signature-eyebrow">{t.signature.eyebrow}</p>
             <h3 class="signature-title">{t.signature.title}</h3>
             <p class="signature-lede">{t.signature.lede}</p>
@@ -276,15 +284,18 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           <p class="section-lede">{t.tarifs.lede}</p>
         </div>
         <div class="tarif-grid">
-          <article class="tarif-card reveal">
+          <article class="tarif-card pack-essentiel reveal">
             <h3 class="tarif-name">{t.tarifs.essentiel.name}</h3>
             <p class="tarif-price"><span>{t.tarifs.essentiel.price}</span></p>
             <ul class="tarif-list">
               {t.tarifs.essentiel.features.map((f) => <li>{f}</li>)}
             </ul>
             <a class="btn btn-ghost tarif-btn" href="#contact">{t.tarifs.essentiel.cta}</a>
+            <a class="tarif-demo" href="#modeles">
+              {t.tarifs.essentiel.demo} <span class="arrow" aria-hidden="true">↓</span>
+            </a>
           </article>
-          <article class="tarif-card tarif-featured reveal" style="--reveal-delay: 0.12s">
+          <article class="tarif-card pack-surmesure tarif-featured reveal" style="--reveal-delay: 0.12s">
             <p class="tarif-badge">{t.tarifs.surMesure.badge}</p>
             <h3 class="tarif-name">{t.tarifs.surMesure.name}</h3>
             <p class="tarif-price"><span>{t.tarifs.surMesure.price}</span></p>
@@ -292,8 +303,9 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
               {t.tarifs.surMesure.features.map((f) => <li>{f}</li>)}
             </ul>
             <a class="btn btn-primary tarif-btn" href="#contact">{t.tarifs.surMesure.cta}</a>
+            <p class="tarif-demo tarif-demo-vide">{t.tarifs.surMesure.demoNote}</p>
           </article>
-          <article class="tarif-card tarif-signature reveal" style="--reveal-delay: 0.24s">
+          <article class="tarif-card pack-signature reveal" style="--reveal-delay: 0.24s">
             <h3 class="tarif-name">{t.tarifs.signature.name}</h3>
             <p class="tarif-price"><span>{t.tarifs.signature.price}</span></p>
             <ul class="tarif-list">
@@ -894,8 +906,74 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     margin-inline: auto;
   }
 
-  .tarif-signature {
-    border-color: rgb(18 19 31 / 0.14);
+  /* --------------------- Code couleur des trois packs -------------------- */
+
+  /* Une couleur par offre, reprise partout où l'offre est évoquée : pastille
+     de section, badge sur les cartes de démonstration, carte tarifaire. Le
+     libellé écrit accompagne toujours la couleur — jamais de couleur seule. */
+
+  .pack-essentiel {
+    --pack: #5352d1;
+    --pack-soft: #e6e6fb;
+  }
+
+  /* Teintes volontairement sombres : elles servent aussi de couleur de texte,
+     et doivent tenir le contraste AA (4,5:1) sur blanc comme sur --pack-soft. */
+
+  .pack-surmesure {
+    --pack: #b83a24;
+    --pack-soft: #ffe6e1;
+  }
+
+  .pack-signature {
+    --pack: #7d5a06;
+    --pack-soft: #f8ecc9;
+  }
+
+  .pack-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    padding: 0.35rem 0.95rem;
+    border-radius: 999px;
+    background: var(--pack-soft);
+    color: var(--pack);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .pack-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--pack);
+    flex-shrink: 0;
+  }
+
+  .pack-note {
+    margin-top: 0.7rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 38rem;
+  }
+
+  /* Pastille d'offre posée sur la photo des cartes de démonstration */
+
+  .modele-pack {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: var(--pack);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    box-shadow: 0 2px 10px rgb(18 19 31 / 0.25);
   }
 
   .tarif-demo {
@@ -904,14 +982,26 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     gap: 0.35rem;
     margin-top: 0.85rem;
     align-self: center;
+    text-align: center;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--accent);
+    color: var(--pack, var(--accent));
     text-decoration: none;
   }
 
   .tarif-demo:hover {
     text-decoration: underline;
+  }
+
+  /* Le pack Sur mesure n'a volontairement pas de démonstration à montrer. */
+  .tarif-demo-vide {
+    font-weight: 500;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .tarif-demo-vide:hover {
+    text-decoration: none;
   }
 
   /* ----------------------------- Modèle Signature ----------------------- */
@@ -1110,15 +1200,21 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     box-shadow: var(--shadow-m);
   }
 
+  /* Chaque carte tarifaire porte la couleur de son pack. */
+  .tarif-card {
+    border-top: 4px solid var(--pack, var(--accent));
+  }
+
   .tarif-featured {
-    border: 2px solid var(--accent);
+    border: 2px solid var(--pack, var(--accent));
+    border-top-width: 4px;
   }
 
   .tarif-badge {
     position: absolute;
     top: -0.85rem;
     left: 2rem;
-    background: var(--accent);
+    background: var(--pack, var(--accent));
     color: #fff;
     font-size: 0.78rem;
     font-weight: 700;
@@ -1160,7 +1256,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .tarif-list li::before {
     content: '✓';
-    color: var(--accent);
+    color: var(--pack, var(--accent));
     font-weight: 700;
     flex-shrink: 0;
   }
@@ -1170,7 +1266,20 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .tarif-card .btn-ghost {
-    color: var(--accent);
+    color: var(--pack, var(--accent));
+  }
+
+  .tarif-card .btn-primary {
+    background: var(--pack, var(--accent));
+    box-shadow: 0 8px 22px rgb(18 19 31 / 0.18);
+  }
+
+  .tarif-card .btn-primary:hover {
+    filter: brightness(0.92);
+  }
+
+  .tarif-name {
+    color: var(--pack, var(--muted));
   }
 
   .tarif-note {

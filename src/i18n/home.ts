@@ -79,6 +79,9 @@ export const home = {
         },
       ],
       viewDemo: 'Voir la démonstration',
+      packBadge: 'Pack Essentiel',
+      packNote:
+        'Les quatre modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
       note: {
         before: "Votre activité n'apparaît pas ici ? C'est justement le principe : chaque site est unique.",
         link: 'Décrivez-moi votre métier',
@@ -86,6 +89,7 @@ export const home = {
       },
     },
     signature: {
+      packBadge: 'Pack Signature',
       eyebrow: 'Un cran au-dessus',
       title: 'Et quand une page ne suffit plus',
       lede:
@@ -141,6 +145,7 @@ export const home = {
           'Mise en ligne incluse',
         ],
         cta: 'Demander un devis',
+        demo: 'Voir les 4 modèles',
       },
       surMesure: {
         badge: 'Le plus choisi',
@@ -155,6 +160,7 @@ export const home = {
           'Accompagnement 3 mois inclus',
         ],
         cta: 'Demander un devis',
+        demoNote: 'Pas de modèle à montrer : il part de vos contenus, pas d’un gabarit.',
       },
       signature: {
         name: 'Signature',
@@ -167,7 +173,7 @@ export const home = {
           'Formation et accompagnement 6 mois',
         ],
         cta: 'Demander un devis',
-        demo: 'Voir un exemple',
+        demo: 'Voir le site complet',
       },
       note: 'Hébergement, nom de domaine et maintenance : 49 €/mois — votre site reste votre propriété, sans engagement.',
     },
@@ -253,6 +259,9 @@ export const home = {
         },
       ],
       viewDemo: 'View the demo',
+      packBadge: 'Essential pack',
+      packNote:
+        'The four templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
       note: {
         before: 'Don’t see your line of work here? That’s exactly the point: every website is one of a kind.',
         link: 'Tell me about your trade',
@@ -260,6 +269,7 @@ export const home = {
       },
     },
     signature: {
+      packBadge: 'Signature pack',
       eyebrow: 'One step further',
       title: 'And when one page is no longer enough',
       lede:
@@ -315,6 +325,7 @@ export const home = {
           'Launch included',
         ],
         cta: 'Request a quote',
+        demo: 'See the 4 templates',
       },
       surMesure: {
         badge: 'Most popular',
@@ -329,6 +340,7 @@ export const home = {
           '3 months of support included',
         ],
         cta: 'Request a quote',
+        demoNote: 'No template to show: it starts from your content, not from a layout.',
       },
       signature: {
         name: 'Signature',
@@ -341,7 +353,7 @@ export const home = {
           'Training and 6 months of support',
         ],
         cta: 'Request a quote',
-        demo: 'See an example',
+        demo: 'See the full site',
       },
       note: 'Hosting, domain name and maintenance: 49 €/month — your website remains your property, with no commitment.',
     },
