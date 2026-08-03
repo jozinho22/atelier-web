@@ -58,7 +58,7 @@ npm run preview  # prévisualiser le build
 - Balises `title` / `meta description` uniques par page, `canonical`, Open Graph
 - Données structurées JSON-LD (`ProfessionalService`) sur la page d'accueil
 - `sitemap-index.xml` généré automatiquement au build + `robots.txt`
-- HTML sémantique, un seul `h1` par page, `lang="fr"`
+- HTML sémantique, un seul `h1` par page, `<html lang>` selon la langue servie
 - Polices auto-hébergées (Fontsource), zéro requête externe
 
 ## Déploiement — trois cibles, un seul code
@@ -74,7 +74,7 @@ automatiquement.
 | Cible | Comment | URL |
 | --- | --- | --- |
 | **Local** (développement) | `npm run dev` | `http://localhost:4321/` |
-| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml), `DOMAINE` vide | `https://jozinho22.github.io/site-vitrine-ventes-de-sites-web/` |
+| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml), `DOMAINE` vide | `https://jozinho22.github.io/atelier-web/` |
 | **GitHub Pages + domaine** (production) | renseigner `DOMAINE` dans [deploy.yml](.github/workflows/deploy.yml) | `https://www.mondomaine.fr/` |
 
 Passage en production (domaine acheté chez un registrar) :
@@ -93,7 +93,7 @@ Passage en production (domaine acheté chez un registrar) :
 Note : un même dépôt sert soit la démo `github.io`, soit le domaine (l'URL
 github.io redirige vers le domaine une fois branché) — la phase démo précède
 simplement la mise en production. Pour reproduire localement le build démo :
-`SITE_URL=https://jozinho22.github.io SITE_BASE=/site-vitrine-ventes-de-sites-web/ npm run build`
+`SITE_URL=https://jozinho22.github.io SITE_BASE=/atelier-web/ npm run build`
 — ou via un fichier `.env` (toutes les variables sont documentées dans
 [.env.example](.env.example), le shell restant prioritaire).
 
@@ -105,15 +105,19 @@ besoins serveur. Tout autre hébergeur statique reste possible via
 
 ## Avant la mise en ligne définitive — à personnaliser
 
-1. **Nom de domaine** : rien à faire côté code — l'ajouter dans les réglages du
-   projet Vercel suffit (canonical, sitemap et robots.txt suivent au build
-   suivant)
-2. **Identité** : nom « Atelier Web », e-mail `contact@atelier-web.example` et
-   téléphone `06 00 00 00 00` (présents dans le header, footer, page d'accueil
-   et mentions légales)
-3. **Mentions légales** : compléter les champs `[à compléter]` dans
-   [src/pages/mentions-legales.astro](src/pages/mentions-legales.astro)
-4. **Tarifs** : ajuster les montants dans [src/pages/index.astro](src/pages/index.astro)
+1. **Nom de domaine** : renseigner `DOMAINE` dans
+   [deploy.yml](.github/workflows/deploy.yml) et le domaine par défaut dans
+   [astro.config.mjs](astro.config.mjs) — canonical, sitemap et robots.txt
+   suivent au build suivant (voir la section Déploiement ci-dessus).
+2. **Identité** : nom « Atelier Web », e-mail `contact@atelier-web.example`,
+   téléphone `06 00 00 00 00` — présents dans
+   [Footer.astro](src/components/Footer.astro),
+   [Home.astro](src/components/pages/Home.astro),
+   [src/i18n/home.ts](src/i18n/home.ts) et [src/i18n/legal.ts](src/i18n/legal.ts).
+3. **Mentions légales** : compléter les champs `[à compléter]` / `[to be
+   completed]` dans [src/i18n/legal.ts](src/i18n/legal.ts) — les deux langues.
+4. **Tarifs** : ajuster les montants dans [src/i18n/home.ts](src/i18n/home.ts)
+   (section `tarifs`, les deux langues).
 
 ## Licence
 

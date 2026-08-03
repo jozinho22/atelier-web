@@ -85,6 +85,25 @@ export const home = {
         after: ", je vous montre ce qu'il pourrait donner.",
       },
     },
+    signature: {
+      eyebrow: 'Un cran au-dessus',
+      title: 'Et quand une page ne suffit plus',
+      lede:
+        'Certaines activités ont trop à montrer pour tenir sur une vitrine. Le site ci-dessous est un modèle complet, traité comme un vrai client : huit pages, une animation dessinée sur mesure, et de vrais outils pour le visiteur.',
+      tag: 'Sport & loisirs',
+      name: 'Golf de Roc’h Avel',
+      desc:
+        'Un club de golf imaginaire, du parcours trou par trou à la carte du restaurant. Sur la page d’accueil, une animation suit le vol de la balle du départ jusqu’au drapeau — au défilement, ou d’un simple clic.',
+      points: [
+        'Huit pages et une navigation complète',
+        'Animation sur mesure, jouée au défilement ou au clic',
+        'Plan du parcours dessiné en vectoriel',
+        'Tarifs et carte de score modifiables sans toucher au code',
+        'Formulaire de réservation, sans serveur ni abonnement',
+      ],
+      cta: 'Visiter le site complet',
+      note: 'S’ouvre dans un nouvel onglet : c’est un site entier, pas une page de démonstration.',
+    },
     methode: {
       eyebrow: 'La méthode',
       title: 'Simple pour vous, du début à la fin',
@@ -136,6 +155,19 @@ export const home = {
           'Accompagnement 3 mois inclus',
         ],
         cta: 'Demander un devis',
+      },
+      signature: {
+        name: 'Signature',
+        price: 'à partir de 2 500 €',
+        features: [
+          'Site complet, huit pages et au-delà',
+          'Une pièce unique : animation, carte interactive, configurateur…',
+          'Identité visuelle construite avec vous',
+          'Contenus rédigés et structurés pour Google',
+          'Formation et accompagnement 6 mois',
+        ],
+        cta: 'Demander un devis',
+        demo: 'Voir un exemple',
       },
       note: 'Hébergement, nom de domaine et maintenance : 49 €/mois — votre site reste votre propriété, sans engagement.',
     },
@@ -227,6 +259,25 @@ export const home = {
         after: ', and I’ll show you what it could look like.',
       },
     },
+    signature: {
+      eyebrow: 'One step further',
+      title: 'And when one page is no longer enough',
+      lede:
+        'Some businesses have far too much to show for a single page. The site below is a complete model, treated like a real client: eight pages, a bespoke animation, and genuine tools for the visitor.',
+      tag: 'Sport & leisure',
+      name: 'Golf de Roc’h Avel',
+      desc:
+        'An imaginary golf club, from the hole-by-hole course guide to the restaurant menu. On the home page, an animation follows the ball from the tee all the way to the flag — as you scroll, or with a single click.',
+      points: [
+        'Eight pages and a full navigation',
+        'Bespoke animation, played on scroll or on click',
+        'Course map drawn in vector graphics',
+        'Prices and scorecard editable without touching the code',
+        'Booking form, with no server and no subscription',
+      ],
+      cta: 'Visit the full site',
+      note: 'Opens in a new tab: this is an entire website, not a demo page.',
+    },
     methode: {
       eyebrow: 'The process',
       title: 'Simple for you, from start to finish',
@@ -278,6 +329,19 @@ export const home = {
           '3 months of support included',
         ],
         cta: 'Request a quote',
+      },
+      signature: {
+        name: 'Signature',
+        price: 'from 2,500 €',
+        features: [
+          'A complete website, eight pages and beyond',
+          'One bespoke piece: animation, interactive map, configurator…',
+          'Visual identity built together with you',
+          'Copy written and structured for search engines',
+          'Training and 6 months of support',
+        ],
+        cta: 'Request a quote',
+        demo: 'See an example',
       },
       note: 'Hosting, domain name and maintenance: 49 €/month — your website remains your property, with no commitment.',
     },

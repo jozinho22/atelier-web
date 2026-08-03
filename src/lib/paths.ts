@@ -1,7 +1,7 @@
 /**
  * Préfixe un chemin interne avec la base du site (config `base` d'Astro).
  * Indispensable pour GitHub Pages, où le site est servi sous
- * /site-vitrine-ventes-de-sites-web/ et non à la racine du domaine.
+ * /atelier-web/ et non à la racine du domaine.
  */
 export function withBase(path = ''): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');

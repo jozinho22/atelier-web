@@ -41,6 +41,21 @@ const modeles = modeleMeta.map((m, i) => ({
   href: localePath(lang, m.path),
 }));
 
+/**
+ * Le modèle « Signature » n'est pas une page de démonstration comme les quatre
+ * autres : c'est un site complet, qui vit dans son propre dépôt et se déploie
+ * seul. On pointe donc une URL absolue, et le lien s'ouvre dans un nouvel
+ * onglet — le visiteur quitte l'atelier pour visiter un vrai site.
+ *
+ * ⚠️ Cette adresse ne répondra qu'une fois le dépôt `modele-golf` publié et
+ * GitHub Pages activé dessus (Settings → Pages → Source = « GitHub Actions »).
+ */
+const signature = {
+  url: 'https://jozinho22.github.io/modele-golf/',
+  image: 'golf.webp',
+  accent: '#3e9c6a',
+};
+
 const etapeDeco = [
   { num: '01', icon: '☕' },
   { num: '02', icon: '🎨' },
@@ -177,6 +192,50 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           {t.modeles.note.before}
           <a href="#contact">{t.modeles.note.link}</a>{t.modeles.note.after}
         </p>
+
+        <!-- ------------------------- Modèle Signature ------------------- -->
+        <div class="signature reveal" style={`--accent-card: ${signature.accent}`}>
+          <a
+            class="signature-visuel"
+            href={signature.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${t.signature.cta} — ${t.signature.name}`}
+          >
+            <img
+              src={withBase(`modeles/${signature.image}`)}
+              alt=""
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="signature-loupe" aria-hidden="true">{t.signature.cta} ↗</span>
+          </a>
+
+          <div class="signature-texte">
+            <p class="eyebrow signature-eyebrow">{t.signature.eyebrow}</p>
+            <h3 class="signature-title">{t.signature.title}</h3>
+            <p class="signature-lede">{t.signature.lede}</p>
+
+            <p class="signature-identite">
+              <span class="modele-tag">{t.signature.tag}</span>
+              <strong>{t.signature.name}</strong>
+            </p>
+            <p class="signature-desc">{t.signature.desc}</p>
+
+            <ul class="signature-points">
+              {t.signature.points.map((point) => <li>{point}</li>)}
+            </ul>
+
+            <p class="signature-actions">
+              <a class="btn btn-primary" href={signature.url} target="_blank" rel="noopener noreferrer">
+                {t.signature.cta} <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </p>
+            <p class="signature-note">{t.signature.note}</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -233,6 +292,20 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
               {t.tarifs.surMesure.features.map((f) => <li>{f}</li>)}
             </ul>
             <a class="btn btn-primary tarif-btn" href="#contact">{t.tarifs.surMesure.cta}</a>
+          </article>
+          <article class="tarif-card tarif-signature reveal" style="--reveal-delay: 0.24s">
+            <h3 class="tarif-name">{t.tarifs.signature.name}</h3>
+            <p class="tarif-price"><span>{t.tarifs.signature.price}</span></p>
+            <ul class="tarif-list">
+              {t.tarifs.signature.features.map((f) => <li>{f}</li>)}
+            </ul>
+            <a class="btn btn-ghost tarif-btn" href="#contact">{t.tarifs.signature.cta}</a>
+            <a
+              class="tarif-demo"
+              href={signature.url}
+              target="_blank"
+              rel="noopener noreferrer">{t.tarifs.signature.demo} <span class="arrow" aria-hidden="true">↗</span></a
+            >
           </article>
         </div>
         <p class="tarif-note reveal">{t.tarifs.note}</p>
@@ -813,10 +886,209 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .tarif-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    /* Trois paliers depuis l'ajout de « Signature » : la largeur maximale doit
+       suivre, sans quoi la troisième carte passe seule à la ligne. */
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
     gap: 1.8rem;
-    max-width: 52rem;
+    max-width: 68rem;
     margin-inline: auto;
+  }
+
+  .tarif-signature {
+    border-color: rgb(18 19 31 / 0.14);
+  }
+
+  .tarif-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.85rem;
+    align-self: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .tarif-demo:hover {
+    text-decoration: underline;
+  }
+
+  /* ----------------------------- Modèle Signature ----------------------- */
+
+  .signature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 2.75rem);
+    align-items: stretch;
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: var(--radius-l);
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.08);
+    box-shadow: var(--shadow-m);
+  }
+
+  @media (max-width: 54rem) {
+    .signature {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .signature-visuel {
+    position: relative;
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    box-shadow: var(--shadow-s);
+    /* Le liseré reprend l'accent du modèle, comme les cartes au-dessus. */
+    outline: 2px solid var(--accent-card);
+    outline-offset: -2px;
+    /* La colonne de texte est plus haute que la capture : on l'étire et on
+       recadre sur la gauche de la page d'accueil, là où vit le titre. */
+    align-self: stretch;
+    min-height: 16rem;
+    display: flex;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+
+  .signature-visuel:hover,
+  .signature-visuel:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-m);
+  }
+
+  .signature-visuel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 8% center;
+    display: block;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .signature-visuel:hover img,
+  .signature-visuel:focus-visible img {
+    transform: scale(1.03);
+  }
+
+  /* Pastille d'invitation : discrète au repos, franche au survol. */
+  .signature-loupe {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%) translateY(0.4rem);
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    background: rgb(18 19 31 / 0.82);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition:
+      opacity 0.3s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+
+  .signature-visuel:hover .signature-loupe,
+  .signature-visuel:focus-visible .signature-loupe {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (hover: none) {
+    /* Sans survol possible, la pastille reste visible : c'est le seul indice
+       que la capture est cliquable. */
+    .signature-loupe {
+      opacity: 1;
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 54rem) {
+    .signature-visuel {
+      aspect-ratio: 16 / 9;
+      min-height: 0;
+    }
+  }
+
+  .signature-eyebrow {
+    color: var(--accent-card);
+  }
+
+  .signature-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    line-height: 1.1;
+    margin-top: 0.6rem;
+  }
+
+  .signature-lede {
+    margin-top: 0.75rem;
+    color: var(--ink-soft);
+  }
+
+  .signature-identite {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(18 19 31 / 0.1);
+  }
+
+  .signature-identite strong {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .signature-desc {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .signature-points {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 1.1rem;
+    font-size: 0.9rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .signature-points li {
+    position: relative;
+    padding-left: 1.35rem;
+  }
+
+  .signature-points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--accent-card);
+  }
+
+  .signature-actions {
+    margin-top: 1.6rem;
+  }
+
+  .signature-actions .arrow {
+    margin-left: 0.15rem;
+  }
+
+  .signature-note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--muted);
   }
 
   .tarif-card {
