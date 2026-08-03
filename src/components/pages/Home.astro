@@ -170,16 +170,18 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
         />
       </div>
       <div class="container">
-        <div class="section-head reveal">
+        <div class="section-head section-head-nue reveal">
           <p class="eyebrow">{t.modeles.eyebrow}</p>
-          <h2 class="section-title">{t.modeles.title}</h2>
-          <p class="section-lede">{t.modeles.lede}</p>
+        </div>
+
+        <!-- ------------------------- Pack Essentiel --------------------- -->
+        <div class="pack-bloc reveal">
           <p class="pack-chip pack-essentiel">
             <span class="pack-dot" aria-hidden="true"></span>{t.modeles.packBadge}
           </p>
+          <h2 class="signature-title">{t.modeles.title}</h2>
           <p class="pack-note">{t.modeles.packNote}</p>
-        </div>
-        <div class="modele-grid">
+          <div class="modele-grid">
           {modeles.map((m, i) => (
             <a
               class="modele-card reveal"
@@ -201,18 +203,22 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
                 <p class="modele-tag">{m.tag}</p>
                 <h3 class="modele-name">{m.name}</h3>
                 <p class="modele-desc">{m.desc}</p>
+                <ul class="modele-points">
+                  {m.points.map((p) => <li>{p}</li>)}
+                </ul>
                 <span class="modele-link">{t.modeles.viewDemo} <span class="arrow">→</span></span>
               </div>
             </a>
           ))}
+          </div>
+          <p class="modele-note">
+            {t.modeles.note.before}
+            <a href="#contact">{t.modeles.note.link}</a>{t.modeles.note.after}
+          </p>
         </div>
-        <p class="modele-note reveal">
-          {t.modeles.note.before}
-          <a href="#contact">{t.modeles.note.link}</a>{t.modeles.note.after}
-        </p>
 
         <!-- ------------------------- Modèle Sur mesure ------------------ -->
-        <div class="signature reveal" style={`--accent-card: ${surMesure.accent}`}>
+        <div class="pack-bloc signature reveal" style={`--accent-card: ${surMesure.accent}`}>
           <a
             class="signature-visuel"
             href={surMesure.url}
@@ -236,8 +242,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
               <span class="pack-dot" aria-hidden="true"></span>{t.surMesure.packBadge}
             </p>
             <p class="eyebrow signature-eyebrow">{t.surMesure.eyebrow}</p>
-            <h3 class="signature-title">{t.surMesure.title}</h3>
-            <p class="signature-lede">{t.surMesure.lede}</p>
+            <h2 class="signature-title">{t.surMesure.title}</h2>
 
             <p class="signature-identite">
               <span class="modele-tag">{t.surMesure.tag}</span>
@@ -259,7 +264,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
         </div>
 
         <!-- ------------------------- Modèle Signature ------------------- -->
-        <div class="signature reveal" style={`--accent-card: ${signature.accent}`}>
+        <div class="pack-bloc signature reveal" style={`--accent-card: ${signature.accent}`}>
           <a
             class="signature-visuel"
             href={signature.url}
@@ -283,8 +288,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
               <span class="pack-dot" aria-hidden="true"></span>{t.signature.packBadge}
             </p>
             <p class="eyebrow signature-eyebrow">{t.signature.eyebrow}</p>
-            <h3 class="signature-title">{t.signature.title}</h3>
-            <p class="signature-lede">{t.signature.lede}</p>
+            <h2 class="signature-title">{t.signature.title}</h2>
 
             <p class="signature-identite">
               <span class="modele-tag">{t.signature.tag}</span>
@@ -764,7 +768,8 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   .modele-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.8rem;
+    gap: 1.4rem;
+    margin-top: 1.4rem;
   }
 
   .modele-card {
@@ -772,7 +777,9 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-height: 24rem;
+    /* Le bloc de texte fixe le plancher : cette valeur sert surtout à garantir
+       une bande de photo visible au-dessus de lui. */
+    min-height: 17.5rem;
     text-decoration: none;
     border-radius: var(--radius-l);
     overflow: hidden;
@@ -817,12 +824,12 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .modele-info {
     position: relative;
-    padding: 1.6rem 1.7rem 1.8rem;
+    padding: 1.1rem 1.2rem 1.25rem;
     color: #fff;
   }
 
   .modele-tag {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.13em;
     text-transform: uppercase;
@@ -830,24 +837,45 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .modele-name {
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    margin-top: 0.4rem;
+    margin-top: 0.3rem;
     letter-spacing: -0.01em;
   }
 
   .modele-desc {
-    margin-top: 0.55rem;
+    margin-top: 0.4rem;
     color: rgb(255 255 255 / 0.82);
-    font-size: 0.98rem;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  /* Contenu du site, en une ligne : les sections que le modèle comporte.
+     Séparateur en ::before plutôt qu'une puce, pour rester discret. */
+  .modele-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    font-size: 0.78rem;
+    color: rgb(255 255 255 / 0.66);
+  }
+
+  .modele-points li + li::before {
+    content: '·';
+    margin-right: 0.5rem;
+    opacity: 0.6;
   }
 
   .modele-link {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 1.1rem;
+    margin-top: 0.55rem;
     font-weight: 600;
+    font-size: 0.88rem;
     color: #fff;
   }
 
@@ -1065,41 +1093,75 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
      capture qui s'ouvre dans un nouvel onglet, et ce qu'il faut retenir à côté.
      Seul l'accent change, passé en variable sur l'élément. */
 
-  .signature {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: clamp(1.5rem, 3vw, 2.75rem);
-    align-items: stretch;
-    margin-top: clamp(3rem, 6vw, 4.5rem);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
+  /* L'en-tête de la section ne porte plus que son intitulé : les titres sont
+     descendus dans les cadres. On supprime donc sa marge basse, l'espacement
+     étant assuré par le margin-top du premier cadre. */
+  .section-head-nue {
+    margin-bottom: 0;
+  }
+
+  /* Habillage commun aux trois offres : chaque pack est présenté dans le même
+     cadre, pour qu'on comprenne d'un coup d'œil qu'ils sont de même nature. */
+  .pack-bloc {
+    max-width: 54rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    margin-inline: auto;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
     border-radius: var(--radius-l);
     background: var(--paper-raised);
     border: 1px solid rgb(18 19 31 / 0.08);
     box-shadow: var(--shadow-m);
   }
 
-  @media (max-width: 54rem) {
-    .signature {
-      grid-template-columns: 1fr;
-    }
+  .pack-bloc > .pack-chip {
+    margin-top: 0;
+  }
+
+  /* Dans un cadre, le titre suit directement la pastille du pack. */
+  .pack-bloc > .signature-title {
+    margin-top: 0.7rem;
+  }
+
+  /* Le visuel flotte à gauche et le texte l'habille : la capture reste en
+     paysage, de taille modeste, et le paragraphe reprend toute la largeur
+     dès qu'il descend sous l'image. */
+  .signature {
+    display: block;
+  }
+
+  /* Le flottant doit être contenu, sinon la bordure de la carte remonte. */
+  .signature::after {
+    content: '';
+    display: block;
+    clear: both;
   }
 
   .signature-visuel {
     position: relative;
+    float: left;
+    width: 19rem;
+    max-width: 45%;
+    aspect-ratio: 16 / 9;
+    margin: 0.35rem 1.4rem 0.9rem 0;
     border-radius: var(--radius-m);
     overflow: hidden;
     box-shadow: var(--shadow-s);
     /* Le liseré reprend l'accent du modèle, comme les cartes au-dessus. */
     outline: 2px solid var(--accent-card);
     outline-offset: -2px;
-    /* La colonne de texte est plus haute que la capture : on l'étire et on
-       recadre sur la gauche de la page d'accueil, là où vit le titre. */
-    align-self: stretch;
-    min-height: 16rem;
-    display: flex;
+    display: block;
     transition:
       transform 0.35s var(--ease-out),
       box-shadow 0.35s var(--ease-out);
+  }
+
+  @media (max-width: 40rem) {
+    .signature-visuel {
+      float: none;
+      width: 100%;
+      max-width: none;
+      margin: 0 0 1.2rem;
+    }
   }
 
   .signature-visuel:hover,
@@ -1175,10 +1237,6 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     margin-top: 0.6rem;
   }
 
-  .signature-lede {
-    margin-top: 0.75rem;
-    color: var(--ink-soft);
-  }
 
   .signature-identite {
     display: flex;
@@ -1422,6 +1480,25 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
     .modele-grid {
       grid-template-columns: 1fr;
+    }
+
+    /* En colonne unique, la carte est bien plus étroite : on lui rend sa
+       hauteur et sa typographie pleine taille pour rester lisible au doigt. */
+    .modele-card {
+      min-height: 22rem;
+    }
+
+    .modele-info {
+      padding: 1.5rem 1.6rem 1.7rem;
+    }
+
+    .modele-name {
+      font-size: 1.35rem;
+    }
+
+    .modele-desc,
+    .modele-link {
+      font-size: 0.96rem;
     }
   }
 </style>

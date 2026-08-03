@@ -55,27 +55,30 @@ export const home = {
     modeles: {
       eyebrow: 'Les modèles',
       title: 'Quatre exemples, une infinité de métiers',
-      lede: "Ces quatre démonstrations ne sont qu'un aperçu du champ des possibles : chaque site est dessiné sur mesure pour votre activité, vos couleurs et vos clients. Explorez-les pour juger du soin apporté — puis imaginez le vôtre.",
       items: [
         {
           tag: 'Associations',
           name: 'Sport & culture',
           desc: 'Actualités, horaires des entraînements, adhésions : tout ce qu’un club doit montrer.',
+          points: ['Activités', 'Actualités', 'Infos pratiques'],
         },
         {
           tag: 'Artisans',
           name: 'Métiers du bâtiment',
           desc: 'Un site solide comme vos chantiers : réalisations, zone d’intervention, devis en un clic.',
+          points: ['Réalisations', 'Zone d’intervention', 'Devis'],
         },
         {
           tag: 'Beauté',
           name: 'Esthétique & bien-être',
           desc: 'Une vitrine douce et raffinée pour instituts, salons et praticiennes indépendantes.',
+          points: ['Carte des soins', 'Horaires', 'Réservation'],
         },
         {
           tag: 'Artistes',
           name: 'Blog & portfolio d’artiste',
           desc: 'Vos œuvres en pleine lumière, un journal de bord pour raconter votre démarche.',
+          points: ['Galerie', 'Journal', 'Expositions'],
         },
       ],
       viewDemo: 'Voir la démonstration',
@@ -92,8 +95,6 @@ export const home = {
       packBadge: 'Pack Sur mesure',
       eyebrow: 'Le plus choisi',
       title: 'Plusieurs pages, un design qui n’appartient qu’à vous',
-      lede:
-        'Quand une vitrine d’une page ne suffit plus : cinq pages, une identité dessinée pour le métier, et des textes écrits pour que Google comprenne où vous êtes et ce que vous faites. Le site ci-dessous en est un exemple complet.',
       tag: 'Salon de thé',
       name: 'The Sugar & Steam Diner',
       desc:
@@ -112,8 +113,6 @@ export const home = {
       packBadge: 'Pack Signature',
       eyebrow: 'Un cran au-dessus',
       title: 'Et quand une page ne suffit plus',
-      lede:
-        'Certaines activités ont trop à montrer pour tenir sur une vitrine. Le site ci-dessous est un modèle complet, traité comme un vrai client : huit pages, une animation dessinée sur mesure, et de vrais outils pour le visiteur.',
       tag: 'Sport & loisirs',
       name: 'Golf de Roc’h Avel',
       desc:
@@ -255,27 +254,30 @@ export const home = {
     modeles: {
       eyebrow: 'The templates',
       title: 'Four examples, countless trades',
-      lede: 'These four demos are just a glimpse of what’s possible: every website is designed from scratch around your business, your colors and your customers. Explore them to see the care that goes in — then picture your own.',
       items: [
         {
           tag: 'Clubs',
           name: 'Sports & culture',
           desc: 'News, practice schedules, memberships: everything a club needs to show.',
+          points: ['Activities', 'News', 'Practical info'],
         },
         {
           tag: 'Artisans',
           name: 'Building trades',
           desc: 'A website as solid as your worksites: past projects, service area, quotes in one click.',
+          points: ['Past projects', 'Service area', 'Quotes'],
         },
         {
           tag: 'Beauty',
           name: 'Beauty & wellness',
           desc: 'A soft, refined showcase for salons, spas and independent practitioners.',
+          points: ['Treatment menu', 'Opening hours', 'Booking'],
         },
         {
           tag: 'Artists',
           name: 'Artist blog & portfolio',
           desc: 'Your work in the spotlight, with a journal to tell the story behind it.',
+          points: ['Gallery', 'Journal', 'Exhibitions'],
         },
       ],
       viewDemo: 'View the demo',
@@ -292,8 +294,6 @@ export const home = {
       packBadge: 'Bespoke pack',
       eyebrow: 'The most popular',
       title: 'Several pages, a design that belongs to you alone',
-      lede:
-        'When a one-page site is no longer enough: five pages, an identity drawn for the trade, and copy written so that Google understands where you are and what you do. The site below is a complete example.',
       tag: 'Tea room',
       name: 'The Sugar & Steam Diner',
       desc:
@@ -312,8 +312,6 @@ export const home = {
       packBadge: 'Signature pack',
       eyebrow: 'One step further',
       title: 'And when one page is no longer enough',
-      lede:
-        'Some businesses have far too much to show for a single page. The site below is a complete model, treated like a real client: eight pages, a bespoke animation, and genuine tools for the visitor.',
       tag: 'Sport & leisure',
       name: 'Golf de Roc’h Avel',
       desc:
