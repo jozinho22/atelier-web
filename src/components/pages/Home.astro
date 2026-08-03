@@ -1213,7 +1213,11 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   .tarif-badge {
     position: absolute;
     top: -0.85rem;
-    left: 2rem;
+    /* Coin haut droit : le nom du pack occupe le coin gauche, le bandeau ne
+       doit jamais venir le serrer — surtout sur trois colonnes, où les cartes
+       sont étroites. */
+    right: 1.5rem;
+    left: auto;
     background: var(--pack, var(--accent));
     color: #fff;
     font-size: 0.78rem;
