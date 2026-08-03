@@ -88,6 +88,26 @@ export const home = {
         after: ", je vous montre ce qu'il pourrait donner.",
       },
     },
+    surMesure: {
+      packBadge: 'Pack Sur mesure',
+      eyebrow: 'Le plus choisi',
+      title: 'Plusieurs pages, un design qui n’appartient qu’à vous',
+      lede:
+        'Quand une vitrine d’une page ne suffit plus : cinq pages, une identité dessinée pour le métier, et des textes écrits pour que Google comprenne où vous êtes et ce que vous faites. Le site ci-dessous en est un exemple complet.',
+      tag: 'Salon de thé',
+      name: 'The Sugar & Steam Diner',
+      desc:
+        'Un salon de thé imaginaire installé dans un diner américain de 1954, à Cherbourg-en-Cotentin. Entre deux pages, le contenu s’évapore derrière une volute de vapeur, et les photos volent d’une page à l’autre.',
+      points: [
+        'Cinq pages : accueil, carte, salon, actualités, contact',
+        'Transitions animées d’une page à l’autre',
+        'Carte et actualités modifiables sans toucher au code',
+        'Photos converties en AVIF et WebP, jusqu’à huit fois plus légères',
+        'Fiche d’établissement, carte et questions fréquentes lisibles par Google',
+      ],
+      cta: 'Visiter le site complet',
+      note: 'S’ouvre dans un nouvel onglet : c’est un site entier, pas une page de démonstration.',
+    },
     signature: {
       packBadge: 'Pack Signature',
       eyebrow: 'Un cran au-dessus',
@@ -160,7 +180,7 @@ export const home = {
           'Accompagnement 3 mois inclus',
         ],
         cta: 'Demander un devis',
-        demoNote: 'Pas de modèle à montrer : il part de vos contenus, pas d’un gabarit.',
+        demo: 'Voir le site complet',
       },
       signature: {
         name: 'Signature',
@@ -268,6 +288,26 @@ export const home = {
         after: ', and I’ll show you what it could look like.',
       },
     },
+    surMesure: {
+      packBadge: 'Bespoke pack',
+      eyebrow: 'The most popular',
+      title: 'Several pages, a design that belongs to you alone',
+      lede:
+        'When a one-page site is no longer enough: five pages, an identity drawn for the trade, and copy written so that Google understands where you are and what you do. The site below is a complete example.',
+      tag: 'Tea room',
+      name: 'The Sugar & Steam Diner',
+      desc:
+        'An imaginary tea room set inside a 1954 American diner in Cherbourg-en-Cotentin. Between two pages, the content evaporates behind a curl of steam, and the photographs fly from one page to the next.',
+      points: [
+        'Five pages: home, menu, the room, news, contact',
+        'Animated transitions from one page to the next',
+        'Menu and news editable without touching the code',
+        'Photographs converted to AVIF and WebP, up to eight times lighter',
+        'Business details, menu and FAQ readable by Google',
+      ],
+      cta: 'Visit the full site',
+      note: 'Opens in a new tab: this is an entire website, not a demo page.',
+    },
     signature: {
       packBadge: 'Signature pack',
       eyebrow: 'One step further',
@@ -340,7 +380,7 @@ export const home = {
           '3 months of support included',
         ],
         cta: 'Request a quote',
-        demoNote: 'No template to show: it starts from your content, not from a layout.',
+        demo: 'See the full site',
       },
       signature: {
         name: 'Signature',

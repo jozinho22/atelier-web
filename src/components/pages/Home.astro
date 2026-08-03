@@ -56,6 +56,19 @@ const signature = {
   accent: '#3e9c6a',
 };
 
+/**
+ * Même principe pour le modèle « Sur mesure » : un site complet dans son propre
+ * dépôt, et non une page de démonstration hébergée ici.
+ *
+ * ⚠️ Cette adresse ne répondra qu'une fois le dépôt `modele-salon-de-the`
+ * publié et GitHub Pages activé dessus.
+ */
+const surMesure = {
+  url: 'https://jozinho22.github.io/modele-salon-de-the/',
+  image: 'salon-de-the.webp',
+  accent: '#c0202e',
+};
+
 const etapeDeco = [
   { num: '01', icon: '☕' },
   { num: '02', icon: '🎨' },
@@ -198,6 +211,53 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           <a href="#contact">{t.modeles.note.link}</a>{t.modeles.note.after}
         </p>
 
+        <!-- ------------------------- Modèle Sur mesure ------------------ -->
+        <div class="signature reveal" style={`--accent-card: ${surMesure.accent}`}>
+          <a
+            class="signature-visuel"
+            href={surMesure.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${t.surMesure.cta} — ${t.surMesure.name}`}
+          >
+            <img
+              src={withBase(`modeles/${surMesure.image}`)}
+              alt=""
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="signature-loupe" aria-hidden="true">{t.surMesure.cta} ↗</span>
+          </a>
+
+          <div class="signature-texte">
+            <p class="pack-chip pack-surmesure">
+              <span class="pack-dot" aria-hidden="true"></span>{t.surMesure.packBadge}
+            </p>
+            <p class="eyebrow signature-eyebrow">{t.surMesure.eyebrow}</p>
+            <h3 class="signature-title">{t.surMesure.title}</h3>
+            <p class="signature-lede">{t.surMesure.lede}</p>
+
+            <p class="signature-identite">
+              <span class="modele-tag">{t.surMesure.tag}</span>
+              <strong>{t.surMesure.name}</strong>
+            </p>
+            <p class="signature-desc">{t.surMesure.desc}</p>
+
+            <ul class="signature-points">
+              {t.surMesure.points.map((point) => <li>{point}</li>)}
+            </ul>
+
+            <p class="signature-actions">
+              <a class="btn btn-primary" href={surMesure.url} target="_blank" rel="noopener noreferrer">
+                {t.surMesure.cta} <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </p>
+            <p class="signature-note">{t.surMesure.note}</p>
+          </div>
+        </div>
+
         <!-- ------------------------- Modèle Signature ------------------- -->
         <div class="signature reveal" style={`--accent-card: ${signature.accent}`}>
           <a
@@ -303,7 +363,12 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
               {t.tarifs.surMesure.features.map((f) => <li>{f}</li>)}
             </ul>
             <a class="btn btn-primary tarif-btn" href="#contact">{t.tarifs.surMesure.cta}</a>
-            <p class="tarif-demo tarif-demo-vide">{t.tarifs.surMesure.demoNote}</p>
+            <a
+              class="tarif-demo"
+              href={surMesure.url}
+              target="_blank"
+              rel="noopener noreferrer">{t.tarifs.surMesure.demo} <span class="arrow" aria-hidden="true">↗</span></a
+            >
           </article>
           <article class="tarif-card pack-signature reveal" style="--reveal-delay: 0.24s">
             <h3 class="tarif-name">{t.tarifs.signature.name}</h3>
@@ -993,18 +1058,12 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     text-decoration: underline;
   }
 
-  /* Le pack Sur mesure n'a volontairement pas de démonstration à montrer. */
-  .tarif-demo-vide {
-    font-weight: 500;
-    font-style: italic;
-    color: var(--muted);
-  }
+  /* ------------------- Modèles complets (Sur mesure, Signature) --------- */
 
-  .tarif-demo-vide:hover {
-    text-decoration: none;
-  }
-
-  /* ----------------------------- Modèle Signature ----------------------- */
+  /* Ces deux paliers ne se démontrent pas par une page hébergée ici mais par un
+     site entier, dans son propre dépôt. Ils partagent donc le même bloc : une
+     capture qui s'ouvre dans un nouvel onglet, et ce qu'il faut retenir à côté.
+     Seul l'accent change, passé en variable sur l'élément. */
 
   .signature {
     display: grid;
