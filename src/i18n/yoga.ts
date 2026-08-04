@@ -37,9 +37,9 @@ export const yoga = {
       eyebrow: 'Le flow',
       title: 'Huit postures, un seul souffle',
       lede:
-        'Chaque cours se déroule comme une phrase : une posture appelle la suivante, sans à-coup. Passez la souris sur une posture, ou laissez-vous porter par l’enchaînement.',
-      lancer: 'Suivre le flow',
-      arreter: 'Arrêter',
+        'Chaque cours se déroule comme une phrase : une posture appelle la suivante, sans à-coup. Les vidéos s’enchaînent d’elles-mêmes — choisissez une posture pour y aller directement.',
+      suspendre: 'Suspendre',
+      reprendre: 'Reprendre',
       postures: [
         { nom: 'La Montagne', sanskrit: 'Tadasana', intention: 'S’enraciner, et se souvenir de sa hauteur.' },
         { nom: 'Le Guerrier', sanskrit: 'Virabhadrasana', intention: 'Tenir sans se crisper. La force tranquille.' },
@@ -131,9 +131,9 @@ export const yoga = {
       eyebrow: 'The flow',
       title: 'Eight postures, one single breath',
       lede:
-        'Every class unfolds like a sentence: one posture calls the next, without a jolt. Hover over a posture, or simply let the sequence carry you.',
-      lancer: 'Follow the flow',
-      arreter: 'Stop',
+        'Every class unfolds like a sentence: one posture calls the next, without a jolt. The videos play on by themselves — pick a posture to jump straight to it.',
+      suspendre: 'Pause',
+      reprendre: 'Resume',
       postures: [
         { nom: 'Mountain', sanskrit: 'Tadasana', intention: 'Take root, and remember your own height.' },
         { nom: 'Warrior', sanskrit: 'Virabhadrasana', intention: 'Hold without tensing. Quiet strength.' },

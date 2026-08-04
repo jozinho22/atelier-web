@@ -5,7 +5,6 @@
 // images déposées.
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../DemoBar.astro';
-import PostureYoga from '../PostureYoga.astro';
 import { splitPath, localePath } from '../../lib/i18n';
 import { withBase } from '../../lib/paths';
 import { common } from '../../i18n/common';
@@ -16,6 +15,35 @@ const t = yoga[lang];
 const c = common[lang];
 
 const photo = (nom: string) => withBase(`modeles/yoga/${nom}`);
+
+/**
+ * Vidéos des postures, dans l'ordre de l'enchaînement défini par le
+ * dictionnaire. Une case vide signifie « pas encore filmée » : la posture
+ * n'apparaît alors pas sur la scène.
+ *
+ * Ajouter une posture = déposer la vidéo dans public/modeles/yoga/postures/
+ * et renseigner son nom à la bonne place ci-dessous. Rien d'autre.
+ */
+const VIDEOS: (string | undefined)[] = [
+  undefined,        // 1 · La Montagne
+  'guerrier.mp4',   // 2 · Le Guerrier
+  'triangle.mp4',   // 3 · Le Triangle
+  undefined,        // 4 · Le Chien tête en bas
+  undefined,        // 5 · La Pince assise
+  'enfant.mp4',     // 6 · L'Enfant
+  'cobra.mp4',      // 7 · Le Cobra
+  undefined,        // 8 · Le Pont
+];
+
+/**
+ * Seules les postures filmées sont montrées : mieux vaut quatre vidéos
+ * abouties qu'un enchaînement à trous. La numérotation affichée suit donc
+ * la scène, pas la table ci-dessus.
+ */
+const postures = t.flow.postures
+  .map((p, i) => ({ ...p, video: VIDEOS[i] }))
+  .filter((p): p is typeof p & { video: string } => Boolean(p.video));
+
 ---
 
 <Base title={t.title} description={t.description}>
@@ -91,26 +119,52 @@ const photo = (nom: string) => withBase(`modeles/yoga/${nom}`);
               class="y-btn y-btn-ligne y-flow-bouton"
               type="button"
               data-flow-bouton
-              data-arreter={t.flow.arreter}
+              data-suspendre={t.flow.suspendre}
+              data-reprendre={t.flow.reprendre}
+              aria-pressed="true"
             >
-              <span data-flow-libelle>{t.flow.lancer}</span>
+              <span data-flow-libelle>{t.flow.suspendre}</span>
               <span class="y-flow-point" aria-hidden="true"></span>
             </button>
           </div>
 
-          <ol class="y-postures" data-flow-liste>
-            {t.flow.postures.map((p, i) => (
-              <li class="y-posture reveal" style={`--reveal-delay: ${i * 0.06}s`} data-posture>
-                <span class="y-posture-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-                <div class="y-posture-figure">
-                  <PostureYoga pose={i} titre={p.nom} />
-                </div>
-                <p class="y-posture-nom">{p.nom}</p>
-                <p class="y-posture-sanskrit">{p.sanskrit}</p>
-                <p class="y-posture-intention">{p.intention}</p>
-              </li>
-            ))}
-          </ol>
+          <div class="y-scene-bloc reveal" data-flow-liste>
+            <!-- La scène : une seule posture montrée à la fois, en fondu. -->
+            <div class="y-scene">
+              {postures.map((p, i) => (
+                <figure class="y-vue" data-vue data-index={i} aria-hidden={i === 0 ? undefined : 'true'}>
+                  <video
+                    class="y-vue-video"
+                    data-video
+                    src={photo(`postures/${p.video}`)}
+                    muted
+                    loop
+                    playsinline
+                    preload="none"
+                    aria-label={p.nom}
+                  />
+                  <figcaption class="y-vue-legende">
+                    <span class="y-vue-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="y-vue-nom">{p.nom}</span>
+                    <span class="y-vue-sanskrit">{p.sanskrit}</span>
+                    <span class="y-vue-intention">{p.intention}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+
+            <!-- L'enchaînement complet, cliquable. -->
+            <ol class="y-sommaire">
+              {postures.map((p, i) => (
+                <li>
+                  <button class="y-sommaire-item" type="button" data-choisir={i} aria-current={i === 0 ? 'true' : undefined}>
+                    <span class="y-sommaire-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="y-sommaire-nom">{p.nom}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
@@ -633,89 +687,147 @@ const photo = (nom: string) => withBase(`modeles/yoga/${nom}`);
     }
   }
 
-  .y-postures {
+  /* La scène et son sommaire : deux colonnes sur grand écran. */
+  .y-scene-bloc {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    gap: 1px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    /* Le fond transparaît dans les interstices : la grille dessine ses
-       propres séparations, sans une seule bordure déclarée. */
-    background: rgb(246 245 242 / 0.16);
-    border: 1px solid rgb(246 245 242 / 0.16);
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
   }
 
-  .y-posture {
+  .y-scene {
     position: relative;
-    padding: 1.8rem 1.4rem 1.6rem;
-    background: var(--y-noir);
-    transition: background-color 0.6s ease;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid rgb(246 245 242 / 0.18);
+    background: var(--y-noir-doux);
   }
 
-  .y-posture-num {
+  /* Les vues se superposent et se relaient en fondu — aucun à-coup, comme
+     le passage d'une posture à l'autre en cours. */
+  .y-vue {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.9s ease,
+      visibility 0.9s;
+  }
+
+  .y-vue.est-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .y-vue-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Le noir et blanc s'applique aussi aux vidéos : le parti pris tient
+       quelle que soit la source déposée. */
+    filter: grayscale(1) contrast(1.08);
+  }
+
+
+  .y-vue-legende {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    gap: 0.15rem;
+    padding: 3.5rem 1.5rem 1.4rem;
+    background: linear-gradient(transparent, rgb(11 11 11 / 0.88) 55%);
+    color: var(--y-blanc);
+  }
+
+  .y-vue-num {
     font-size: 0.7rem;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.24em;
     color: var(--y-gris);
   }
 
-  .y-posture-figure {
-    margin: 0.8rem 0 1.2rem;
-    color: var(--y-blanc);
-    transition: transform 0.6s var(--ease-out);
-  }
-
-  .y-posture:hover .y-posture-figure,
-  .y-posture.est-active .y-posture-figure {
-    transform: scale(1.06);
-  }
-
-  .y-posture-nom {
+  .y-vue-nom {
     font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 400;
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
   }
 
-  .y-posture-sanskrit {
-    margin-top: 0.15rem;
-    font-size: 0.78rem;
+  .y-vue-sanskrit {
+    font-size: 0.8rem;
     font-style: italic;
     letter-spacing: 0.08em;
     color: var(--y-gris);
   }
 
-  .y-posture-intention {
-    margin-top: 0.8rem;
-    font-size: 0.87rem;
-    line-height: 1.6;
+  .y-vue-intention {
+    margin-top: 0.35rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
     color: var(--y-gris-clair);
-    opacity: 0;
-    transform: translateY(4px);
+  }
+
+  /* -------------------------------- Sommaire -------------------------- */
+
+  .y-sommaire {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid rgb(246 245 242 / 0.18);
+  }
+
+  .y-sommaire-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 0.72rem 0.6rem;
+    border: 0;
+    border-bottom: 1px solid rgb(246 245 242 / 0.12);
+    background: transparent;
+    color: var(--y-gris-clair);
+    font: inherit;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
     transition:
-      opacity 0.5s ease,
-      transform 0.5s var(--ease-out);
+      background-color 0.4s,
+      color 0.4s,
+      padding-left 0.4s var(--ease-out);
   }
 
-  .y-posture:hover .y-posture-intention,
-  .y-posture.est-active .y-posture-intention {
-    opacity: 1;
-    transform: none;
+  .y-sommaire-item:hover {
+    color: var(--y-blanc);
+    padding-left: 1rem;
   }
 
-  /* La posture en cours dans l'enchaînement s'éclaire, les autres s'effacent
-     — le regard suit le flow tout seul. */
-  .y-posture.est-active {
-    background: var(--y-noir-doux);
+  .y-sommaire-item[aria-current='true'] {
+    background: rgb(246 245 242 / 0.08);
+    color: var(--y-blanc);
   }
 
-  [data-flow-liste].flow-en-cours .y-posture:not(.est-active) {
-    opacity: 0.32;
+  .y-sommaire-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--y-gris);
+    font-variant-numeric: tabular-nums;
   }
 
-  [data-flow-liste] .y-posture {
-    transition:
-      background-color 0.6s ease,
-      opacity 0.6s ease;
+  .y-sommaire-item[aria-current='true'] .y-sommaire-num {
+    color: var(--y-blanc);
+  }
+
+  .y-sommaire-nom {
+    font-family: var(--font-serif);
+    flex-grow: 1;
+  }
+
+
+  @media (max-width: 860px) {
+    .y-scene-bloc {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* ----------------------------- Bande photo -------------------------- */
@@ -960,88 +1072,117 @@ const photo = (nom: string) => withBase(`modeles/yoga/${nom}`);
 
 <script>
   // ------------------------------------------------------------------
-  //  Tracé des figures à l'entrée dans le champ de vision
+  //  La scène : les vidéos des postures s'enchaînent d'elles-mêmes, en
+  //  boucle. Chaque plan est joué jusqu'au bout, puis cède la place au
+  //  suivant ; après la dernière, on revient à la première.
   // ------------------------------------------------------------------
   const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const postures = Array.from(document.querySelectorAll<HTMLElement>('[data-posture]'));
 
-  if (postures.length > 0) {
-    if (mouvementReduit || !('IntersectionObserver' in window)) {
-      postures.forEach((p) => p.classList.add('est-dessinee'));
-    } else {
-      const observateur = new IntersectionObserver(
-        (entrees) => {
-          for (const entree of entrees) {
-            if (entree.isIntersecting) {
-              entree.target.classList.add('est-dessinee');
-              observateur.unobserve(entree.target);
-            }
-          }
-        },
-        { threshold: 0.35 }
-      );
-      postures.forEach((p) => observateur.observe(p));
-    }
-  }
-
-  // ------------------------------------------------------------------
-  //  L'enchaînement : les postures s'éclairent l'une après l'autre
-  // ------------------------------------------------------------------
+  const vues = Array.from(document.querySelectorAll<HTMLElement>('[data-vue]'));
+  const choix = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-choisir]'));
+  const bloc = document.querySelector<HTMLElement>('[data-flow-liste]');
   const bouton = document.querySelector<HTMLButtonElement>('[data-flow-bouton]');
-  const liste = document.querySelector<HTMLElement>('[data-flow-liste]');
   const libelle = document.querySelector<HTMLElement>('[data-flow-libelle]');
 
-  if (bouton && liste && libelle && postures.length > 0) {
-    const texteLancer = libelle.textContent ?? '';
-    const texteArreter = bouton.dataset.arreter ?? '';
-    // Une posture toutes les 2,6 s : le temps d'un cycle respiratoire complet.
-    const DUREE = 2600;
-    let minuteur = 0;
-    let index = 0;
+  if (vues.length > 0 && bloc) {
+    const texteSuspendre = bouton?.dataset.suspendre ?? '';
+    const texteReprendre = bouton?.dataset.reprendre ?? '';
 
-    const eteindre = (): void => {
-      postures.forEach((p) => p.classList.remove('est-active'));
+    let courante = 0;
+    // Le mouvement réduit démarre en pause : on ne lance pas de vidéo à
+    // quelqu'un qui a demandé moins d'animation, il la déclenchera s'il veut.
+    let enPause = mouvementReduit;
+    // On part du principe que la scène est visible : si l'observateur ne
+    // répond pas (navigateur ancien, onglet non composité…), les vidéos
+    // tournent au lieu de rester figées. L'observateur ne fait que mettre en
+    // pause quand la section sort du champ — un repli qui échoue du bon côté.
+    let aLEcran = true;
+
+    const videoDe = (i: number): HTMLVideoElement | null =>
+      vues[i]?.querySelector<HTMLVideoElement>('[data-video]') ?? null;
+
+    const suivante = (): void => montrer((courante + 1) % vues.length);
+
+    /** Lance la vidéo courante si les conditions sont réunies. */
+    const jouer = (): void => {
+      const video = videoDe(courante);
+      if (!video || enPause || !aLEcran) return;
+      // `play()` rejette si le navigateur refuse : on silence pour ne pas
+      // polluer la console.
+      void video.play().catch(() => {});
     };
 
-    const arreter = (): void => {
-      window.clearInterval(minuteur);
-      minuteur = 0;
-      eteindre();
-      liste.classList.remove('flow-en-cours');
-      bouton.setAttribute('aria-pressed', 'false');
-      libelle.textContent = texteLancer;
-    };
-
-    const avancer = (): void => {
-      eteindre();
-      postures[index].classList.add('est-active');
-      index = (index + 1) % postures.length;
-    };
-
-    bouton.setAttribute('aria-pressed', 'false');
-
-    bouton.addEventListener('click', () => {
-      if (minuteur) {
-        arreter();
-        return;
+    function montrer(i: number): void {
+      const sortante = videoDe(courante);
+      if (sortante) {
+        sortante.pause();
+        sortante.currentTime = 0;
       }
-      index = 0;
-      liste.classList.add('flow-en-cours');
-      bouton.setAttribute('aria-pressed', 'true');
-      if (texteArreter) libelle.textContent = texteArreter;
-      avancer();
-      minuteur = window.setInterval(avancer, DUREE);
+
+      courante = i;
+
+      vues.forEach((v, n) => {
+        const active = n === i;
+        v.classList.toggle('est-visible', active);
+        if (active) v.removeAttribute('aria-hidden');
+        else v.setAttribute('aria-hidden', 'true');
+      });
+
+      choix.forEach((b, n) => {
+        if (n === i) b.setAttribute('aria-current', 'true');
+        else b.removeAttribute('aria-current');
+      });
+
+      jouer();
+    }
+
+    // Chaque vidéo passe la main à la suivante. `loop` reste désactivé : c'est
+    // l'enchaînement qui boucle, pas le plan.
+    vues.forEach((_, i) => {
+      const video = videoDe(i);
+      if (!video) return;
+      video.loop = false;
+      video.addEventListener('ended', () => {
+        // Seule la vidéo affichée a le droit de faire avancer la suite.
+        if (i === courante) suivante();
+      });
     });
 
-    // L'enchaînement s'arrête s'il sort de l'écran : inutile de faire
-    // travailler la page pour une animation que personne ne regarde.
+    choix.forEach((b, i) => b.addEventListener('click', () => montrer(i)));
+
+    const majBouton = (): void => {
+      if (!bouton || !libelle) return;
+      bouton.setAttribute('aria-pressed', enPause ? 'false' : 'true');
+      libelle.textContent = enPause ? texteReprendre : texteSuspendre;
+    };
+
+    bouton?.addEventListener('click', () => {
+      enPause = !enPause;
+      if (enPause) videoDe(courante)?.pause();
+      else jouer();
+      majBouton();
+    });
+
+    majBouton();
+
+    // Hors écran, rien ne tourne : ni décodage vidéo, ni bande passante.
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(
+      // L'observateur est conservé dans une variable : sans référence
+      // retenue, il peut être ramassé par le GC et cesser de notifier.
+      const veille = new IntersectionObserver(
         (entrees) => {
-          if (minuteur && entrees.some((e) => !e.isIntersecting)) arreter();
+          aLEcran = entrees.some((e) => e.isIntersecting);
+          if (aLEcran) jouer();
+          else vues.forEach((_, i) => videoDe(i)?.pause());
         },
-        { threshold: 0 }
-      ).observe(liste);
+        { threshold: 0.25 }
+      );
+      veille.observe(bloc);
+    } else {
+      aLEcran = true;
+      jouer();
     }
+
+    montrer(0);
   }
 </script>
