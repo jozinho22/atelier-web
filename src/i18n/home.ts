@@ -76,9 +76,9 @@ export const home = {
         },
         {
           tag: 'Artistes',
-          name: 'Blog & portfolio d’artiste',
-          desc: 'Vos œuvres en pleine lumière, un journal de bord pour raconter votre démarche.',
-          points: ['Galerie', 'Journal', 'Expositions'],
+          name: 'Dessinatrice au fusain',
+          desc: 'Papier vieilli et noir de charbon : un portfolio d’inspiration 1940 où le trait prime.',
+          points: ['Galerie', 'Démarche', 'Commandes'],
         },
         {
           tag: 'Bien-être',
@@ -301,9 +301,9 @@ export const home = {
         },
         {
           tag: 'Artists',
-          name: 'Artist blog & portfolio',
-          desc: 'Your work in the spotlight, with a journal to tell the story behind it.',
-          points: ['Gallery', 'Journal', 'Exhibitions'],
+          name: 'Charcoal artist',
+          desc: 'Aged paper and charcoal black: a 1940s-inspired portfolio where the line comes first.',
+          points: ['Gallery', 'Method', 'Commissions'],
         },
         {
           tag: 'Wellbeing',

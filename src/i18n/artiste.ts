@@ -1,186 +1,227 @@
 import type { Lang } from '../lib/i18n';
 
 /**
- * Textes de la démo « blog d'artiste » (Claire Aubry, peintre à Nantes).
- * Même forme dans les deux langues ; seuls les textes changent.
+ * Modèle « É. Martin » — dessinatrice au fusain.
+ * Univers 1940 : papier vieilli, noir de charbon, swing manouche. Le seul
+ * éclat de couleur du site est celui du bouquet de roses — tout le reste,
+ * y compris l'interface, reste au fusain.
  */
 export const artiste = {
   fr: {
     meta: {
-      title: "Modèle blog d'artiste — Claire Aubry, peintre | Atelier Web",
+      title: 'Modèle dessinatrice au fusain — Élise Martin | Atelier Web',
       description:
-        "Exemple de site blog-portfolio pour artiste : galerie d'œuvres, journal de création, expositions et contact. Un modèle Atelier Web mettant l'art en pleine lumière.",
+        "Exemple de site vitrine pour une artiste dessinatrice au fusain : galerie, démarche, atelier et commandes. Un modèle Atelier Web d'inspiration années 1940.",
     },
-    demoLabel: "Blog & portfolio d'artiste",
-    header: {
-      ariaNav: 'Navigation du site',
-      logo: { first: 'Claire', last: 'Aubry' },
-      nav: {
-        oeuvres: 'Œuvres',
-        journal: 'Journal',
-        expos: 'Expositions',
-        contact: 'Contact',
-      },
+    demoLabel: 'Dessinatrice au fusain',
+    nav: {
+      galerie: 'La galerie',
+      fusain: 'Le fusain',
+      atelier: "L'atelier",
+      commandes: 'Commandes',
     },
     hero: {
-      kicker: "Peinture — journal d'atelier",
-      title1: 'Je peins ce que',
-      title2: 'la lumière oublie.',
-      lede: "Claire Aubry, peintre à Nantes. Ici, mes toiles, mes séries en cours et un journal d'atelier où j'écris ce que la peinture ne dit pas.",
-      ctaOeuvres: 'Voir les œuvres',
-      ctaJournal: 'Lire le journal ↓',
+      kicker: 'Fusain sur papier — depuis 1998',
+      titre: 'Élise Martin',
+      sousTitre: 'Le noir, et tout ce qu’il contient',
+      lede:
+        'Je dessine au fusain, à la main, sur des papiers que je choisis un par un. Des visages, des scènes, quelques bouquets. Tout ce qui, dans les années quarante, aurait mérité qu’on s’arrête.',
+      ctaGalerie: 'Voir la galerie',
+      ctaCommande: 'Commander un portrait',
+      /** Trois temps posés, comme une mesure de swing manouche. */
+      tempo: ['Fusain', 'Papier', 'Patience'],
+      photoAlt: 'Élise Martin dans son atelier parisien',
+      photoLegende: 'Élise Martin, à la table de travail.',
     },
-    oeuvres: {
-      kicker: 'Œuvres récentes',
-      title: 'Séries 2024 — 2026',
-      items: [
-        { titre: 'Marée nº7', annee: '2026', technique: 'Huile sur toile — 90 × 120 cm', art: 'art-1' },
-        { titre: 'La chambre jaune', annee: '2025', technique: 'Acrylique — 60 × 80 cm', art: 'art-2' },
-        { titre: 'Verticales', annee: '2025', technique: 'Encre et pigments — 50 × 70 cm', art: 'art-3' },
-        { titre: 'Ce qui reste', annee: '2024', technique: 'Technique mixte — 100 × 100 cm', art: 'art-4' },
-      ],
-    },
-    journal: {
-      kicker: 'Le journal',
-      title: "Notes d'atelier",
-      lire: 'Lire le billet →',
-      billets: [
+    galerie: {
+      kicker: 'La galerie',
+      titre: 'Quatre feuilles',
+      lede:
+        'Chaque dessin est une pièce unique, signée et datée. Les formats varient selon le sujet — un portrait ne se pose pas comme une scène de cabaret.',
+      oeuvres: [
         {
-          date: '18 juillet 2026',
-          titre: 'Ce que la mer efface',
-          extrait:
-            'Trois semaines face à l’Atlantique pour préparer la série des Marées. Carnet de bord d’une résidence entre brume et lumière crue…',
-          duree: '4 min de lecture',
+          fichier: 'portrait-de-femme.webp',
+          titre: 'Portrait de femme',
+          annee: '1947',
+          prix: '1 400 €',
+          technique: 'Fusain et estompe sur papier de soie — 32 × 48 cm',
+          note: 'Le chapeau donne le ton : elle sait qu’on la regarde, et cela l’amuse.',
         },
         {
-          date: '2 juin 2026',
-          titre: 'Pourquoi je peins en série',
-          extrait:
-            'Une toile seule ment souvent. C’est la répétition qui révèle — retour sur une obsession de peintre et sur ce qu’elle m’apprend…',
-          duree: '6 min de lecture',
+          fichier: 'jazz-at-cabaret.webp',
+          titre: 'Cabaret, deuxième set',
+          annee: '1949',
+          prix: '1 850 €',
+          technique: 'Fusain sur papier fort — 60 × 34 cm',
+          note: 'La fumée m’a demandé plus de temps que les musiciens.',
         },
         {
-          date: '14 avril 2026',
-          titre: 'Dans l’atelier, à 6 h du matin',
-          extrait:
-            'La lumière du petit matin change tout : les pigments, le silence, la patience. Visite guidée de mon rituel de travail…',
-          duree: '3 min de lecture',
-        },
-      ],
-    },
-    expos: {
-      kicker: 'Agenda',
-      title: 'Expositions à venir',
-      items: [
-        {
-          dates: '12 sept. — 24 oct. 2026',
-          lieu: 'Galerie du Passage, Nantes',
-          nom: '« Marées », exposition personnelle',
+          fichier: 'chat-siamois.webp',
+          titre: 'La poursuite',
+          annee: '1951',
+          prix: '1 200 €',
+          technique: 'Fusain et craie blanche — 52 × 30 cm',
+          note: 'Un siamois, une souris, et une issue que je n’ai pas voulu dessiner.',
         },
         {
-          dates: '5 — 8 nov. 2026',
-          lieu: 'Grand Palais éphémère, Paris',
-          nom: 'Salon Art Contempo, stand C12',
+          fichier: 'roses.webp',
+          titre: 'Roses au salon',
+          annee: '1953',
+          prix: '2 100 €',
+          technique: 'Fusain rehaussé de pastel — 58 × 32 cm',
+          note: 'Le seul dessin où j’ai cédé à la couleur. Une fois suffit.',
         },
       ],
+      stylePrefix: 'Style',
+      mentionCouleur: 'Seule œuvre en couleur',
+      indiceCouleur: 'Approchez : la couleur revient.',
     },
-    contact: {
-      title: 'Une toile vous parle ?',
-      text: "Pour une acquisition, une commande ou une visite d'atelier, écrivez-moi — je réponds à chaque message.",
-      email: 'atelier@claireaubry.example',
-      note: 'Atelier ouvert sur rendez-vous, quartier de la Création, Nantes.',
+    fusain: {
+      kicker: 'Le fusain',
+      titre: 'Un bâton de saule brûlé, et rien d’autre',
+      texte:
+        'Le fusain ne pardonne pas grand-chose. Il s’étale, il salit, il refuse le détail qu’on veut lui arracher. C’est pour cela qu’il va si bien aux visages : il oblige à choisir ce qui compte, et à laisser le reste dans l’ombre.',
+      etapes: [
+        { titre: 'Le trait', desc: 'Poser la structure en quelques gestes, sans rien fixer encore.' },
+        { titre: 'L’estompe', desc: 'Le doigt, le chiffon, la mie de pain. C’est là que naissent les volumes.' },
+        { titre: 'Le blanc', desc: 'Reprendre la lumière à la gomme mie de pain, comme on creuse.' },
+        { titre: 'Le fixatif', desc: 'Une passe légère, à distance. Trop près, tout s’écrase.' },
+      ],
     },
-    footer: {
-      copyright: '© 2026 Claire Aubry — Toutes les œuvres sont protégées',
+    atelier: {
+      kicker: 'L’atelier',
+      titre: 'Une table, une lampe, un tourne-disque',
+      texte:
+        'Je travaille le matin, quand la lumière est encore froide, avec du swing en fond — Django, Grappelli, les enregistrements d’avant-guerre. Ce n’est pas de la nostalgie : ce rythme-là tient la main, il empêche de figer le trait.',
+      citation: 'Le fusain ne se corrige pas. Il se recommence, ou il s’accepte.',
+      signature: 'Élise',
+      photoAlt: 'La galerie E. Martin, accrochage complet',
+      photoLegende: 'La galerie, rue des Grands-Augustins.',
     },
+    commandes: {
+      kicker: 'Commandes',
+      titre: 'Faire faire un portrait',
+      texte:
+        'Je réalise une dizaine de portraits sur commande par an, d’après photographies ou d’après nature à l’atelier. Comptez six semaines, un peu plus si le sujet a moins de dix ans — les enfants ne tiennent pas en place, et c’est très bien ainsi.',
+      formules: [
+        { nom: 'Portrait, format 30 × 40', prix: '480 €' },
+        { nom: 'Portrait, format 50 × 65', prix: '780 €' },
+        { nom: 'Scène ou groupe', prix: 'sur devis' },
+      ],
+      note: 'Encadrement sous verre antireflet en supplément. Envoi soigné dans toute la France.',
+      contactTitre: 'Écrire à l’atelier',
+      email: 'atelier@elisemartin.example',
+      telephone: '02 00 00 00 00',
+      adresse: '9 rue des Grands-Augustins\n75006 Paris',
+    },
+    footer: { baseline: 'Fusain sur papier — Paris', droits: 'Toutes les œuvres sont protégées.' },
   },
   en: {
     meta: {
-      title: 'Artist blog template — Claire Aubry, painter | Atelier Web',
+      title: 'Charcoal artist template — Élise Martin | Atelier Web',
       description:
-        'Sample blog-portfolio website for an artist: a gallery of works, a studio journal, exhibitions, and contact. An Atelier Web template that puts the art in the spotlight.',
+        'Example website for a charcoal artist: gallery, method, studio and commissions. An Atelier Web template drawn from the 1940s.',
     },
-    demoLabel: 'Artist blog & portfolio',
-    header: {
-      ariaNav: 'Site navigation',
-      logo: { first: 'Claire', last: 'Aubry' },
-      nav: {
-        oeuvres: 'Works',
-        journal: 'Journal',
-        expos: 'Exhibitions',
-        contact: 'Contact',
-      },
+    demoLabel: 'Charcoal artist',
+    nav: {
+      galerie: 'Gallery',
+      fusain: 'Charcoal',
+      atelier: 'The studio',
+      commandes: 'Commissions',
     },
     hero: {
-      kicker: 'Painting — a studio journal',
-      title1: 'I paint what',
-      title2: 'the light forgets.',
-      lede: "Claire Aubry, painter in Nantes. Here you'll find my canvases, my ongoing series, and a studio journal where I write what painting leaves unsaid.",
-      ctaOeuvres: 'See the works',
-      ctaJournal: 'Read the journal ↓',
+      kicker: 'Charcoal on paper — since 1998',
+      titre: 'Élise Martin',
+      sousTitre: 'Black, and everything inside it',
+      lede:
+        'I draw in charcoal, by hand, on papers I choose one sheet at a time. Faces, scenes, the occasional bouquet. Everything that, back in the forties, would have been worth stopping for.',
+      ctaGalerie: 'See the gallery',
+      ctaCommande: 'Commission a portrait',
+      tempo: ['Charcoal', 'Paper', 'Patience'],
+      photoAlt: 'Élise Martin in her Paris studio',
+      photoLegende: 'Élise Martin, at the drawing table.',
     },
-    oeuvres: {
-      kicker: 'Recent works',
-      title: 'Series 2024 — 2026',
-      items: [
-        { titre: 'Tide No. 7', annee: '2026', technique: 'Oil on canvas — 90 × 120 cm', art: 'art-1' },
-        { titre: 'The Yellow Room', annee: '2025', technique: 'Acrylic — 60 × 80 cm', art: 'art-2' },
-        { titre: 'Verticals', annee: '2025', technique: 'Ink and pigments — 50 × 70 cm', art: 'art-3' },
-        { titre: 'What Remains', annee: '2024', technique: 'Mixed media — 100 × 100 cm', art: 'art-4' },
-      ],
-    },
-    journal: {
-      kicker: 'The journal',
-      title: 'Studio notes',
-      lire: 'Read the post →',
-      billets: [
+    galerie: {
+      kicker: 'The gallery',
+      titre: 'Four sheets',
+      lede:
+        'Each drawing is a one-off, signed and dated. Formats vary with the subject — a portrait does not sit the way a cabaret scene does.',
+      oeuvres: [
         {
-          date: 'July 18, 2026',
-          titre: 'What the Sea Erases',
-          extrait:
-            'Three weeks facing the Atlantic, preparing the Tides series. The logbook of a residency spent between sea mist and raw light…',
-          duree: '4 min read',
+          fichier: 'portrait-de-femme.webp',
+          titre: 'Portrait of a woman',
+          annee: '1947',
+          prix: '1 400 €',
+          technique: 'Charcoal and stump on tissue paper — 32 × 48 cm',
+          note: 'The hat sets the tone: she knows she is being looked at, and it amuses her.',
         },
         {
-          date: 'June 2, 2026',
-          titre: 'Why I Paint in Series',
-          extrait:
-            'A single canvas often lies. Repetition is what reveals — notes on a painter’s obsession and everything it keeps teaching me…',
-          duree: '6 min read',
+          fichier: 'jazz-at-cabaret.webp',
+          titre: 'Cabaret, second set',
+          annee: '1949',
+          prix: '1 850 €',
+          technique: 'Charcoal on heavy paper — 60 × 34 cm',
+          note: 'The smoke took me longer than the musicians did.',
         },
         {
-          date: 'April 14, 2026',
-          titre: 'In the Studio at 6 a.m.',
-          extrait:
-            'Early-morning light changes everything: the pigments, the silence, the patience. A guided tour of my working ritual…',
-          duree: '3 min read',
-        },
-      ],
-    },
-    expos: {
-      kicker: 'Calendar',
-      title: 'Upcoming exhibitions',
-      items: [
-        {
-          dates: 'Sept 12 – Oct 24, 2026',
-          lieu: 'Galerie du Passage, Nantes',
-          nom: '“Tides,” a solo exhibition',
+          fichier: 'chat-siamois.webp',
+          titre: 'The chase',
+          annee: '1951',
+          prix: '1 200 €',
+          technique: 'Charcoal and white chalk — 52 × 30 cm',
+          note: 'A Siamese, a mouse, and an ending I chose not to draw.',
         },
         {
-          dates: 'Nov 5 – 8, 2026',
-          lieu: 'Grand Palais éphémère, Paris',
-          nom: 'Salon Art Contempo, booth C12',
+          fichier: 'roses.webp',
+          titre: 'Roses in the parlour',
+          annee: '1953',
+          prix: '2 100 €',
+          technique: 'Charcoal heightened with pastel — 58 × 32 cm',
+          note: 'The one drawing where I gave in to colour. Once is enough.',
         },
       ],
+      stylePrefix: 'Style',
+      mentionCouleur: 'The only work in colour',
+      indiceCouleur: 'Come closer: the colour returns.',
     },
-    contact: {
-      title: 'Does a canvas speak to you?',
-      text: 'For an acquisition, a commission, or a studio visit, write to me — I reply to every message.',
-      email: 'atelier@claireaubry.example',
-      note: 'Studio open by appointment, quartier de la Création, Nantes.',
+    fusain: {
+      kicker: 'Charcoal',
+      titre: 'A stick of burnt willow, and nothing else',
+      texte:
+        'Charcoal forgives very little. It spreads, it smudges, it refuses the detail you try to force out of it. That is exactly why it suits faces: it makes you choose what matters, and leave the rest in shadow.',
+      etapes: [
+        { titre: 'The line', desc: 'Set the structure in a few gestures, fixing nothing yet.' },
+        { titre: 'The stump', desc: 'Finger, cloth, breadcrumb. This is where volume appears.' },
+        { titre: 'The white', desc: 'Take the light back with a kneaded eraser, like carving.' },
+        { titre: 'The fixative', desc: 'One light pass, from a distance. Too close and it all flattens.' },
+      ],
     },
-    footer: {
-      copyright: '© 2026 Claire Aubry — All works protected',
+    atelier: {
+      kicker: 'The studio',
+      titre: 'A table, a lamp, a record player',
+      texte:
+        'I work in the morning, while the light is still cold, with swing playing — Django, Grappelli, the pre-war sessions. It is not nostalgia: that rhythm holds your hand, it stops the line from setting.',
+      citation: 'Charcoal cannot be corrected. It is begun again, or accepted.',
+      signature: 'Élise',
+      photoAlt: 'Galerie E. Martin, the full hang',
+      photoLegende: 'The gallery, rue des Grands-Augustins.',
     },
+    commandes: {
+      kicker: 'Commissions',
+      titre: 'Having a portrait made',
+      texte:
+        'I take on around ten commissioned portraits a year, from photographs or from life at the studio. Allow six weeks, a little more if the sitter is under ten — children will not sit still, and quite right too.',
+      formules: [
+        { nom: 'Portrait, 30 × 40 cm', prix: '480 €' },
+        { nom: 'Portrait, 50 × 65 cm', prix: '780 €' },
+        { nom: 'Scene or group', prix: 'on request' },
+      ],
+      note: 'Framing under anti-reflective glass at extra cost. Carefully packed shipping across France.',
+      contactTitre: 'Write to the studio',
+      email: 'atelier@elisemartin.example',
+      telephone: '02 00 00 00 00',
+      adresse: '9 rue des Grands-Augustins\n75006 Paris, France',
+    },
+    footer: { baseline: 'Charcoal on paper — Paris', droits: 'All works are protected.' },
   },
 } as const satisfies Record<Lang, unknown>;

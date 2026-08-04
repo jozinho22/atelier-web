@@ -3,12 +3,26 @@ import Base from '../../layouts/Base.astro';
 import DemoBar from '../DemoBar.astro';
 import AuroraBackdrop from '../AuroraBackdrop.astro';
 import { splitPath, localePath } from '../../lib/i18n';
+import { withBase } from '../../lib/paths';
 import { esthetique } from '../../i18n/esthetique';
 import { common } from '../../i18n/common';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = esthetique[lang];
 const c = common[lang];
+
+const photo = (nom: string) => withBase(`modeles/esthetique/${nom}`);
+
+/**
+ * Une photo par soin, dans l'ordre de la carte. Les visuels ne dépendent pas
+ * de la langue : ils restent ici plutôt que dans le dictionnaire.
+ */
+const PHOTOS_SOINS = [
+  'soin-visage-signature.webp',
+  'modelage-relaxant.webp',
+  'beaute-du-regard.webp',
+  'manucure-douceur.webp',
+];
 ---
 
 <Base title={t.meta.title} description={t.meta.description}>
@@ -70,12 +84,23 @@ const c = common[lang];
           <div class="e-soins">
             {t.soins.items.map((s, i) => (
               <article class="e-soin reveal" style={`--reveal-delay: ${i * 0.08}s`}>
-                <div class="e-soin-head">
-                  <h3>{s.name}</h3>
-                  <span class="e-soin-prix">{s.prix}</span>
+                <img
+                  class="e-soin-photo"
+                  src={photo(PHOTOS_SOINS[i])}
+                  alt=""
+                  width="1600"
+                  height="1600"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="e-soin-corps">
+                  <div class="e-soin-head">
+                    <h3>{s.name}</h3>
+                    <span class="e-soin-prix">{s.prix}</span>
+                  </div>
+                  <p class="e-soin-duree">{s.duree}</p>
+                  <p class="e-soin-desc">{s.desc}</p>
                 </div>
-                <p class="e-soin-duree">{s.duree}</p>
-                <p class="e-soin-desc">{s.desc}</p>
               </article>
             ))}
           </div>
@@ -88,9 +113,22 @@ const c = common[lang];
       <!-- =========================== L'INSTITUT ========================== -->
       <section id="institut" class="e-section e-section-rose">
         <div class="wrap e-institut">
-          <div class="e-portrait reveal" aria-hidden="true">
-            <span class="e-portrait-arc"></span>
-            <span class="e-portrait-visage">🌸</span>
+          <div class="e-portrait-bloc reveal">
+            <figure class="e-portrait">
+              <img
+                class="e-portrait-photo"
+                src={photo('aurelie.webp')}
+                alt={t.institut.photoAlt}
+                width="1600"
+                height="2143"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="e-portrait-arc" aria-hidden="true"></span>
+            </figure>
+            <!-- La fleur quitte le cadre pour s'y adosser : le portrait prend
+                 sa place à l'intérieur de l'arche, elle reste à côté. -->
+            <span class="e-portrait-fleur" aria-hidden="true">🌸</span>
           </div>
           <div class="reveal" style="--reveal-delay: 0.15s">
             <p class="e-kicker">{t.institut.kicker}</p>
@@ -160,12 +198,16 @@ const c = common[lang];
 <style>
   /* Palette du modèle : crème, blush, terracotta — élégance feutrée. */
   .esth {
+    /* Terracottas et gris assombris pour passer WCAG AA (4.5:1) sur le fond
+       le plus soutenu de la page, le rose #f6e8e2 : --e-terra sert à la fois
+       de texte et de fond de bouton sous du blanc, --e-terra-deep reste
+       nettement plus sombre pour garder les deux niveaux d'accent. */
     --e-creme: #fdf8f5;
     --e-rose: #f6e8e2;
-    --e-terra: #c98a7d;
-    --e-terra-deep: #a96a5d;
+    --e-terra: #9d5141;
+    --e-terra-deep: #7b4b41;
     --e-ink: #43312c;
-    --e-muted: #8d7a74;
+    --e-muted: #73635e;
     font-family: var(--font-sans);
     color: var(--e-ink);
     background: var(--e-creme);
@@ -452,10 +494,13 @@ const c = common[lang];
   }
 
   .e-soin {
+    display: flex;
+    flex-direction: column;
     background: #fff;
     border: 1px solid rgb(67 49 44 / 0.08);
     border-radius: 18px;
-    padding: 1.8rem 1.7rem;
+    /* overflow: hidden pour que la photo épouse les coins arrondis. */
+    overflow: hidden;
     transition:
       transform 0.35s var(--ease-out),
       box-shadow 0.35s var(--ease-out);
@@ -464,6 +509,26 @@ const c = common[lang];
   .e-soin:hover {
     transform: translateY(-5px);
     box-shadow: 0 16px 34px rgb(67 49 44 / 0.1);
+  }
+
+  /* Les photos sont carrées. En 4/3 on retire l'avant-plan encombré du bas
+     sans jamais couper les visages, d'où le décalage vers le haut. */
+  .e-soin-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center 25%;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .e-soin:hover .e-soin-photo {
+    transform: scale(1.04);
+  }
+
+  .e-soin-corps {
+    padding: 1.5rem 1.7rem 1.8rem;
   }
 
   .e-soin-head {
@@ -522,16 +587,34 @@ const c = common[lang];
     align-items: center;
   }
 
+  /* Le bloc porte la largeur et sert de repère à la fleur, qui déborde de
+     l'arche — celle-ci est en overflow: hidden et la rognerait. */
+  .e-portrait-bloc {
+    position: relative;
+    /* width explicite : avec margin-inline auto, l'élément de grille passe en
+       shrink-to-fit et l'arche — sans largeur intrinsèque — s'effondre à 0. */
+    width: 100%;
+    max-width: 20rem;
+    margin-inline: auto;
+  }
+
   .e-portrait {
     position: relative;
     aspect-ratio: 3 / 4;
-    max-width: 20rem;
-    margin-inline: auto;
-    display: grid;
-    place-items: center;
+    margin: 0;
     background: linear-gradient(160deg, #f9ede4, #f3d8cd);
     border-radius: 50% 50% 18px 18px / 42% 42% 18px 18px;
     overflow: hidden;
+  }
+
+  /* Le portrait est en 1600×2143, l'arche en 3/4 : le recadrage est nul. */
+  .e-portrait-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 28%;
   }
 
   .e-portrait-arc {
@@ -541,8 +624,18 @@ const c = common[lang];
     border-radius: inherit;
   }
 
-  .e-portrait-visage {
-    font-size: 4.5rem;
+  .e-portrait-fleur {
+    position: absolute;
+    right: -0.7rem;
+    bottom: 1.8rem;
+    display: grid;
+    place-items: center;
+    width: 4.2rem;
+    height: 4.2rem;
+    font-size: 2.1rem;
+    background: var(--e-creme);
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgb(67 49 44 / 0.14);
     animation: float 10s ease-in-out infinite;
   }
 

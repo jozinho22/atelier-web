@@ -40,33 +40,77 @@ export const association = {
       title: 'Nos activités',
       lede: 'Une section pour chaque envie, encadrée par des animateurs passionnés.',
       items: [
-        { icon: '⚽', name: 'Football', detail: 'Dès 6 ans — 4 équipes', jours: 'Mer. & Sam.' },
-        { icon: '🏀', name: 'Basket', detail: 'Ados & adultes', jours: 'Mar. & Jeu.' },
-        { icon: '🎭', name: 'Théâtre', detail: 'Ateliers tous niveaux', jours: 'Lun. & Mer.' },
-        { icon: '🎶', name: 'Chorale', detail: 'Répertoire varié', jours: 'Ven.' },
+        {
+          icon: '⚽',
+          name: 'Football',
+          detail: 'Dès 6 ans — 4 équipes',
+          creneaux: [
+            { jour: 'Mercredi', heure: '14 h 00 – 16 h 00', lieu: 'Stade des Oliviers' },
+            { jour: 'Samedi', heure: '09 h 30 – 11 h 30', lieu: 'Stade des Oliviers' },
+          ],
+        },
+        {
+          icon: '🏀',
+          name: 'Basket',
+          detail: 'Ados & adultes',
+          creneaux: [
+            { jour: 'Mardi', heure: '18 h 30 – 20 h 00', lieu: 'Gymnase Jean-Moulin' },
+            { jour: 'Jeudi', heure: '19 h 00 – 20 h 30', lieu: 'Gymnase Jean-Moulin' },
+          ],
+        },
+        {
+          icon: '🎭',
+          name: 'Théâtre',
+          detail: 'Ateliers tous niveaux',
+          creneaux: [
+            { jour: 'Lundi', heure: '18 h 00 – 20 h 00', lieu: 'Salle Pagnol' },
+            { jour: 'Mercredi', heure: '17 h 00 – 19 h 00', lieu: 'Salle Pagnol' },
+          ],
+        },
+        {
+          icon: '🎶',
+          name: 'Chorale',
+          detail: 'Répertoire varié',
+          creneaux: [
+            { jour: 'Vendredi', heure: '20 h 00 – 21 h 30', lieu: 'Maison des associations' },
+          ],
+        },
       ],
     },
     news: {
       title: 'La vie du club',
-      readMore: 'Lire la suite →',
+      readMore: 'Lire la suite',
+      readLess: 'Replier',
       items: [
         {
           date: '12 juillet 2026',
           tag: 'Tournoi',
           titre: 'Les U11 champions du tournoi de la Métropole !',
           texte: 'Une finale haletante remportée aux tirs au but. Bravo aux petits Cigales et merci aux bénévoles.',
+          suite: [
+            "Menés 2-0 à la mi-temps, les U11 ont renversé la rencontre en douze minutes. Égalisation de Sacha à la 58e, puis une séance de tirs au but où notre gardien Milo a détourné deux frappes.",
+            "Le trophée est exposé à la maison des associations jusqu'à la rentrée. Merci aux quinze parents qui ont assuré les transports et la buvette tout le week-end — sans eux, rien de tout cela.",
+          ],
         },
         {
           date: '28 juin 2026',
           tag: 'Spectacle',
           titre: 'Le gala de fin d’année a fait salle comble',
           texte: 'Théâtre, chorale et danse réunis sur scène devant 300 spectateurs. Revivez la soirée en photos.',
+          suite: [
+            "Trois cents spectateurs, deux heures de spectacle, et un plateau partagé par les trois sections : les comédiens ont ouvert, la chorale a enchaîné, les danseurs ont clos la soirée.",
+            "Les photos sont disponibles auprès du secrétariat. Une captation vidéo sera envoyée par courriel aux familles inscrites avant la fin du mois.",
+          ],
         },
         {
           date: '15 juin 2026',
           tag: 'Inscriptions',
           titre: 'Les inscriptions 2026-2027 sont ouvertes',
           texte: 'Permanences tous les mercredis de 17 h à 19 h à la maison des associations. Tarifs inchangés !',
+          suite: [
+            "Les permanences se tiennent tous les mercredis de 17 h à 19 h à la maison des associations, du 3 septembre au 1er octobre. Prévoir un certificat médical de moins de trois mois et une photo d'identité.",
+            "Les tarifs restent inchangés pour la quatrième année : 60 € l'adhésion annuelle, 45 € à partir du deuxième membre d'une même famille. Le premier cours d'essai reste gratuit et sans engagement.",
+          ],
         },
       ],
     },
@@ -133,33 +177,77 @@ export const association = {
       title: 'Our activities',
       lede: 'A program for every passion, led by coaches who love what they do.',
       items: [
-        { icon: '⚽', name: 'Soccer', detail: 'Ages 6 and up — 4 teams', jours: 'Wed. & Sat.' },
-        { icon: '🏀', name: 'Basketball', detail: 'Teens & adults', jours: 'Tue. & Thu.' },
-        { icon: '🎭', name: 'Theater', detail: 'Workshops for all levels', jours: 'Mon. & Wed.' },
-        { icon: '🎶', name: 'Choir', detail: 'A wide-ranging repertoire', jours: 'Fri.' },
+        {
+          icon: '⚽',
+          name: 'Football',
+          detail: 'From age 6 — 4 teams',
+          creneaux: [
+            { jour: 'Wednesday', heure: '2:00 – 4:00 pm', lieu: 'Stade des Oliviers' },
+            { jour: 'Saturday', heure: '9:30 – 11:30 am', lieu: 'Stade des Oliviers' },
+          ],
+        },
+        {
+          icon: '🏀',
+          name: 'Basketball',
+          detail: 'Teens & adults',
+          creneaux: [
+            { jour: 'Tuesday', heure: '6:30 – 8:00 pm', lieu: 'Gymnase Jean-Moulin' },
+            { jour: 'Thursday', heure: '7:00 – 8:30 pm', lieu: 'Gymnase Jean-Moulin' },
+          ],
+        },
+        {
+          icon: '🎭',
+          name: 'Drama',
+          detail: 'Workshops, all levels',
+          creneaux: [
+            { jour: 'Monday', heure: '6:00 – 8:00 pm', lieu: 'Salle Pagnol' },
+            { jour: 'Wednesday', heure: '5:00 – 7:00 pm', lieu: 'Salle Pagnol' },
+          ],
+        },
+        {
+          icon: '🎶',
+          name: 'Choir',
+          detail: 'A varied repertoire',
+          creneaux: [
+            { jour: 'Friday', heure: '8:00 – 9:30 pm', lieu: 'Maison des associations' },
+          ],
+        },
       ],
     },
     news: {
       title: 'Club life',
-      readMore: 'Read more →',
+      readMore: 'Read more',
+      readLess: 'Collapse',
       items: [
         {
           date: 'July 12, 2026',
           tag: 'Tournament',
           titre: 'Our U11s crowned champions of the Métropole tournament!',
           texte: 'A nail-biting final won on penalty kicks. Well done to our young Cigales, and thank you to the volunteers.',
+          suite: [
+            "Two goals down at half-time, the U11s turned the game around in twelve minutes. Sacha equalised in the 58th, then came a penalty shoot-out in which our keeper Milo saved two.",
+            "The trophy is on display at the community hall until September. Thanks to the fifteen parents who handled transport and the refreshment stand all weekend — without them, none of this happens.",
+          ],
         },
         {
           date: 'June 28, 2026',
           tag: 'Show',
           titre: 'Our end-of-year gala played to a full house',
           texte: 'Theater, choir, and dance shared the stage in front of 300 spectators. Relive the evening in photos.',
+          suite: [
+            "Three hundred spectators, two hours of performance, and a stage shared by all three sections: the actors opened, the choir followed, the dancers closed the evening.",
+            "Photographs are available from the office. A video recording will be emailed to registered families before the end of the month.",
+          ],
         },
         {
           date: 'June 15, 2026',
           tag: 'Registration',
           titre: 'Registration for 2026-2027 is now open',
           texte: 'Stop by any Wednesday from 5 to 7 p.m. at the Maison des associations. Prices unchanged!',
+          suite: [
+            "Drop-in sessions run every Wednesday from 5 to 7 pm at the community hall, from 3 September to 1 October. Bring a medical certificate less than three months old and one passport photo.",
+            "Fees are unchanged for the fourth year running: 60 € annual membership, 45 € from the second member of the same family. The first trial session remains free, with no commitment.",
+          ],
         },
       ],
     },

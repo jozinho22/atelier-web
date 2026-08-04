@@ -67,6 +67,7 @@ export const esthetique = {
       texte:
         "Diplômée en esthétique et cosmétique depuis douze ans, j'ai imaginé L'Écrin de Soi comme un refuge : lumière tamisée, matières naturelles, silence feutré. Ici, chaque soin commence par une écoute et se termine par un thé.",
       signature: 'Aurélie',
+      photoAlt: "Aurélie, esthéticienne, à son poste de travail à L'Écrin de Soi",
     },
     temoignages: {
       kicker: 'Elles en parlent',
@@ -166,6 +167,7 @@ export const esthetique = {
       texte:
         "Certified in esthetics and cosmetics for twelve years, I imagined L'Écrin de Soi as a refuge: soft lighting, natural materials, a hushed calm. Here, every treatment begins with listening and ends with a cup of tea.",
       signature: 'Aurélie',
+      photoAlt: "Aurélie, beauty therapist, at her workstation at L'Écrin de Soi",
     },
     temoignages: {
       kicker: 'In their words',

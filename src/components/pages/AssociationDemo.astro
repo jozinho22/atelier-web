@@ -76,7 +76,15 @@ const c = common[lang];
                 <span class="a-card-icon" aria-hidden="true">{s.icon}</span>
                 <h3>{s.name}</h3>
                 <p>{s.detail}</p>
-                <p class="a-card-jours">{s.jours}</p>
+                <ul class="a-creneaux">
+                  {s.creneaux.map((c) => (
+                    <li>
+                      <span class="a-creneau-jour">{c.jour}</span>
+                      <span class="a-creneau-heure">{c.heure}</span>
+                      <span class="a-creneau-lieu">{c.lieu}</span>
+                    </li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
@@ -89,14 +97,35 @@ const c = common[lang];
           <h2 class="a-title reveal">{t.news.title}</h2>
           <div class="a-actus">
             {t.news.items.map((a, i) => (
-              <article class="a-actu reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+              <article class="a-actu reveal" style={`--reveal-delay: ${i * 0.08}s`} data-actu>
                 <p class="a-actu-meta">
                   <span class="a-actu-tag">{a.tag}</span>
                   <time>{a.date}</time>
                 </p>
-                <h3>{a.titre}</h3>
+                <h3 id={`actu-titre-${i}`}>{a.titre}</h3>
                 <p class="a-actu-texte">{a.texte}</p>
-                <span class="a-actu-lien">{t.news.readMore}</span>
+
+                <!-- La suite est dans le HTML dès le départ : sans JavaScript
+                     l'article reste entièrement lisible, et c'est le script
+                     qui le replie au chargement. -->
+                <div class="a-actu-suite" id={`actu-suite-${i}`} data-actu-suite>
+                  <div>
+                    {a.suite.map((par) => <p>{par}</p>)}
+                  </div>
+                </div>
+
+                <button
+                  class="a-actu-lien"
+                  type="button"
+                  data-actu-bouton
+                  data-plus={t.news.readMore}
+                  data-moins={t.news.readLess}
+                  aria-expanded="true"
+                  aria-controls={`actu-suite-${i}`}
+                >
+                  <span data-actu-libelle>{t.news.readMore}</span>
+                  <span class="a-actu-chevron" aria-hidden="true">↓</span>
+                </button>
               </article>
             ))}
           </div>
@@ -508,16 +537,44 @@ const c = common[lang];
     font-size: 0.95rem;
   }
 
-  .a-card-jours {
-    display: inline-block;
-    margin-top: 0.7rem;
+  /* Créneaux : jour, horaire et lieu, alignés en colonnes lisibles. */
+  .a-creneaux {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0.9rem 0 0;
+    border-top: 1px solid rgb(19 51 38 / 0.12);
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .a-creneaux li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.1rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .a-creneau-jour {
+    font-weight: 700;
+  }
+
+  .a-creneau-heure {
+    justify-self: end;
+    font-variant-numeric: tabular-nums;
     background: var(--a-sun);
     color: var(--a-ink);
     font-weight: 700;
-    font-size: 0.82rem;
-    padding: 0.25rem 0.8rem;
+    padding: 0.1rem 0.5rem;
     border-radius: 999px;
+    font-size: 0.78rem;
   }
+
+  .a-creneau-lieu {
+    grid-column: 1 / -1;
+    font-size: 0.78rem;
+    color: var(--a-muted);
+  }
+
 
   /* Actualités */
 
@@ -577,10 +634,54 @@ const c = common[lang];
   }
 
   .a-actu-lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     margin-top: 1rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
     font-weight: 700;
-    color: var(--a-green);
     font-size: 0.95rem;
+    color: var(--a-green);
+    cursor: pointer;
+    align-self: flex-start;
+  }
+
+  .a-actu-lien:hover {
+    text-decoration: underline;
+  }
+
+  .a-actu-chevron {
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  [data-actu-bouton][aria-expanded='true'] .a-actu-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Repli animé. La hauteur est pilotée en JavaScript plutôt que par
+     l'astuce `grid-template-rows: 0fr` : dans cette carte (boîte flex en
+     colonne), la ligne refusait de descendre sous la hauteur du contenu.
+     Mesurer puis animer une hauteur explicite est plus verbeux, mais donne
+     un résultat vérifiable partout. */
+  .a-actu-suite {
+    overflow: hidden;
+    transition: height 0.5s var(--ease-out);
+  }
+
+  .a-actu-suite p {
+    margin-top: 0.9rem;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    color: var(--a-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .a-actu-suite {
+      transition: none;
+    }
   }
 
   /* CTA adhésion */
@@ -739,3 +840,62 @@ const c = common[lang];
     }
   }
 </style>
+
+<script>
+  // Articles dépliables. Le corps complet est présent dans le HTML dès le
+  // départ : sans JavaScript l'article reste lisible en entier et le bouton,
+  // inutile, n'apparaît pas. C'est le script qui replie et révèle le bouton.
+  document.querySelectorAll<HTMLElement>('[data-actu]').forEach((actu) => {
+    const suite = actu.querySelector<HTMLElement>('[data-actu-suite]');
+    const bouton = actu.querySelector<HTMLButtonElement>('[data-actu-bouton]');
+    const libelle = actu.querySelector<HTMLElement>('[data-actu-libelle]');
+    if (!suite || !bouton || !libelle) return;
+
+    const plus = bouton.dataset.plus ?? '';
+    const moins = bouton.dataset.moins ?? '';
+
+    let liberation = 0;
+
+    /** Rend la hauteur libre pour que le contenu puisse se reflower ensuite. */
+    const liberer = (): void => {
+      window.clearTimeout(liberation);
+      if (bouton.getAttribute('aria-expanded') === 'true') suite.style.height = 'auto';
+    };
+
+    const ouvrir = (): void => {
+      suite.style.height = `${suite.scrollHeight}px`;
+      suite.addEventListener('transitionend', liberer, { once: true });
+      // Filet : en mouvement réduit la transition est désactivée, donc
+      // `transitionend` ne se déclenche jamais et la hauteur resterait figée
+      // en pixels — insensible à un redimensionnement.
+      liberation = window.setTimeout(liberer, 700);
+    };
+
+    const fermer = (immediat = false): void => {
+      window.clearTimeout(liberation);
+      if (immediat) {
+        suite.style.height = '0px';
+        return;
+      }
+      // On fige la hauteur courante, on force un recalcul, puis on part à 0 :
+      // sans cette étape, le navigateur n'a pas de valeur de départ à animer.
+      suite.style.height = `${suite.scrollHeight}px`;
+      void suite.offsetHeight;
+      suite.style.height = '0px';
+    };
+
+    const appliquer = (ouvert: boolean, immediat = false): void => {
+      bouton.setAttribute('aria-expanded', String(ouvert));
+      libelle.textContent = ouvert ? moins : plus;
+      if (ouvert) ouvrir();
+      else fermer(immediat);
+    };
+
+    appliquer(false, true);   // état initial : replié, sans animation
+    bouton.hidden = false;
+
+    bouton.addEventListener('click', () => {
+      appliquer(bouton.getAttribute('aria-expanded') !== 'true');
+    });
+  });
+</script>
