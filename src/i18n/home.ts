@@ -80,12 +80,18 @@ export const home = {
           desc: 'Vos œuvres en pleine lumière, un journal de bord pour raconter votre démarche.',
           points: ['Galerie', 'Journal', 'Expositions'],
         },
+        {
+          tag: 'Bien-être',
+          name: 'Cours de yoga',
+          desc: 'Noir et blanc, souffle et lenteur : un studio où le site respire au rythme du cours.',
+          points: ['Postures animées', 'Horaires', 'Réservation'],
+        },
       ],
       viewDemo: 'Voir la démonstration',
       packBadge: 'Pack Essentiel',
       eyebrow2: 'Pour démarrer',
       packNote:
-        'Les quatre modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
+        'Les cinq modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
       note: {
         before: "Votre activité n'apparaît pas ici ? C'est justement le principe : chaque site est unique.",
         link: 'Décrivez-moi votre métier',
@@ -293,12 +299,18 @@ export const home = {
           desc: 'Your work in the spotlight, with a journal to tell the story behind it.',
           points: ['Gallery', 'Journal', 'Exhibitions'],
         },
+        {
+          tag: 'Wellbeing',
+          name: 'Yoga classes',
+          desc: 'Black and white, breath and slowness: a studio whose website breathes with the class.',
+          points: ['Animated postures', 'Schedule', 'Booking'],
+        },
       ],
       viewDemo: 'View the demo',
       packBadge: 'Essential pack',
       eyebrow2: 'To get started',
       packNote:
-        'The four templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
+        'The five templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
       note: {
         before: 'Don’t see your line of work here? That’s exactly the point: every website is one of a kind.',
         link: 'Tell me about your trade',

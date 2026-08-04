@@ -1,0 +1,169 @@
+---
+/**
+ * Figure de yoga dessinée au trait, pour le modèle « Souffle ».
+ *
+ * Chaque posture est un tracé volontairement minimal : une tête et quelques
+ * segments. Le style vient du trait lui-même — extrémités arrondies, épaisseur
+ * constante, aucun aplat — et de la façon dont il se dessine à l'écran.
+ *
+ * Le repère est un carré de 120 × 120, le sol se situant vers y = 105.
+ */
+interface Props {
+  /** Index de la posture, dans l'ordre de l'enchaînement. */
+  pose: number;
+  /** Titre accessible ; la figure est décorative si absent. */
+  titre?: string;
+}
+
+const { pose, titre } = Astro.props;
+
+type Figure = { tete: [number, number, number]; traits: string[] };
+
+const FIGURES: Figure[] = [
+  // 1 · La Montagne — debout, enraciné, bras le long du corps.
+  {
+    tete: [60, 20, 8],
+    traits: ['M60 28 L60 66', 'M60 38 L50 64', 'M60 38 L70 64', 'M60 66 L56 105', 'M60 66 L64 105'],
+  },
+  // 2 · Le Guerrier — jambes écartées, genou avant plié, bras à l'horizontale.
+  {
+    tete: [58, 26, 8],
+    traits: ['M20 46 L96 46', 'M58 34 L58 64', 'M58 64 L33 84 L30 105', 'M58 64 L92 105'],
+  },
+  // 3 · Le Triangle — buste incliné, un bras vers le ciel, l'autre vers le sol.
+  {
+    tete: [39, 37, 7.5],
+    traits: ['M38 105 L74 62 L100 105', 'M74 62 L48 46', 'M48 46 L60 18', 'M48 46 L38 96'],
+  },
+  // 4 · Le Chien tête en bas — le V renversé, tête relâchée entre les bras.
+  {
+    tete: [44, 66, 7],
+    traits: ['M62 32 L24 100', 'M62 32 L96 102', 'M50 56 L62 32'],
+  },
+  // 5 · La Pince assise — assis, jambes tendues, buste replié vers l'avant.
+  {
+    tete: [76, 78, 7],
+    traits: ['M30 94 L96 94', 'M30 94 L70 80', 'M62 82 L92 90'],
+  },
+  // 6 · L'Enfant — à genoux, front au sol, bras étendus devant.
+  {
+    tete: [44, 99, 7],
+    traits: ['M90 86 L88 104 L70 104', 'M90 86 L52 97', 'M56 96 L22 103'],
+  },
+  // 7 · Le Cobra — ventre au sol, poitrine ouverte, regard vers le haut.
+  {
+    tete: [38, 66, 7],
+    traits: ['M104 102 L58 101', 'M58 101 L44 74', 'M46 78 L50 102'],
+  },
+  // 8 · Le Pont — dos au sol, bassin soulevé vers le ciel.
+  {
+    tete: [102, 97, 7],
+    traits: ['M92 101 L60 70 L38 76 L34 103', 'M92 101 L110 103'],
+  },
+];
+
+const figure = FIGURES[pose] ?? FIGURES[0];
+const [cx, cy, r] = figure.tete;
+---
+
+<svg
+  class="posture"
+  viewBox="0 0 120 120"
+  role={titre ? 'img' : 'presentation'}
+  aria-label={titre}
+  aria-hidden={titre ? undefined : 'true'}
+>
+  <!-- Le sol : une simple ligne, très effacée, qui ancre la figure. -->
+  <line class="posture-sol" x1="10" y1="107" x2="110" y2="107" />
+  <g class="posture-corps">
+    <circle class="posture-trait posture-tete" cx={cx} cy={cy} r={r} />
+    {figure.traits.map((d) => <path class="posture-trait" d={d} />)}
+  </g>
+</svg>
+
+<style>
+  .posture {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .posture-sol {
+    stroke: currentColor;
+    stroke-width: 0.8;
+    opacity: 0.22;
+  }
+
+  /* Le corps respire : une dilatation à peine perceptible, calée sur un
+     rythme d'inspiration-expiration lente (environ six respirations par
+     minute, ce que l'on cherche justement en cours). */
+  .posture-corps {
+    transform-origin: 60px 105px;
+    animation: respire 10s ease-in-out infinite;
+  }
+
+  @keyframes respire {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.025);
+    }
+  }
+
+  .posture-trait {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* Le trait se dessine : la longueur du tracé est masquée puis révélée.
+       360 couvre largement le plus long segment de toutes les figures. */
+    stroke-dasharray: 360;
+    stroke-dashoffset: 360;
+  }
+
+  .posture-tete {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+  }
+
+  /* La classe est posée par le script de la page quand la figure entre à
+     l'écran, pour que le tracé se dessine sous les yeux du visiteur. */
+  :global(.est-dessinee) .posture-trait {
+    animation: trace 1.6s ease-out forwards;
+  }
+
+  :global(.est-dessinee) .posture-trait:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  :global(.est-dessinee) .posture-trait:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  :global(.est-dessinee) .posture-trait:nth-child(4) {
+    animation-delay: 0.45s;
+  }
+  :global(.est-dessinee) .posture-trait:nth-child(5) {
+    animation-delay: 0.6s;
+  }
+
+  @keyframes trace {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Mouvement réduit : la figure est simplement là, entièrement tracée. */
+  @media (prefers-reduced-motion: reduce) {
+    .posture-corps {
+      animation: none;
+    }
+
+    .posture-trait {
+      stroke-dashoffset: 0;
+      animation: none !important;
+    }
+  }
+</style>

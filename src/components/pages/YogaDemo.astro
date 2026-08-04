@@ -1,0 +1,1047 @@
+---
+// Modèle « Souffle » — studio de yoga. Noir et blanc strict : le Yin et le
+// Yang. Les sections alternent fond noir et fond blanc, et les photos sont
+// désaturées en CSS pour que le parti pris tienne quelles que soient les
+// images déposées.
+import Base from '../../layouts/Base.astro';
+import DemoBar from '../DemoBar.astro';
+import PostureYoga from '../PostureYoga.astro';
+import { splitPath, localePath } from '../../lib/i18n';
+import { withBase } from '../../lib/paths';
+import { common } from '../../i18n/common';
+import { yoga } from '../../i18n/yoga';
+
+const { lang } = splitPath(Astro.url.pathname);
+const t = yoga[lang];
+const c = common[lang];
+
+const photo = (nom: string) => withBase(`modeles/yoga/${nom}`);
+---
+
+<Base title={t.title} description={t.description}>
+  <DemoBar label={t.demoLabel} />
+  <div class="yoga">
+    <!-- ============================= EN-TÊTE ============================ -->
+    <header class="y-header">
+      <div class="y-wrap y-header-inner">
+        <a class="y-logo" href="#haut" aria-label="Souffle">
+          <svg class="y-taijitu" viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="19" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M20 1a9.5 9.5 0 0 0 0 19 9.5 9.5 0 0 1 0 19 19 19 0 0 0 0-38Z"
+              fill="currentColor"
+            />
+            <circle cx="20" cy="10.5" r="2.4" fill="currentColor" />
+            <circle cx="20" cy="29.5" r="2.4" fill="var(--y-noir)" />
+          </svg>
+          Souffle
+        </a>
+        <nav aria-label={lang === 'fr' ? 'Navigation du studio' : 'Studio navigation'}>
+          <ul class="y-nav">
+            <li><a href="#flow">{t.nav.flow}</a></li>
+            <li><a href="#cours">{t.nav.cours}</a></li>
+            <li><a href="#prof">{t.nav.prof}</a></li>
+            <li><a href="#infos">{t.nav.infos}</a></li>
+          </ul>
+        </nav>
+        <a class="y-btn y-btn-clair" href="#infos">{t.nav.cta}</a>
+      </div>
+    </header>
+
+    <main id="haut">
+      <!-- ============================== HERO ============================= -->
+      <section class="y-hero">
+        <img class="y-hero-photo" src={photo('prof-1.webp')} alt="" width="1600" height="2136" />
+        <div class="y-hero-voile" aria-hidden="true"></div>
+        <div class="y-wrap y-hero-inner">
+          <p class="y-kicker">{t.hero.kicker}</p>
+          <h1 class="y-hero-titre">
+            {t.hero.titleLine}<br /><em>{t.hero.titleEm}</em>
+          </h1>
+          <p class="y-hero-lede">{t.hero.lede}</p>
+          <div class="y-hero-actions">
+            <a class="y-btn y-btn-clair" href="#infos">{t.hero.ctaPrimaire}</a>
+            <a class="y-btn y-btn-ligne" href="#flow">{t.hero.ctaSecondaire}</a>
+          </div>
+        </div>
+        <span class="y-souffle" aria-hidden="true"></span>
+      </section>
+
+      <!-- ====================== BANDEAU YIN / YANG ====================== -->
+      <section class="y-duo" aria-hidden="true">
+        <div class="y-wrap y-duo-inner">
+          {t.hero.duo.map((d) => (
+            <p class="y-duo-paire">
+              <span class="y-duo-yin">{d.yin}</span>
+              <span class="y-duo-trait"></span>
+              <span class="y-duo-yang">{d.yang}</span>
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <!-- ============================== FLOW ============================= -->
+      <section id="flow" class="y-section y-section-noire">
+        <div class="y-wrap">
+          <div class="y-tete reveal">
+            <p class="y-kicker">{t.flow.eyebrow}</p>
+            <h2 class="y-titre">{t.flow.title}</h2>
+            <p class="y-lede">{t.flow.lede}</p>
+            <button
+              class="y-btn y-btn-ligne y-flow-bouton"
+              type="button"
+              data-flow-bouton
+              data-arreter={t.flow.arreter}
+            >
+              <span data-flow-libelle>{t.flow.lancer}</span>
+              <span class="y-flow-point" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <ol class="y-postures" data-flow-liste>
+            {t.flow.postures.map((p, i) => (
+              <li class="y-posture reveal" style={`--reveal-delay: ${i * 0.06}s`} data-posture>
+                <span class="y-posture-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <div class="y-posture-figure">
+                  <PostureYoga pose={i} titre={p.nom} />
+                </div>
+                <p class="y-posture-nom">{p.nom}</p>
+                <p class="y-posture-sanskrit">{p.sanskrit}</p>
+                <p class="y-posture-intention">{p.intention}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <!-- ========================= BANDE PHOTO ========================== -->
+      <section class="y-bande" aria-hidden="true">
+        <img src={photo('prof-3.webp')} alt="" width="1600" height="2136" loading="lazy" decoding="async" />
+      </section>
+
+      <!-- ============================= COURS ============================= -->
+      <section id="cours" class="y-section">
+        <div class="y-wrap">
+          <div class="y-tete reveal">
+            <p class="y-kicker">{t.cours.eyebrow}</p>
+            <h2 class="y-titre">{t.cours.title}</h2>
+          </div>
+
+          <div class="y-cours">
+            {t.cours.items.map((co, i) => (
+              <article class="y-cours-carte reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <h3 class="y-cours-nom">{co.nom}</h3>
+                <p class="y-cours-meta">{co.duree} · {co.niveau}</p>
+                <p class="y-cours-desc">{co.desc}</p>
+              </article>
+            ))}
+          </div>
+
+          <div class="y-horaires reveal">
+            <h3 class="y-horaires-titre">{t.cours.horairesTitre}</h3>
+            <table>
+              <tbody>
+                {t.cours.horaires.map((h) => (
+                  <tr>
+                    <th scope="row">{h.jour}</th>
+                    <td>{h.cours}</td>
+                    <td class="y-horaires-heure">{h.heure}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== PROF ============================= -->
+      <section id="prof" class="y-section y-section-noire">
+        <div class="y-wrap y-prof">
+          <div class="y-prof-photo reveal">
+            <img src={photo('prof-2.webp')} alt="Léa Vasseur" width="1600" height="2136" loading="lazy" decoding="async" />
+          </div>
+          <div class="y-prof-texte reveal" style="--reveal-delay: 0.12s">
+            <p class="y-kicker">{t.prof.eyebrow}</p>
+            <h2 class="y-titre">{t.prof.title}</h2>
+            <p class="y-lede">{t.prof.texte}</p>
+            <blockquote class="y-citation">
+              <p>{t.prof.citation}</p>
+              <footer>{t.prof.signature}</footer>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= INFOS ============================= -->
+      <section id="infos" class="y-section">
+        <div class="y-wrap">
+          <div class="y-tete reveal">
+            <p class="y-kicker">{t.infos.eyebrow}</p>
+            <h2 class="y-titre">{t.infos.title}</h2>
+          </div>
+
+          <div class="y-infos">
+            <div class="y-infos-bloc reveal">
+              <h3>{t.infos.tarifsTitre}</h3>
+              <ul class="y-tarifs">
+                {t.infos.tarifs.map((tf) => (
+                  <li><span>{tf.nom}</span><span class="y-tarifs-prix">{tf.prix}</span></li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="y-infos-bloc reveal" style="--reveal-delay: 0.08s">
+              <h3>{t.infos.lieuTitre}</h3>
+              <p class="y-adresse">{t.infos.adresse}</p>
+              <p class="y-infos-note">{t.infos.lieuNote}</p>
+            </div>
+
+            <div class="y-infos-bloc y-infos-contact reveal" style="--reveal-delay: 0.16s">
+              <h3>{t.infos.contactTitre}</h3>
+              <p class="y-infos-note">{t.infos.contactNote}</p>
+              <a class="y-btn y-btn-sombre" href="tel:+33400000000">{t.infos.telephone}</a>
+              <a class="y-lien" href={`mailto:${t.infos.email}`}>{t.infos.email}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="y-footer">
+      <div class="y-wrap y-footer-inner">
+        <p>© 2026 Souffle — {t.footer.baseline}</p>
+        <p>{c.demo.madeBy} <a href={localePath(lang, '')}>Atelier Web</a></p>
+      </div>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  /* ------------------------------------------------------------------ */
+  /*  Palette : deux valeurs, rien d'autre. Le Yin et le Yang.           */
+  /* ------------------------------------------------------------------ */
+
+  .yoga {
+    --y-noir: #0b0b0b;
+    --y-noir-doux: #17171a;
+    --y-blanc: #f6f5f2;
+    --y-blanc-pur: #fff;
+    /* Deux gris, pas un : le même ne peut pas être lisible à la fois sur
+       blanc et sur noir. Celui-ci vaut pour les sections claires ; les
+       sections sombres le redéfinissent plus bas. */
+    --y-gris: #6b6b6b;
+    --y-gris-clair: #c9c9c9;
+    font-family: var(--font-sans);
+    color: var(--y-noir);
+    background: var(--y-blanc);
+    letter-spacing: 0.01em;
+  }
+
+  .y-wrap {
+    width: min(68rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+
+  /* Toutes les photos passent en noir et blanc : le parti pris du modèle ne
+     dépend pas des images fournies. */
+  .yoga img {
+    filter: grayscale(1) contrast(1.06);
+  }
+
+  /* ------------------------------- En-tête --------------------------- */
+
+  .y-header {
+    position: sticky;
+    top: 2.35rem;
+    z-index: 40;
+    background: rgb(11 11 11 / 0.72);
+    backdrop-filter: blur(14px);
+    color: var(--y-blanc);
+  }
+
+  .y-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.85rem;
+  }
+
+  .y-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .y-taijitu {
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: y-tourne 24s linear infinite;
+  }
+
+  @keyframes y-tourne {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .y-header nav {
+    margin-left: auto;
+  }
+
+  .y-nav {
+    display: flex;
+    gap: 1.7rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .y-nav a {
+    text-decoration: none;
+    color: var(--y-gris-clair);
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    transition: color 0.3s;
+  }
+
+  .y-nav a:hover {
+    color: var(--y-blanc);
+  }
+
+  /* ------------------------------- Boutons --------------------------- */
+
+  .y-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.6rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.4s,
+      color 0.4s,
+      border-color 0.4s,
+      transform 0.4s var(--ease-out);
+  }
+
+  .y-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .y-btn-clair {
+    background: var(--y-blanc);
+    color: var(--y-noir);
+  }
+
+  .y-btn-clair:hover {
+    background: var(--y-blanc-pur);
+  }
+
+  .y-btn-sombre {
+    background: var(--y-noir);
+    color: var(--y-blanc);
+  }
+
+  .y-btn-ligne {
+    border-color: currentColor;
+    background: transparent;
+    color: inherit;
+  }
+
+  .y-btn-ligne:hover {
+    background: currentColor;
+    /* Le texte prend la couleur du fond de la section : inversion Yin/Yang. */
+    color: var(--y-noir);
+  }
+
+  .y-section-noire .y-btn-ligne:hover {
+    color: var(--y-noir);
+  }
+
+  .y-lien {
+    color: inherit;
+    font-size: 0.95rem;
+    border-bottom: 1px solid currentColor;
+    text-decoration: none;
+    padding-bottom: 2px;
+    transition: opacity 0.3s;
+  }
+
+  .y-lien:hover {
+    opacity: 0.6;
+  }
+
+  /* -------------------------------- Hero ----------------------------- */
+
+  .y-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: min(92vh, 46rem);
+    padding-block: clamp(4rem, 10vw, 7rem);
+    background: var(--y-noir);
+    color: var(--y-blanc);
+    overflow: hidden;
+  }
+
+  /* Sélecteur renforcé : `.yoga img` (deux composantes) l'emportait sur une
+     simple classe et effaçait l'assombrissement — or le texte du hero repose
+     sur cette photo. */
+  .yoga img.y-hero-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 55 % et non 30 % : les photos étant en portrait dans un cadre large,
+       seuls 39 % de la hauteur sont visibles — mesuré, le sujet se trouve
+       autour de 58 %, pas dans le ciel. */
+    object-position: 50% 55%;
+    /* Contraste poussé : on cherche le tirage argentique, pas la photo. */
+    filter: grayscale(1) contrast(1.15) brightness(0.72);
+    animation: y-approche 24s ease-in-out infinite alternate;
+  }
+
+  @keyframes y-approche {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.07);
+    }
+  }
+
+  .y-hero-voile {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgb(11 11 11 / 0.55) 0%,
+      rgb(11 11 11 / 0.25) 40%,
+      rgb(11 11 11 / 0.92) 100%
+    );
+  }
+
+  .y-hero-inner {
+    position: relative;
+    max-width: 40rem;
+  }
+
+  .y-kicker {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--y-gris);
+  }
+
+  .y-section-noire .y-kicker,
+  .y-hero .y-kicker {
+    color: var(--y-gris-clair);
+  }
+
+  .y-hero-titre {
+    margin-top: 1.6rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2.6rem, 8vw, 5.2rem);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .y-hero-titre em {
+    font-style: italic;
+    color: var(--y-gris-clair);
+  }
+
+  .y-hero-lede {
+    margin-top: 1.6rem;
+    max-width: 32rem;
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: var(--y-gris-clair);
+  }
+
+  .y-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.4rem;
+  }
+
+  /* Un trait qui monte et redescend, comme une respiration. */
+  .y-souffle {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 1px;
+    height: 4.5rem;
+    background: linear-gradient(to bottom, transparent, var(--y-gris-clair));
+    transform-origin: bottom;
+    animation: y-respire 6s ease-in-out infinite;
+  }
+
+  @keyframes y-respire {
+    0%,
+    100% {
+      transform: scaleY(0.3);
+      opacity: 0.25;
+    }
+    50% {
+      transform: scaleY(1);
+      opacity: 0.9;
+    }
+  }
+
+  /* --------------------------- Bandeau Yin/Yang ----------------------- */
+
+  .y-duo {
+    background: var(--y-blanc);
+    border-block: 1px solid rgb(11 11 11 / 0.12);
+    padding-block: 1.6rem;
+  }
+
+  .y-duo-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(1.5rem, 6vw, 5rem);
+  }
+
+  .y-duo-paire {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--font-serif);
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    letter-spacing: 0.06em;
+  }
+
+  .y-duo-yin {
+    color: var(--y-noir);
+  }
+
+  .y-duo-yang {
+    color: var(--y-gris);
+    font-style: italic;
+  }
+
+  /* Le trait bascule doucement d'un côté à l'autre : l'équilibre n'est
+     jamais figé. */
+  .y-duo-trait {
+    width: 2.5rem;
+    height: 1px;
+    background: var(--y-noir);
+    opacity: 0.4;
+    transform-origin: center;
+    animation: y-bascule 8s ease-in-out infinite;
+  }
+
+  @keyframes y-bascule {
+    0%,
+    100% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(4deg);
+    }
+  }
+
+  /* ------------------------------ Sections --------------------------- */
+
+  .y-section {
+    padding-block: clamp(4rem, 9vw, 7.5rem);
+  }
+
+  .y-section-noire,
+  .y-hero,
+  .y-header,
+  .y-footer {
+    /* Sur fond noir, le gris doit au contraire s'éclaircir pour rester
+       lisible : 8:1 au lieu des 3:1 qu'aurait donné le gris clair. */
+    --y-gris: #a5a5a5;
+  }
+
+  .y-section-noire {
+    background: var(--y-noir);
+    color: var(--y-blanc);
+  }
+
+  .y-tete {
+    max-width: 42rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .y-titre {
+    margin-top: 1.1rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 300;
+    line-height: 1.12;
+  }
+
+  .y-lede {
+    margin-top: 1.2rem;
+    font-size: 1.02rem;
+    line-height: 1.8;
+    color: var(--y-gris);
+  }
+
+  .y-section-noire .y-lede {
+    color: var(--y-gris-clair);
+  }
+
+  /* ------------------------------ Postures --------------------------- */
+
+  .y-flow-bouton {
+    margin-top: 1.8rem;
+  }
+
+  .y-flow-point {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.35;
+    transition: opacity 0.3s;
+  }
+
+  [data-flow-bouton][aria-pressed='true'] .y-flow-point {
+    opacity: 1;
+    animation: y-pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes y-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.2;
+    }
+  }
+
+  .y-postures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Le fond transparaît dans les interstices : la grille dessine ses
+       propres séparations, sans une seule bordure déclarée. */
+    background: rgb(246 245 242 / 0.16);
+    border: 1px solid rgb(246 245 242 / 0.16);
+  }
+
+  .y-posture {
+    position: relative;
+    padding: 1.8rem 1.4rem 1.6rem;
+    background: var(--y-noir);
+    transition: background-color 0.6s ease;
+  }
+
+  .y-posture-num {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--y-gris);
+  }
+
+  .y-posture-figure {
+    margin: 0.8rem 0 1.2rem;
+    color: var(--y-blanc);
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .y-posture:hover .y-posture-figure,
+  .y-posture.est-active .y-posture-figure {
+    transform: scale(1.06);
+  }
+
+  .y-posture-nom {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+  }
+
+  .y-posture-sanskrit {
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    font-style: italic;
+    letter-spacing: 0.08em;
+    color: var(--y-gris);
+  }
+
+  .y-posture-intention {
+    margin-top: 0.8rem;
+    font-size: 0.87rem;
+    line-height: 1.6;
+    color: var(--y-gris-clair);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s var(--ease-out);
+  }
+
+  .y-posture:hover .y-posture-intention,
+  .y-posture.est-active .y-posture-intention {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* La posture en cours dans l'enchaînement s'éclaire, les autres s'effacent
+     — le regard suit le flow tout seul. */
+  .y-posture.est-active {
+    background: var(--y-noir-doux);
+  }
+
+  [data-flow-liste].flow-en-cours .y-posture:not(.est-active) {
+    opacity: 0.32;
+  }
+
+  [data-flow-liste] .y-posture {
+    transition:
+      background-color 0.6s ease,
+      opacity 0.6s ease;
+  }
+
+  /* ----------------------------- Bande photo -------------------------- */
+
+  .y-bande {
+    height: clamp(14rem, 34vw, 26rem);
+    overflow: hidden;
+  }
+
+  .y-bande img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Cadre très large : 22 % de l'image visible, calés sur le sujet. */
+    object-position: 50% 60%;
+    filter: grayscale(1) contrast(1.1) brightness(0.95);
+  }
+
+  /* -------------------------------- Cours ----------------------------- */
+
+  .y-cours {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2.2rem 2.5rem;
+  }
+
+  .y-cours-carte {
+    padding-top: 1.4rem;
+    border-top: 1px solid rgb(11 11 11 / 0.22);
+  }
+
+  .y-cours-nom {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  .y-cours-meta {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--y-gris);
+  }
+
+  .y-cours-desc {
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #4a4a4a;
+  }
+
+  .y-horaires {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    max-width: 40rem;
+  }
+
+  .y-horaires-titre {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .y-horaires table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .y-horaires th,
+  .y-horaires td {
+    padding: 0.85rem 0;
+    text-align: left;
+    font-weight: 400;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgb(11 11 11 / 0.12);
+  }
+
+  .y-horaires th {
+    width: 30%;
+  }
+
+  .y-horaires-heure {
+    text-align: right;
+    color: var(--y-gris);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* -------------------------------- Prof ------------------------------ */
+
+  .y-prof {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .y-prof-photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.12);
+  }
+
+  .y-citation {
+    margin: 2.2rem 0 0;
+    padding-left: 1.4rem;
+    border-left: 1px solid var(--y-gris);
+  }
+
+  .y-citation p {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .y-citation footer {
+    margin-top: 0.7rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--y-gris);
+  }
+
+  /* -------------------------------- Infos ----------------------------- */
+
+  .y-infos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2.5rem;
+  }
+
+  .y-infos-bloc h3 {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgb(11 11 11 / 0.22);
+  }
+
+  .y-tarifs {
+    list-style: none;
+    margin: 1.1rem 0 0;
+    padding: 0;
+  }
+
+  .y-tarifs li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgb(11 11 11 / 0.08);
+  }
+
+  .y-tarifs-prix {
+    font-variant-numeric: tabular-nums;
+    color: var(--y-gris);
+  }
+
+  .y-adresse {
+    margin-top: 1.1rem;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    white-space: pre-line;
+  }
+
+  .y-infos-note {
+    margin-top: 0.9rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--y-gris);
+  }
+
+  .y-infos-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .y-infos-contact .y-btn {
+    margin-top: 1.3rem;
+  }
+
+  .y-infos-contact .y-lien {
+    margin-top: 1rem;
+  }
+
+  /* -------------------------------- Footer ---------------------------- */
+
+  .y-footer {
+    background: var(--y-noir);
+    color: var(--y-gris);
+    font-size: 0.85rem;
+  }
+
+  .y-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding-block: 1.6rem;
+  }
+
+  .y-footer a {
+    color: var(--y-blanc);
+  }
+
+  /* ------------------------------ Responsive -------------------------- */
+
+  @media (max-width: 760px) {
+    .y-header nav {
+      display: none;
+    }
+
+    .y-header-inner {
+      justify-content: space-between;
+    }
+
+    .y-prof {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .y-hero-photo,
+    .y-souffle,
+    .y-duo-trait,
+    .y-taijitu {
+      animation: none;
+    }
+
+    .y-posture-intention {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // ------------------------------------------------------------------
+  //  Tracé des figures à l'entrée dans le champ de vision
+  // ------------------------------------------------------------------
+  const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const postures = Array.from(document.querySelectorAll<HTMLElement>('[data-posture]'));
+
+  if (postures.length > 0) {
+    if (mouvementReduit || !('IntersectionObserver' in window)) {
+      postures.forEach((p) => p.classList.add('est-dessinee'));
+    } else {
+      const observateur = new IntersectionObserver(
+        (entrees) => {
+          for (const entree of entrees) {
+            if (entree.isIntersecting) {
+              entree.target.classList.add('est-dessinee');
+              observateur.unobserve(entree.target);
+            }
+          }
+        },
+        { threshold: 0.35 }
+      );
+      postures.forEach((p) => observateur.observe(p));
+    }
+  }
+
+  // ------------------------------------------------------------------
+  //  L'enchaînement : les postures s'éclairent l'une après l'autre
+  // ------------------------------------------------------------------
+  const bouton = document.querySelector<HTMLButtonElement>('[data-flow-bouton]');
+  const liste = document.querySelector<HTMLElement>('[data-flow-liste]');
+  const libelle = document.querySelector<HTMLElement>('[data-flow-libelle]');
+
+  if (bouton && liste && libelle && postures.length > 0) {
+    const texteLancer = libelle.textContent ?? '';
+    const texteArreter = bouton.dataset.arreter ?? '';
+    // Une posture toutes les 2,6 s : le temps d'un cycle respiratoire complet.
+    const DUREE = 2600;
+    let minuteur = 0;
+    let index = 0;
+
+    const eteindre = (): void => {
+      postures.forEach((p) => p.classList.remove('est-active'));
+    };
+
+    const arreter = (): void => {
+      window.clearInterval(minuteur);
+      minuteur = 0;
+      eteindre();
+      liste.classList.remove('flow-en-cours');
+      bouton.setAttribute('aria-pressed', 'false');
+      libelle.textContent = texteLancer;
+    };
+
+    const avancer = (): void => {
+      eteindre();
+      postures[index].classList.add('est-active');
+      index = (index + 1) % postures.length;
+    };
+
+    bouton.setAttribute('aria-pressed', 'false');
+
+    bouton.addEventListener('click', () => {
+      if (minuteur) {
+        arreter();
+        return;
+      }
+      index = 0;
+      liste.classList.add('flow-en-cours');
+      bouton.setAttribute('aria-pressed', 'true');
+      if (texteArreter) libelle.textContent = texteArreter;
+      avancer();
+      minuteur = window.setInterval(avancer, DUREE);
+    });
+
+    // L'enchaînement s'arrête s'il sort de l'écran : inutile de faire
+    // travailler la page pour une animation que personne ne regarde.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        (entrees) => {
+          if (minuteur && entrees.some((e) => !e.isIntersecting)) arreter();
+        },
+        { threshold: 0 }
+      ).observe(liste);
+    }
+  }
+</script>
