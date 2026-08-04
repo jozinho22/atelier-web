@@ -54,7 +54,7 @@ export const home = {
     },
     modeles: {
       eyebrow: 'Les modèles',
-      title: 'Quatre exemples, une infinité de métiers',
+      title: 'Une page, et tout l’essentiel',
       items: [
         {
           tag: 'Associations',
@@ -83,6 +83,7 @@ export const home = {
       ],
       viewDemo: 'Voir la démonstration',
       packBadge: 'Pack Essentiel',
+      eyebrow2: 'Pour démarrer',
       packNote:
         'Les quatre modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
       note: {
@@ -94,7 +95,7 @@ export const home = {
     surMesure: {
       packBadge: 'Pack Sur mesure',
       eyebrow: 'Le plus choisi',
-      title: 'Plusieurs pages, un design qui n’appartient qu’à vous',
+      title: 'Quand une page ne suffit plus',
       tag: 'Salon de thé',
       name: 'The Sugar & Steam Diner',
       desc:
@@ -112,7 +113,7 @@ export const home = {
     signature: {
       packBadge: 'Pack Signature',
       eyebrow: 'Un cran au-dessus',
-      title: 'Et quand une page ne suffit plus',
+      title: 'Quand le site devient une pièce unique',
       tag: 'Sport & loisirs',
       name: 'Golf de Roc’h Avel',
       desc:
@@ -126,6 +127,19 @@ export const home = {
       ],
       cta: 'Visiter le site complet',
       note: 'S’ouvre dans un nouvel onglet : c’est un site entier, pas une page de démonstration.',
+    },
+    portfolio: {
+      eyebrow: 'Réalisations',
+      title: 'Des sites déjà en ligne',
+      lede: 'Quelques projets livrés — cliquez pour les visiter.',
+      visiter: 'Visiter le site',
+      precedent: 'Projet précédent',
+      suivant: 'Projet suivant',
+      items: [
+        { name: 'Api Jawa', desc: 'Dépôt-vente d’artisans à petits prix.' },
+        { name: 'Expert Maths Lycée', desc: 'Plate-forme de cours de mathématiques en ligne.' },
+        { name: 'Monmétré', desc: 'Plate-forme de métrés CVC sur mesure.' },
+      ],
     },
     methode: {
       eyebrow: 'La méthode',
@@ -253,7 +267,7 @@ export const home = {
     },
     modeles: {
       eyebrow: 'The templates',
-      title: 'Four examples, countless trades',
+      title: 'One page, and all the essentials',
       items: [
         {
           tag: 'Clubs',
@@ -282,6 +296,7 @@ export const home = {
       ],
       viewDemo: 'View the demo',
       packBadge: 'Essential pack',
+      eyebrow2: 'To get started',
       packNote:
         'The four templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
       note: {
@@ -293,7 +308,7 @@ export const home = {
     surMesure: {
       packBadge: 'Bespoke pack',
       eyebrow: 'The most popular',
-      title: 'Several pages, a design that belongs to you alone',
+      title: 'When one page is no longer enough',
       tag: 'Tea room',
       name: 'The Sugar & Steam Diner',
       desc:
@@ -311,7 +326,7 @@ export const home = {
     signature: {
       packBadge: 'Signature pack',
       eyebrow: 'One step further',
-      title: 'And when one page is no longer enough',
+      title: 'When the website becomes a one-off piece',
       tag: 'Sport & leisure',
       name: 'Golf de Roc’h Avel',
       desc:
@@ -325,6 +340,19 @@ export const home = {
       ],
       cta: 'Visit the full site',
       note: 'Opens in a new tab: this is an entire website, not a demo page.',
+    },
+    portfolio: {
+      eyebrow: 'Recent work',
+      title: 'Websites already online',
+      lede: 'A few delivered projects — click to visit them.',
+      visiter: 'Visit the website',
+      precedent: 'Previous project',
+      suivant: 'Next project',
+      items: [
+        { name: 'Api Jawa', desc: 'Consignment shop for affordable artisan goods.' },
+        { name: 'Expert Maths Lycée', desc: 'Online maths tutoring platform.' },
+        { name: 'Monmétré', desc: 'Custom HVAC quantity-surveying platform.' },
+      ],
     },
     methode: {
       eyebrow: 'The process',

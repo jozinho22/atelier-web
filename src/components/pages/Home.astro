@@ -53,7 +53,9 @@ const modeles = modeleMeta.map((m, i) => ({
 const signature = {
   url: 'https://jozinho22.github.io/modele-golf/',
   image: 'golf.webp',
-  accent: '#3e9c6a',
+  // Vert assombri : l'accent sert aussi de couleur de texte (étiquette du
+  // modèle), et #3e9c6a n'atteignait que 3,4:1 sur blanc au lieu de 4,5:1.
+  accent: '#2b7350',
 };
 
 /**
@@ -68,6 +70,24 @@ const surMesure = {
   image: 'salon-de-the.webp',
   accent: '#c0202e',
 };
+
+/**
+ * Portfolio : sites réellement livrés. Les favicons sont copiés dans
+ * public/portfolio/ plutôt que chargés depuis les domaines distants — le site
+ * ne fait aucune requête externe, et une icône ne peut pas disparaître si le
+ * site du client change. `icon` absent ⇒ monogramme dessiné en CSS.
+ */
+const portfolioMeta = [
+  { url: 'https://api-jawa.fr', icon: 'api-jawa.png', accent: '#c98a3f' },
+  { url: 'https://expert-maths-lycee.fr', accent: '#2f6fdb' },
+  { url: 'https://xn--monmtr-evac.com', icon: 'monmetre.svg', accent: '#1f8a70' },
+];
+const portfolio = portfolioMeta.map((p, i) => ({
+  ...p,
+  ...t.portfolio.items[i],
+  // Domaine lisible : on retire le protocole et on décode le punycode.
+  domaine: p.url.replace(/^https?:\/\//, '').replace('xn--monmtr-evac.com', 'monmétré.com'),
+}));
 
 const etapeDeco = [
   { num: '01', icon: '☕' },
@@ -179,6 +199,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           <p class="pack-chip pack-essentiel">
             <span class="pack-dot" aria-hidden="true"></span>{t.modeles.packBadge}
           </p>
+          <p class="eyebrow signature-eyebrow">{t.modeles.eyebrow2}</p>
           <h2 class="signature-title">{t.modeles.title}</h2>
           <p class="pack-note">{t.modeles.packNote}</p>
           <div class="modele-grid">
@@ -197,7 +218,6 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
                 loading="lazy"
                 decoding="async"
               />
-              <div class="modele-overlay" aria-hidden="true"></div>
               <span class="modele-pack pack-essentiel">{t.modeles.packBadge}</span>
               <div class="modele-info">
                 <p class="modele-tag">{m.tag}</p>
@@ -307,6 +327,57 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
             </p>
             <p class="signature-note">{t.signature.note}</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== PORTFOLIO =========================== -->
+    <section id="portfolio" class="section portfolio-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">{t.portfolio.eyebrow}</p>
+          <h2 class="section-title">{t.portfolio.title}</h2>
+          <p class="section-lede">{t.portfolio.lede}</p>
+        </div>
+
+        <div class="carrousel reveal" data-carrousel>
+          <button class="carrousel-fleche" type="button" data-carrousel-prec aria-label={t.portfolio.precedent}>
+            <span aria-hidden="true">←</span>
+          </button>
+
+          <ul class="carrousel-piste" data-carrousel-piste>
+            {portfolio.map((p) => (
+              <li class="carrousel-item" style={`--accent-card: ${p.accent}`}>
+                <a class="projet" href={p.url} target="_blank" rel="noopener noreferrer">
+                  {p.icon ? (
+                    <img
+                      class="projet-icone"
+                      src={withBase(`portfolio/${p.icon}`)}
+                      alt=""
+                      width="48"
+                      height="48"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span class="projet-icone projet-monogramme" aria-hidden="true">
+                      {p.name.charAt(0)}
+                    </span>
+                  )}
+                  <p class="projet-nom">{p.name}</p>
+                  <p class="projet-domaine">{p.domaine}</p>
+                  <p class="projet-desc">{p.desc}</p>
+                  <span class="projet-lien">
+                    {t.portfolio.visiter} <span class="arrow" aria-hidden="true">↗</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <button class="carrousel-fleche" type="button" data-carrousel-suiv aria-label={t.portfolio.suivant}>
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
     </section>
@@ -772,15 +843,16 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     margin-top: 1.4rem;
   }
 
+  /* Comme les deux autres packs : la photo est un bloc à part entière, posé
+     au-dessus du texte, et non un fond sur lequel on écrirait. */
   .modele-card {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    /* Le bloc de texte fixe le plancher : cette valeur sert surtout à garantir
-       une bande de photo visible au-dessus de lui. */
-    min-height: 17.5rem;
     text-decoration: none;
+    color: inherit;
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.08);
     border-radius: var(--radius-l);
     overflow: hidden;
     box-shadow: var(--shadow-s);
@@ -790,42 +862,32 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .modele-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-m);
   }
 
-  /* Photo du métier en fond de carte, léger zoom au survol */
-
   .modele-photo {
-    position: absolute;
-    inset: 0;
     width: 100%;
-    height: 100%;
+    /* `height: auto` est indispensable : sans lui, l'attribut height="873" de
+       la balise fait loi et `aspect-ratio` est ignoré. */
+    height: auto;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
+    /* Liseré aux couleurs du métier, comme le visuel des deux autres packs. */
+    border-bottom: 3px solid var(--accent-card);
     transition: transform 0.6s var(--ease-out);
   }
 
   .modele-card:hover .modele-photo {
-    transform: scale(1.06);
-  }
-
-  /* Voile dégradé sombre pour la lisibilité du texte sur la photo */
-
-  .modele-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgb(18 19 31 / 0.02) 35%,
-      rgb(18 19 31 / 0.55) 65%,
-      rgb(18 19 31 / 0.93)
-    );
+    transform: scale(1.04);
   }
 
   .modele-info {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     padding: 1.1rem 1.2rem 1.25rem;
-    color: #fff;
   }
 
   .modele-tag {
@@ -833,7 +895,19 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     font-weight: 700;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: var(--accent-card, var(--accent-soft));
+    color: var(--accent-card, var(--accent));
+  }
+
+  /* Dans les 4 cartes vitrines, l'accent métier est pastel : illisible en
+     texte sur blanc, il devient le fond d'une pastille au texte encre. Les
+     blocs Sur mesure et Signature, eux, ont des accents sombres : ils restent
+     en texte coloré (règle ci-dessus). */
+  .modele-card .modele-tag {
+    align-self: flex-start;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--accent-card);
+    color: var(--ink);
   }
 
   .modele-name {
@@ -845,7 +919,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .modele-desc {
     margin-top: 0.4rem;
-    color: rgb(255 255 255 / 0.82);
+    color: var(--muted);
     font-size: 0.88rem;
     line-height: 1.45;
   }
@@ -860,7 +934,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     margin: 0.5rem 0 0;
     padding: 0;
     font-size: 0.78rem;
-    color: rgb(255 255 255 / 0.66);
+    color: var(--muted);
   }
 
   .modele-points li + li::before {
@@ -873,10 +947,11 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 0.55rem;
+    margin-top: auto;
+    padding-top: 0.7rem;
     font-weight: 600;
     font-size: 0.88rem;
-    color: #fff;
+    color: var(--accent);
   }
 
   .modele-link .arrow {
@@ -1139,7 +1214,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   .signature-visuel {
     position: relative;
     float: left;
-    width: 19rem;
+    width: 21rem;
     max-width: 45%;
     aspect-ratio: 16 / 9;
     margin: 0.35rem 1.4rem 0.9rem 0;
@@ -1467,6 +1542,196 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     color: var(--ink);
   }
 
+  /* ---------------------------- Portfolio ------------------------------- */
+
+  .portfolio-section {
+    background: linear-gradient(#efeee8, var(--paper));
+  }
+
+  /* Le carrousel repose sur le défilement natif avec accroche : sans
+     JavaScript, la piste reste parcourable au doigt et au clavier. Les
+     flèches ne font qu'ajouter du confort. */
+  .carrousel {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .carrousel-piste {
+    display: flex;
+    gap: 1.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+    overflow-x: auto;
+    /* `proximity` et non `mandatory` : quand la course restante est plus
+       courte qu'une fiche, l'accroche stricte ramènerait systématiquement au
+       début et le carrousel paraîtrait bloqué. */
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .carrousel-piste::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carrousel-item {
+    flex: 0 0 clamp(15rem, 30%, 18rem);
+    scroll-snap-align: start;
+  }
+
+  .carrousel-fleche {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid rgb(18 19 31 / 0.14);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-s);
+    transition:
+      transform 0.25s var(--ease-out),
+      background-color 0.25s,
+      opacity 0.25s;
+  }
+
+  .carrousel-fleche:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--accent-soft);
+  }
+
+  .carrousel-fleche:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  /* Piste entièrement visible : les flèches n'ont rien à faire défiler. On les
+     masque avec `visibility` et non `display`, afin qu'elles conservent leur
+     place : sinon la piste s'élargirait, la mesure changerait, et l'état
+     oscillerait entre défilable et non défilable. */
+  .carrousel[data-defilable='non'] .carrousel-fleche {
+    visibility: hidden;
+  }
+
+  /* `justify-content` ne modifie que la position du contenu, pas la largeur de
+     la piste : aucun risque de boucle, et le centrage n'ampute pas la course
+     puisqu'il n'y a précisément rien à faire défiler. */
+  .carrousel[data-defilable='non'] .carrousel-piste {
+    justify-content: center;
+  }
+
+  /* Fiche projet */
+
+  .projet {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.4rem 1.3rem 1.5rem;
+    border-radius: var(--radius-m);
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.08);
+    border-top: 3px solid var(--accent-card);
+    box-shadow: var(--shadow-s);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      transform 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out);
+  }
+
+  .projet:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-m);
+  }
+
+  .projet-icone {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 10px;
+    object-fit: contain;
+    background: var(--paper);
+    padding: 0.3rem;
+    border: 1px solid rgb(18 19 31 / 0.07);
+  }
+
+  /* Repli quand le favicon du site n'est pas disponible. */
+  .projet-monogramme {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent-card);
+    border-color: transparent;
+  }
+
+  .projet-nom {
+    margin-top: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .projet-domaine {
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+    color: var(--accent-card);
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  .projet-desc {
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .projet-lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .projet:hover .projet-lien .arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .projet-lien .arrow {
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  @media (max-width: 640px) {
+    .carrousel {
+      grid-template-columns: 1fr;
+    }
+
+    .carrousel-fleche {
+      display: none;
+    }
+
+    .carrousel-item {
+      flex-basis: 80%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carrousel-piste {
+      scroll-behavior: auto;
+    }
+  }
+
   /* ----------------------------- Responsive ----------------------------- */
 
   @media (max-width: 900px) {
@@ -1502,3 +1767,63 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     }
   }
 </style>
+
+<script>
+  // Carrousel du portfolio : les flèches font défiler la piste d'une fiche.
+  // Le défilement natif reste la source de vérité — on se contente de le
+  // piloter et de refléter son état sur les boutons.
+  document.querySelectorAll<HTMLElement>('[data-carrousel]').forEach((carrousel) => {
+    const piste = carrousel.querySelector<HTMLElement>('[data-carrousel-piste]');
+    const prec = carrousel.querySelector<HTMLButtonElement>('[data-carrousel-prec]');
+    const suiv = carrousel.querySelector<HTMLButtonElement>('[data-carrousel-suiv]');
+    if (!piste || !prec || !suiv) return;
+
+    const ecart = (): number => parseFloat(getComputedStyle(piste).columnGap) || 0;
+
+    /**
+     * Largeur cumulée des fiches. On ne se fie pas à scrollWidth : quand la
+     * piste est centrée, le navigateur rend une partie du débordement
+     * inatteignable et scrollWidth sous-estime le contenu réel.
+     */
+    const largeurContenu = (): number => {
+      const fiches = Array.from(piste.children) as HTMLElement[];
+      if (fiches.length === 0) return 0;
+      const somme = fiches.reduce((total, f) => total + f.getBoundingClientRect().width, 0);
+      return somme + ecart() * (fiches.length - 1);
+    };
+
+    const majBoutons = (): void => {
+      // Tant que les fiches tiennent dans la largeur, les flèches n'ont rien
+      // à piloter : on les retire plutôt que de les laisser inertes.
+      carrousel.dataset.defilable = largeurContenu() - piste.clientWidth > 2 ? 'oui' : 'non';
+      // 2 px de tolérance : les navigateurs arrondissent scrollLeft.
+      const reste = piste.scrollWidth - piste.clientWidth;
+      prec.disabled = piste.scrollLeft <= 2;
+      suiv.disabled = piste.scrollLeft >= reste - 2;
+    };
+
+    const pas = (): number => {
+      const fiche = piste.querySelector<HTMLElement>('li');
+      return fiche ? fiche.offsetWidth + ecart() : piste.clientWidth;
+    };
+
+    // Comportement explicite plutôt qu'hérité du CSS : on veut un saut sec
+    // pour qui demande moins d'animation, un défilement fluide sinon.
+    const douceur = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    const defiler = (sens: number): void => {
+      piste.scrollBy({ left: sens * pas(), behavior: douceur });
+    };
+
+    prec.addEventListener('click', () => defiler(-1));
+    suiv.addEventListener('click', () => defiler(1));
+    piste.addEventListener('scroll', majBoutons, { passive: true });
+
+    // L'observateur est conservé dans une variable : sans référence retenue,
+    // il peut être ramassé par le GC et cesser silencieusement de notifier.
+    const observateur = new ResizeObserver(majBoutons);
+    observateur.observe(piste);
+    window.addEventListener('resize', majBoutons, { passive: true });
+
+    majBoutons();
+  });
+</script>
