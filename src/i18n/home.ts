@@ -86,12 +86,18 @@ export const home = {
           desc: 'Noir et blanc, souffle et lenteur : un studio où le site respire au rythme du cours.',
           points: ['Postures animées', 'Horaires', 'Réservation'],
         },
+        {
+          tag: 'Restauration',
+          name: 'Restaurant italien',
+          desc: 'Nuit, braise et or : une carte qui se lit comme au restaurant, et le service en vedette.',
+          points: ['Carte', 'Cave', 'Réservation'],
+        },
       ],
       viewDemo: 'Voir la démonstration',
       packBadge: 'Pack Essentiel',
       eyebrow2: 'Pour démarrer',
       packNote:
-        'Les cinq modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
+        'Les six modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
       note: {
         before: "Votre activité n'apparaît pas ici ? C'est justement le principe : chaque site est unique.",
         link: 'Décrivez-moi votre métier',
@@ -305,12 +311,18 @@ export const home = {
           desc: 'Black and white, breath and slowness: a studio whose website breathes with the class.',
           points: ['Animated postures', 'Schedule', 'Booking'],
         },
+        {
+          tag: 'Restaurants',
+          name: 'Italian restaurant',
+          desc: 'Night, embers and gold: a menu that reads like the real thing, with service in the spotlight.',
+          points: ['Menu', 'Cellar', 'Booking'],
+        },
       ],
       viewDemo: 'View the demo',
       packBadge: 'Essential pack',
       eyebrow2: 'To get started',
       packNote:
-        'The five templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
+        'The six templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
       note: {
         before: 'Don’t see your line of work here? That’s exactly the point: every website is one of a kind.',
         link: 'Tell me about your trade',

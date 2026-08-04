@@ -1,0 +1,834 @@
+---
+// Modèle « L'Anima » — restaurant italien haut de gamme.
+// Registre chaleureux et feutré : nuit, braise et or. Le luxe passe par le
+// détail (filets dorés, lettrines, lenteur des transitions), jamais par
+// l'accumulation.
+import Base from '../../layouts/Base.astro';
+import DemoBar from '../DemoBar.astro';
+import { splitPath, localePath } from '../../lib/i18n';
+import { withBase } from '../../lib/paths';
+import { common } from '../../i18n/common';
+import { restaurant } from '../../i18n/restaurant';
+
+const { lang } = splitPath(Astro.url.pathname);
+const t = restaurant[lang];
+const c = common[lang];
+
+const photo = (nom: string) => withBase(`modeles/restaurant/${nom}`);
+---
+
+<Base title={t.title} description={t.description}>
+  <DemoBar label={t.demoLabel} />
+  <div class="anima">
+    <!-- ============================= EN-TÊTE ============================ -->
+    <header class="a-header">
+      <div class="a-wrap a-header-inner">
+        <a class="a-logo" href="#haut" aria-label="L’Anima">
+          <span class="a-logo-nom">L’Anima</span>
+          <span class="a-logo-sous" aria-hidden="true">Cucina italiana</span>
+        </a>
+        <nav aria-label={lang === 'fr' ? 'Navigation du restaurant' : 'Restaurant navigation'}>
+          <ul class="a-nav">
+            <li><a href="#carte">{t.nav.carte}</a></li>
+            <li><a href="#four">{t.nav.four}</a></li>
+            <li><a href="#cave">{t.nav.cave}</a></li>
+            <li><a href="#table">{t.nav.table}</a></li>
+          </ul>
+        </nav>
+        <a class="a-btn a-btn-or" href="#reserver">{t.nav.cta}</a>
+      </div>
+    </header>
+
+    <main id="haut">
+      <!-- ============================== HERO ============================= -->
+      <section class="a-hero">
+        <img class="a-hero-photo" src={photo('four.webp')} alt="" width="1600" height="873" />
+        <span class="a-hero-voile" aria-hidden="true"></span>
+        <span class="a-braise" aria-hidden="true"></span>
+        <div class="a-wrap a-hero-inner">
+          <p class="a-kicker">{t.hero.kicker}</p>
+          <h1 class="a-hero-titre">
+            {t.hero.titleLine}<br /><em>{t.hero.titleEm}</em>
+          </h1>
+          <p class="a-hero-lede">{t.hero.lede}</p>
+          <div class="a-hero-actions">
+            <a class="a-btn a-btn-or" href="#reserver">{t.hero.ctaPrimaire}</a>
+            <a class="a-btn a-btn-ligne" href="#carte">{t.hero.ctaSecondaire}</a>
+          </div>
+          <ul class="a-reperes">
+            {t.hero.reperes.map((r) => <li>{r}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================== CARTE ============================ -->
+      <section id="carte" class="a-section">
+        <div class="a-wrap">
+          <div class="a-tete reveal">
+            <p class="a-kicker">{t.carte.eyebrow}</p>
+            <h2 class="a-titre">{t.carte.title}</h2>
+            <p class="a-lede">{t.carte.lede}</p>
+          </div>
+
+          <div class="a-carte">
+            {t.carte.familles.map((f, i) => (
+              <div class="a-famille reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <h3 class="a-famille-nom">{f.nom}</h3>
+                <ul class="a-plats">
+                  {f.plats.map((p) => (
+                    <li class="a-plat">
+                      <div class="a-plat-tete">
+                        <span class="a-plat-nom">{p.nom}</span>
+                        <span class="a-plat-points" aria-hidden="true"></span>
+                        <span class="a-plat-prix">{p.prix}</span>
+                      </div>
+                      <p class="a-plat-desc">{p.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <p class="a-carte-note reveal">{t.carte.note}</p>
+        </div>
+      </section>
+
+      <!-- =============================== FOUR ============================ -->
+      <section id="four" class="a-section a-section-nuit">
+        <div class="a-wrap a-four">
+          <div class="a-four-texte reveal">
+            <p class="a-kicker">{t.four.eyebrow}</p>
+            <h2 class="a-titre">{t.four.title}</h2>
+            <p class="a-lede">{t.four.texte}</p>
+            <ul class="a-four-points">
+              {t.four.points.map((p) => (
+                <li>
+                  <span class="a-four-point-titre">{p.titre}</span>
+                  <span class="a-four-point-desc">{p.desc}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="a-four-photo reveal" style="--reveal-delay: 0.12s">
+            <img src={photo('four.webp')} alt="" width="1600" height="873" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </section>
+
+      <!-- =============================== CAVE ============================ -->
+      <section id="cave" class="a-section">
+        <div class="a-wrap a-cave">
+          <div class="a-cave-photo reveal">
+            <img src={photo('bar.webp')} alt="" width="1600" height="873" loading="lazy" decoding="async" />
+          </div>
+          <div class="a-cave-texte reveal" style="--reveal-delay: 0.12s">
+            <p class="a-kicker">{t.cave.eyebrow}</p>
+            <h2 class="a-titre">{t.cave.title}</h2>
+            <p class="a-lede">{t.cave.texte}</p>
+            <div class="a-cave-colonnes">
+              {t.cave.colonnes.map((col) => (
+                <div>
+                  <h3 class="a-cave-col-titre">{col.titre}</h3>
+                  <ul class="a-cave-liste">
+                    {col.lignes.map((l) => <li>{l}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <p class="a-note">{t.cave.note}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== TABLE ============================ -->
+      <section id="table" class="a-table-section">
+        <img class="a-table-photo" src={photo('table.webp')} alt="" width="1600" height="873" loading="lazy" decoding="async" />
+        <span class="a-table-voile" aria-hidden="true"></span>
+        <div class="a-wrap a-table-inner reveal">
+          <p class="a-kicker">{t.table.eyebrow}</p>
+          <h2 class="a-titre">{t.table.title}</h2>
+          <p class="a-lede">{t.table.texte}</p>
+          <blockquote class="a-citation">
+            <p>{t.table.citation}</p>
+            <footer>{t.table.signature}</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- ============================ RÉSERVER =========================== -->
+      <section id="reserver" class="a-section a-section-nuit">
+        <div class="a-wrap">
+          <div class="a-tete reveal">
+            <p class="a-kicker">{t.infos.eyebrow}</p>
+            <h2 class="a-titre">{t.infos.title}</h2>
+          </div>
+
+          <div class="a-infos">
+            <div class="a-infos-bloc reveal">
+              <h3>{t.infos.horairesTitre}</h3>
+              <table class="a-horaires">
+                <tbody>
+                  {t.infos.horaires.map((h) => (
+                    <tr><th scope="row">{h.jour}</th><td>{h.service}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="a-infos-bloc reveal" style="--reveal-delay: 0.08s">
+              <h3>{t.infos.lieuTitre}</h3>
+              <p class="a-adresse">{t.infos.adresse}</p>
+              <p class="a-note">{t.infos.lieuNote}</p>
+            </div>
+
+            <div class="a-infos-bloc a-infos-contact reveal" style="--reveal-delay: 0.16s">
+              <h3>{t.infos.contactTitre}</h3>
+              <p class="a-note">{t.infos.contactNote}</p>
+              <a class="a-btn a-btn-or" href="tel:+33400000000">{t.infos.telephone}</a>
+              <a class="a-lien" href={`mailto:${t.infos.email}`}>{t.infos.email}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="a-footer">
+      <div class="a-wrap a-footer-inner">
+        <p>© 2026 L’Anima — {t.footer.baseline}</p>
+        <p>{c.demo.madeBy} <a href={localePath(lang, '')}>Atelier Web</a></p>
+      </div>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  /* ------------------------------------------------------------------ */
+  /*  Palette : nuit, braise et or. Chaleureuse, jamais clinquante.      */
+  /* ------------------------------------------------------------------ */
+
+  .anima {
+    --a-nuit: #14100d;
+    --a-nuit-doux: #1e1813;
+    --a-creme: #f7f2ea;
+    --a-creme-pur: #fffdf9;
+    --a-or: #b8892f;
+    --a-or-clair: #d9ae5f;
+    --a-braise: #a8431c;
+    /* Deux gris et deux dorés : les mêmes teintes ne peuvent pas être
+       lisibles à la fois sur crème et sur nuit. Ces valeurs valent pour les
+       sections claires ; les sections sombres les redéfinissent plus bas. */
+    --a-doux: #6e625a;
+    --a-or-texte: #7d5c1a;
+    font-family: var(--font-sans);
+    color: var(--a-nuit);
+    background: var(--a-creme);
+  }
+
+  .a-section-nuit,
+  .a-hero,
+  .a-header,
+  .a-footer,
+  .a-table-section {
+    --a-doux: #b9a893;
+    /* Sur fond nuit, le doré clair atteint 9:1 — inutile de l'assombrir. */
+    --a-or-texte: var(--a-or-clair);
+  }
+
+  .a-wrap {
+    width: min(70rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+
+  /* ------------------------------- En-tête --------------------------- */
+
+  .a-header {
+    position: sticky;
+    top: 2.35rem;
+    z-index: 40;
+    background: rgb(20 16 13 / 0.82);
+    backdrop-filter: blur(12px);
+    color: var(--a-creme);
+    border-bottom: 1px solid rgb(184 137 47 / 0.28);
+  }
+
+  .a-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.8rem;
+  }
+
+  .a-logo {
+    display: grid;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .a-logo-nom {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+  }
+
+  .a-logo-sous {
+    font-size: 0.62rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--a-or-clair);
+  }
+
+  .a-header nav {
+    margin-left: auto;
+  }
+
+  .a-nav {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .a-nav a {
+    position: relative;
+    text-decoration: none;
+    color: var(--a-creme);
+    font-size: 0.88rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Un filet doré se trace sous le lien : le détail plutôt que l'effet. */
+  .a-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 1px;
+    background: var(--a-or-clair);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .a-nav a:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* ------------------------------- Boutons --------------------------- */
+
+  .a-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.7rem;
+    border: 1px solid transparent;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.45s,
+      color 0.45s,
+      border-color 0.45s,
+      transform 0.45s var(--ease-out);
+  }
+
+  .a-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .a-btn-or {
+    background: var(--a-or);
+    color: #1a1208;
+  }
+
+  .a-btn-or:hover {
+    background: var(--a-or-clair);
+  }
+
+  .a-btn-ligne {
+    border-color: currentColor;
+    color: inherit;
+  }
+
+  .a-btn-ligne:hover {
+    background: var(--a-creme);
+    color: var(--a-nuit);
+    border-color: var(--a-creme);
+  }
+
+  .a-lien {
+    color: inherit;
+    font-size: 0.92rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--a-or);
+    padding-bottom: 2px;
+    transition: opacity 0.3s;
+  }
+
+  .a-lien:hover {
+    opacity: 0.65;
+  }
+
+  /* -------------------------------- Hero ----------------------------- */
+
+  .a-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: min(90vh, 44rem);
+    padding-block: clamp(4rem, 9vw, 7rem);
+    background: var(--a-nuit);
+    color: var(--a-creme);
+    overflow: hidden;
+  }
+
+  .anima img.a-hero-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 45%;
+    filter: brightness(0.62) saturate(1.05);
+    animation: a-approche 30s ease-in-out infinite alternate;
+  }
+
+  @keyframes a-approche {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+
+  .a-hero-voile {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgb(20 16 13 / 0.62) 0%,
+      rgb(20 16 13 / 0.2) 38%,
+      rgb(20 16 13 / 0.94) 100%
+    );
+  }
+
+  /* Lueur de braise : elle respire lentement, comme un feu qui tient. */
+  .a-braise {
+    position: absolute;
+    left: 18%;
+    top: 42%;
+    width: 34rem;
+    height: 34rem;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgb(168 67 28 / 0.34), transparent 62%);
+    filter: blur(30px);
+    animation: a-braise 7s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes a-braise {
+    0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.08); }
+  }
+
+  .a-hero-inner {
+    position: relative;
+    max-width: 42rem;
+  }
+
+  .a-kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--a-or-texte);
+  }
+
+  .a-hero-titre {
+    margin-top: 1.4rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+
+  .a-hero-titre em {
+    font-style: italic;
+    color: var(--a-or-clair);
+  }
+
+  .a-hero-lede {
+    margin-top: 1.5rem;
+    max-width: 34rem;
+    font-size: 1.06rem;
+    line-height: 1.8;
+    color: #e4d9c9;
+  }
+
+  .a-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.2rem;
+  }
+
+  .a-reperes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    list-style: none;
+    margin: 2.2rem 0 0;
+    padding: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    color: var(--a-doux);
+  }
+
+  .a-reperes li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .a-reperes li::before {
+    content: '';
+    width: 0.3rem;
+    height: 0.3rem;
+    rotate: 45deg;
+    background: var(--a-or);
+  }
+
+  /* ------------------------------ Sections --------------------------- */
+
+  .a-section {
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+
+  .a-section-nuit {
+    background: var(--a-nuit);
+    color: var(--a-creme);
+  }
+
+  .a-tete {
+    max-width: 42rem;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .a-titre {
+    margin-top: 1rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+  }
+
+  .a-lede {
+    margin-top: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--a-doux);
+  }
+
+  .a-note {
+    margin-top: 1.1rem;
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--a-doux);
+  }
+
+  /* -------------------------------- Carte ---------------------------- */
+
+  .a-carte {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .a-famille-nom {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgb(184 137 47 / 0.45);
+  }
+
+  .a-plats {
+    list-style: none;
+    margin: 1.3rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  /* Le nom, la ligne de points, le prix : la mise en page d'une carte. */
+  .a-plat-tete {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .a-plat-nom {
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+
+  .a-plat-points {
+    flex: 1;
+    height: 1px;
+    background-image: radial-gradient(circle, var(--a-doux) 1px, transparent 1px);
+    background-size: 5px 1px;
+    background-repeat: repeat-x;
+    opacity: 0.5;
+    transform: translateY(-3px);
+  }
+
+  .a-plat-prix {
+    font-variant-numeric: tabular-nums;
+    color: var(--a-or-texte);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .a-plat-desc {
+    margin-top: 0.25rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--a-doux);
+  }
+
+  .a-carte-note {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+    font-size: 0.92rem;
+    font-style: italic;
+    color: var(--a-doux);
+  }
+
+  /* --------------------------------- Four ---------------------------- */
+
+  .a-four,
+  .a-cave {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+
+  .a-four-photo img,
+  .a-cave-photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    /* Un liseré doré très fin, décalé : le cadre d'une photo encadrée. */
+    outline: 1px solid rgb(184 137 47 / 0.55);
+    outline-offset: 8px;
+  }
+
+  .a-four-points {
+    list-style: none;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .a-four-points li {
+    display: grid;
+    gap: 0.15rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgb(184 137 47 / 0.5);
+  }
+
+  .a-four-point-titre {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .a-four-point-desc {
+    font-size: 0.86rem;
+    color: var(--a-doux);
+  }
+
+  /* --------------------------------- Cave ---------------------------- */
+
+  .a-cave-colonnes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 1.8rem;
+    margin-top: 1.8rem;
+  }
+
+  .a-cave-col-titre {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgb(184 137 47 / 0.4);
+  }
+
+  .a-cave-liste {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--a-doux);
+  }
+
+  /* -------------------------------- Table ---------------------------- */
+
+  .a-table-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: min(80vh, 38rem);
+    padding-block: clamp(4rem, 8vw, 6rem);
+    background: var(--a-nuit);
+    color: var(--a-creme);
+    overflow: hidden;
+  }
+
+  .anima img.a-table-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 42%;
+    filter: brightness(0.5) saturate(1.05);
+  }
+
+  .a-table-voile {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgb(20 16 13 / 0.92) 0%, rgb(20 16 13 / 0.55) 55%, rgb(20 16 13 / 0.3) 100%);
+  }
+
+  .a-table-inner {
+    position: relative;
+    max-width: 38rem;
+  }
+
+  .a-citation {
+    margin: 2rem 0 0;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--a-or);
+  }
+
+  .a-citation p {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.45;
+  }
+
+  .a-citation footer {
+    margin-top: 0.7rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--a-or-clair);
+  }
+
+  /* -------------------------------- Infos ---------------------------- */
+
+  .a-infos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2.5rem;
+  }
+
+  .a-infos-bloc h3 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgb(184 137 47 / 0.45);
+  }
+
+  .a-horaires {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+  }
+
+  .a-horaires th,
+  .a-horaires td {
+    padding: 0.6rem 0;
+    text-align: left;
+    font-weight: 400;
+    font-size: 0.92rem;
+    border-bottom: 1px solid rgb(247 242 234 / 0.12);
+  }
+
+  .a-horaires td {
+    text-align: right;
+    color: var(--a-doux);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .a-adresse {
+    margin-top: 1rem;
+    font-size: 0.96rem;
+    line-height: 1.75;
+    white-space: pre-line;
+  }
+
+  .a-infos-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .a-infos-contact .a-btn {
+    margin-top: 1.3rem;
+  }
+
+  .a-infos-contact .a-lien {
+    margin-top: 1rem;
+  }
+
+  /* -------------------------------- Footer --------------------------- */
+
+  .a-footer {
+    background: #0e0b09;
+    color: var(--a-doux);
+    font-size: 0.84rem;
+  }
+
+  .a-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding-block: 1.5rem;
+  }
+
+  .a-footer a {
+    color: var(--a-or-clair);
+  }
+
+  /* ------------------------------ Responsive -------------------------- */
+
+  @media (max-width: 760px) {
+    .a-header nav {
+      display: none;
+    }
+
+    .a-header-inner {
+      justify-content: space-between;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .a-hero-photo,
+    .a-braise {
+      animation: none;
+    }
+  }
+</style>
