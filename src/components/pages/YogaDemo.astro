@@ -5,6 +5,7 @@
 // images déposées.
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../DemoBar.astro';
+import MenuMobile from '../MenuMobile.astro';
 import { splitPath, localePath } from '../../lib/i18n';
 import { withBase } from '../../lib/paths';
 import { common } from '../../i18n/common';
@@ -44,6 +45,13 @@ const postures = t.flow.postures
   .map((p, i) => ({ ...p, video: VIDEOS[i] }))
   .filter((p): p is typeof p & { video: string } => Boolean(p.video));
 
+
+const liensMenu = [
+  { href: '#flow', label: t.nav.flow },
+  { href: '#cours', label: t.nav.cours },
+  { href: '#prof', label: t.nav.prof },
+  { href: '#infos', label: t.nav.infos },
+];
 ---
 
 <Base title={t.title} description={t.description}>
@@ -73,6 +81,7 @@ const postures = t.flow.postures
           </ul>
         </nav>
         <a class="y-btn y-btn-clair" href="#infos">{t.nav.cta}</a>
+        <MenuMobile variante="yoga" lang={lang} liens={liensMenu} cta={{ href: '#infos', label: t.nav.cta }} />
       </div>
     </header>
 
@@ -1042,7 +1051,9 @@ const postures = t.flow.postures
   /* ------------------------------ Responsive -------------------------- */
 
   @media (max-width: 760px) {
-    .y-header nav {
+    /* La navigation et son bouton cèdent la place au menu dépliable. */
+    .y-header nav,
+    .y-btn {
       display: none;
     }
 

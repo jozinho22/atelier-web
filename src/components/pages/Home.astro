@@ -7,6 +7,7 @@ import AuroraBackdrop from '../AuroraBackdrop.astro';
 import { withBase } from '../../lib/paths';
 import { splitPath, localePath } from '../../lib/i18n';
 import { home } from '../../i18n/home';
+import { prixPack, prixHebergement } from '../../data/tarifs';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = home[lang];
@@ -27,8 +28,6 @@ const jsonLd = {
 };
 
 // Visuels et couleurs des cartes modèles (identiques dans les deux langues).
-const serviceIcons = ['🔍', '📱', '✨', '⚡'];
-
 const modeleMeta = [
   { path: 'modeles/association', image: 'association.webp', accent: '#7fe0a8' },
   { path: 'modeles/batiment', image: 'batiment.webp', accent: '#f2b705' },
@@ -116,13 +115,12 @@ const portfolio = portfolioMeta.map((p, i) => ({
   domaine: p.url.replace(/^https?:\/\//, '').replace('xn--monmtr-evac.com', 'monmétré.com'),
 }));
 
-const etapeDeco = [
-  { num: '01', icon: '☕' },
-  { num: '02', icon: '🎨' },
-  { num: '03', icon: '✏️' },
-  { num: '04', icon: '🚀' },
-];
-const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
+/**
+ * Les quatre étapes forment un circuit fermé : la mise en ligne d'un site
+ * ramène au premier échange du suivant. Le numéro suffit à les ordonner —
+ * les pictogrammes n'ajoutaient rien que le titre ne dise déjà.
+ */
+const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStart(2, '0') }));
 ---
 
 <Base title={t.title} description={t.description} jsonLd={jsonLd}>
@@ -196,12 +194,35 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
         <div class="service-grid">
           {t.services.items.map((s, i) => (
             <article class="service-card reveal" style={`--reveal-delay: ${i * 0.1}s`}>
-              <div class="service-icon" aria-hidden="true">{serviceIcons[i]}</div>
               <h3>{s.title}</h3>
               <p>{s.desc}</p>
+              <ul class="service-points">
+                {s.points.map((point) => <li>{point}</li>)}
+              </ul>
             </article>
           ))}
         </div>
+
+        <!-- La méthode, dans la même section : elle répond au « comment »
+             quand ce qui précède répond au « pourquoi ». -->
+        <div id="methode" class="section-head methode-head reveal">
+          <p class="eyebrow">{t.methode.eyebrow}</p>
+          <h2 class="section-title">{t.methode.title}</h2>
+        </div>
+
+        <ol class="circuit reveal">
+          {etapes.map((e, i) => (
+            <li class={`circuit-etape etape-${i + 1}`}>
+              <span class="circuit-num" aria-hidden="true">{e.num}</span>
+              <h3>{e.title}</h3>
+              <p>{e.desc}</p>
+            </li>
+          ))}
+          <span class="circuit-fleche fleche-1" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
+          <span class="circuit-fleche fleche-2" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
+          <span class="circuit-fleche fleche-3" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
+          <span class="circuit-fleche fleche-4" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
+        </ol>
       </div>
     </section>
 
@@ -415,34 +436,6 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
       </div>
     </section>
 
-    <!-- ============================ MÉTHODE ============================ -->
-    <section id="methode" class="section methode-section">
-      <div class="section-backdrop" aria-hidden="true">
-        <AuroraBackdrop
-          colors={['#4a49c9', '#d84f9a', '#1f6fae']}
-          background="#12131f"
-          speed={0.7}
-          grain={0.05}
-        />
-      </div>
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">{t.methode.eyebrow}</p>
-          <h2 class="section-title">{t.methode.title}</h2>
-        </div>
-        <ol class="etapes">
-          {etapes.map((e, i) => (
-            <li class="etape reveal" style={`--reveal-delay: ${i * 0.1}s`}>
-              <span class="etape-icon" aria-hidden="true">{e.icon}</span>
-              <span class="etape-num" aria-hidden="true">{e.num}</span>
-              <h3>{e.title}</h3>
-              <p>{e.desc}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
     <!-- ============================ TARIFS ============================= -->
     <section id="tarifs" class="section">
       <div class="container">
@@ -454,7 +447,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
         <div class="tarif-grid">
           <article class="tarif-card pack-essentiel reveal">
             <h3 class="tarif-name">{t.tarifs.essentiel.name}</h3>
-            <p class="tarif-price"><span>{t.tarifs.essentiel.price}</span></p>
+            <p class="tarif-price"><span>{prixPack('essentiel', lang)}</span></p>
             <ul class="tarif-list">
               {t.tarifs.essentiel.features.map((f) => <li>{f}</li>)}
             </ul>
@@ -466,34 +459,36 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           <article class="tarif-card pack-surmesure tarif-featured reveal" style="--reveal-delay: 0.12s">
             <p class="tarif-badge">{t.tarifs.surMesure.badge}</p>
             <h3 class="tarif-name">{t.tarifs.surMesure.name}</h3>
-            <p class="tarif-price"><span>{t.tarifs.surMesure.price}</span></p>
+            <p class="tarif-price"><span>{prixPack('surMesure', lang)}</span></p>
             <ul class="tarif-list">
               {t.tarifs.surMesure.features.map((f) => <li>{f}</li>)}
             </ul>
             <a class="btn btn-primary tarif-btn" href="#contact">{t.tarifs.surMesure.cta}</a>
             <a
               class="tarif-demo"
-              href={surMesure.url}
+              href={surMesure[0].url}
               target="_blank"
               rel="noopener noreferrer">{t.tarifs.surMesure.demo} <span class="arrow" aria-hidden="true">↗</span></a
             >
           </article>
           <article class="tarif-card pack-signature reveal" style="--reveal-delay: 0.24s">
             <h3 class="tarif-name">{t.tarifs.signature.name}</h3>
-            <p class="tarif-price"><span>{t.tarifs.signature.price}</span></p>
+            <p class="tarif-price"><span>{prixPack('signature', lang)}</span></p>
             <ul class="tarif-list">
               {t.tarifs.signature.features.map((f) => <li>{f}</li>)}
             </ul>
             <a class="btn btn-ghost tarif-btn" href="#contact">{t.tarifs.signature.cta}</a>
             <a
               class="tarif-demo"
-              href={signature.url}
+              href={signature[0].url}
               target="_blank"
               rel="noopener noreferrer">{t.tarifs.signature.demo} <span class="arrow" aria-hidden="true">↗</span></a
             >
           </article>
         </div>
-        <p class="tarif-note reveal">{t.tarifs.note}</p>
+        <p class="tarif-note reveal">
+          {t.tarifs.note.avant}<strong>{prixHebergement(lang)}</strong>{t.tarifs.note.apres}
+        </p>
       </div>
     </section>
 
@@ -838,16 +833,33 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     box-shadow: var(--shadow-m);
   }
 
-  .service-icon {
-    font-size: 1.7rem;
-    width: 3.2rem;
-    height: 3.2rem;
+  .service-points {
     display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: var(--accent-soft);
-    margin-bottom: 1.1rem;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--muted);
   }
+
+  .service-points li {
+    position: relative;
+    padding-left: 1.15rem;
+  }
+
+  .service-points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.52em;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
 
   .service-card h3 {
     font-size: 1.15rem;
@@ -1012,95 +1024,132 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     font-weight: 600;
   }
 
-  /* ------------------------------ Méthode ------------------------------- */
+  /* ------------------------- Méthode : le circuit ------------------------ */
 
-  .methode-section {
-    position: relative;
-    overflow: hidden;
-    background: var(--ink);
-    color: #fff;
+  .methode-head {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
   }
 
-  /* Sur fond encre, l'indigo du système ne tient que 3,07:1. */
-  .methode-section .eyebrow {
-    color: var(--accent-on-ink);
-  }
-
-  .methode-section .container {
-    position: relative;
-  }
-
-  .methode-section .section-title {
-    color: #fff;
-  }
-
-  .etapes {
+  /* Quatre étapes aux angles d'un carré, quatre flèches sur les côtés : le
+     circuit se referme, la mise en ligne d'un site ramène au premier échange
+     du suivant. La grille explicite garantit que flèches et étapes restent
+     alignées quelle que soit la hauteur des textes. */
+  .circuit {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 1.4rem;
-    list-style: none;
-    margin: 0;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas:
+      'e1 f1 e2'
+      'f4 .  f2'
+      'e4 f3 e3';
+    align-items: stretch;
+    gap: 1.1rem;
+    margin: 2.4rem 0 0;
     padding: 0;
+    list-style: none;
     counter-reset: etape;
   }
 
-  .etape {
+  .etape-1 { grid-area: e1; }
+  .etape-2 { grid-area: e2; }
+  .etape-3 { grid-area: e3; }
+  .etape-4 { grid-area: e4; }
+
+  .circuit-etape {
     position: relative;
-    background: rgb(255 255 255 / 0.05);
-    border: 1px solid rgb(255 255 255 / 0.1);
+    background: var(--paper-raised);
+    border: 1px solid rgb(18 19 31 / 0.08);
     border-radius: var(--radius-m);
-    padding: 1.7rem 1.5rem;
+    padding: 1.5rem 1.6rem;
+    box-shadow: var(--shadow-s);
     transition:
       transform 0.35s var(--ease-out),
-      background-color 0.35s;
+      box-shadow 0.35s var(--ease-out);
   }
 
-  .etape:hover {
-    transform: translateY(-5px);
-    background: rgb(255 255 255 / 0.09);
+  .circuit-etape:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-m);
   }
 
-  .etape-icon {
-    position: absolute;
-    top: 1.4rem;
-    right: 1.4rem;
+  .circuit-num {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .circuit-etape h3 {
+    margin-top: 0.6rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .circuit-etape p {
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .circuit-fleche {
     display: grid;
     place-items: center;
-    width: 2.8rem;
-    height: 2.8rem;
-    border-radius: 12px;
-    background: rgb(255 255 255 / 0.08);
-    font-size: 1.35rem;
-    transition:
-      transform 0.35s var(--ease-out),
-      background-color 0.35s;
+    color: var(--accent);
+    /* 0,55 ne donnait que 2,35:1 sur le papier — sous le seuil de 3:1 des
+       éléments graphiques porteurs de sens, et une flèche qui relie deux
+       étapes en porte. */
+    opacity: 0.8;
   }
 
-  .etape:hover .etape-icon {
-    transform: scale(1.15) rotate(-6deg);
-    background: rgb(255 255 255 / 0.14);
+  .circuit-fleche svg {
+    width: 4.5rem;
+    height: 0.75rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
-  .etape-num {
-    font-size: 2.6rem;
-    font-weight: 800;
-    line-height: 1;
-    background: linear-gradient(120deg, #8d8cf0, #ff8a76);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  /* Sens horaire : 1 → 2 en haut, 2 → 3 à droite, 3 → 4 en bas, 4 → 1 à
+     gauche. La rotation dispense de dessiner quatre tracés distincts. */
+  .fleche-1 { grid-area: f1; }
+  .fleche-2 { grid-area: f2; }
+  .fleche-3 { grid-area: f3; }
+  .fleche-4 { grid-area: f4; }
+  .fleche-2 svg { transform: rotate(90deg); }
+  .fleche-3 svg { transform: rotate(180deg); }
+  .fleche-4 svg { transform: rotate(270deg); }
+
+  /* Une fois pivotées, les flèches verticales occupent leur largeur en
+     hauteur : à 4,5 rem elles mordaient sur les cartes du dessus et du
+     dessous, dont l'interstice ne fait que 47 px. */
+  .fleche-2 svg,
+  .fleche-4 svg {
+    width: 2.4rem;
   }
 
-  .etape h3 {
-    margin-top: 0.9rem;
-    font-size: 1.15rem;
-    font-weight: 700;
-  }
+  /* Sous 760 px, le carré se déplie en colonne : les quatre flèches pointent
+     vers le bas, la dernière remontant vers la première n'aurait plus de sens
+     et disparaît. */
+  @media (max-width: 760px) {
+    .circuit {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'e1' 'f1' 'e2' 'f2' 'e3' 'f3' 'e4';
+      gap: 0.9rem;
+    }
 
-  .etape p {
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-    color: #b9bacd;
+    .fleche-1 svg,
+    .fleche-2 svg,
+    .fleche-3 svg {
+      transform: rotate(90deg);
+    }
+
+    .fleche-4 {
+      display: none;
+    }
   }
 
   /* ------------------------------- Tarifs ------------------------------- */

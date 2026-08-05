@@ -1,0 +1,538 @@
+---
+/**
+ * Menu dépliable pour mobile et tablette, partagé par les sept sites.
+ *
+ * Jusqu'ici, sous 760 px, chaque en-tête se contentait de masquer sa
+ * navigation : le visiteur mobile n'avait aucun moyen d'atteindre les sections.
+ * Ce composant la lui rend.
+ *
+ * Le COMPORTEMENT est écrit une seule fois — ouverture, Échap, retour du focus,
+ * fermeture au clic, blocage du défilement, mouvement réduit. Seul l'HABILLAGE
+ * change d'un site à l'autre, via `variante`.
+ *
+ * Pourquoi les sept habillages vivent ici plutôt que dans chaque démo : le
+ * modèle Restaurant et le modèle Association utilisent tous deux le préfixe
+ * `.a-`. Les styles Astro étant scopés par composant, ils coexistent sans
+ * heurt — mais les habiller depuis chaque démo imposerait `:global()`, qui
+ * casse justement ce cloisonnement et ferait collisionner les deux.
+ */
+import type { Lang } from '../lib/i18n';
+
+export interface Props {
+  /** Liens du menu, dans l'ordre de la navigation du site. */
+  liens: { href: string; label: string }[];
+  /** Habillage : détermine à la fois les couleurs et l'animation d'ouverture. */
+  variante: 'principal' | 'association' | 'batiment' | 'esthetique' | 'artiste' | 'yoga' | 'restaurant';
+  /** Appel à l'action repris en bas du panneau, s'il y en a un dans l'en-tête. */
+  cta?: { href: string; label: string };
+  /** Langue de la page : les deux intitulés accessibles en découlent. */
+  lang: Lang;
+}
+
+const { liens, variante, cta, lang } = Astro.props;
+
+// Deux chaînes fixes, dérivées de la langue plutôt que répétées dans les sept
+// dictionnaires — aucun site n'a de raison de les formuler autrement.
+const ouvrir = lang === 'fr' ? 'Ouvrir le menu' : 'Open menu';
+const fermer = lang === 'fr' ? 'Fermer le menu' : 'Close menu';
+
+const id = `menu-${variante}`;
+---
+
+<div class="mm" data-variante={variante} data-menu>
+  <button
+    class="mm-bouton"
+    type="button"
+    aria-expanded="false"
+    aria-controls={id}
+    aria-label={ouvrir}
+    data-ouvrir={ouvrir}
+    data-fermer={fermer}
+    data-menu-bouton
+  >
+    <span class="mm-barres" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+
+  <div class="mm-panneau" id={id} data-variante={variante} hidden data-menu-panneau>
+    <nav aria-label={ouvrir}>
+      <ul class="mm-liste">
+        {liens.map((l, i) => (
+          <li style={`--i: ${i}`}><a href={l.href} data-menu-lien>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    {cta && (
+      <a class="mm-cta" href={cta.href} data-menu-lien>{cta.label}</a>
+    )}
+  </div>
+</div>
+
+<script>
+  // Un seul gestionnaire pour tous les menus de la page — il n'y en a qu'un,
+  // mais rien n'empêcherait d'en poser deux.
+  document.querySelectorAll<HTMLElement>('[data-menu]').forEach((menu) => {
+    const bouton = menu.querySelector<HTMLButtonElement>('[data-menu-bouton]');
+    const panneau = menu.querySelector<HTMLElement>('[data-menu-panneau]');
+    if (!bouton || !panneau) return;
+
+    let ouvert = false;
+
+    /**
+     * Le panneau commence sous l'en-tête. Plutôt que d'inscrire sept hauteurs
+     * en dur — chaque site a ses propres marges —, on mesure l'en-tête réel et
+     * on suit ses variations (rotation de l'appareil, barre d'URL mobile qui
+     * se rétracte).
+     */
+    /**
+     * Six des sept en-têtes portent un `backdrop-filter`, qui crée un bloc
+     * conteneur pour les descendants en `position: fixed` : le panneau se
+     * calait sur l'en-tête (80 px de haut) au lieu de la fenêtre. On le
+     * déplace donc à la racine du document, une fois pour toutes. `aria-controls`
+     * fonctionne à distance, la relation bouton/panneau reste intacte.
+     */
+    const entete = menu.closest('header');
+    document.body.appendChild(panneau);
+    const calerLeHaut = () => {
+      if (!entete) return;
+      // `bottom` et non `offsetHeight` : sur les six démos, une barre de
+      // démonstration précède l'en-tête. Sa hauteur ne dit donc pas où
+      // l'en-tête se termine — et le panneau recouvrait le bouton.
+      const bas = Math.max(0, Math.round(entete.getBoundingClientRect().bottom));
+      panneau.style.setProperty('--mm-haut', `${bas}px`);
+    };
+    calerLeHaut();
+    if (entete && 'ResizeObserver' in window) {
+      const ro = new ResizeObserver(calerLeHaut);
+      ro.observe(entete);
+    }
+    window.addEventListener('resize', calerLeHaut);
+
+    const basculer = (versOuvert: boolean) => {
+      ouvert = versOuvert;
+      bouton.setAttribute('aria-expanded', String(ouvert));
+      bouton.setAttribute(
+        'aria-label',
+        (ouvert ? bouton.dataset.fermer : bouton.dataset.ouvrir) ?? ''
+      );
+      menu.classList.toggle('is-ouvert', ouvert);
+      panneau.classList.toggle('is-ouvert', ouvert);
+
+      if (ouvert) {
+        // `hidden` doit tomber AVANT que la transition démarre, sinon le
+        // navigateur passe directement à l'état final sans animer.
+        calerLeHaut();
+        panneau.hidden = false;
+        void panneau.offsetHeight;
+        // Le défilement de la page derrière un panneau plein écran désoriente.
+        document.body.style.overflow = 'hidden';
+        panneau.querySelector<HTMLElement>('a')?.focus();
+      } else {
+        document.body.style.overflow = '';
+        // On attend la fin de la transition pour retirer le panneau de l'arbre,
+        // faute de quoi la fermeture serait instantanée. En mouvement réduit,
+        // la transition dure 0 s et `transitionend` ne se déclenche pas : le
+        // repli à 250 ms garantit que le panneau disparaît quand même.
+        const retirer = () => {
+          if (!ouvert) panneau.hidden = true;
+        };
+        panneau.addEventListener('transitionend', retirer, { once: true });
+        window.setTimeout(retirer, 1100);
+      }
+    };
+
+    bouton.addEventListener('click', () => basculer(!ouvert));
+
+    // Un lien mène à une ancre de la même page : sans fermeture, le panneau
+    // masquerait la section qu'on vient de demander.
+    panneau.querySelectorAll('[data-menu-lien]').forEach((lien) => {
+      lien.addEventListener('click', () => basculer(false));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && ouvert) {
+        basculer(false);
+        bouton.focus();
+      }
+    });
+
+    // Repasser en grand écran pendant que le menu est ouvert laisserait le
+    // corps de page bloqué en `overflow: hidden`.
+    window.matchMedia('(min-width: 761px)').addEventListener('change', (e) => {
+      if (e.matches && ouvert) basculer(false);
+    });
+  });
+</script>
+
+<style>
+  /* ===================== Structure commune aux sept ====================== */
+
+  .mm {
+    display: none;
+  }
+
+  /* Le menu ne remplace la navigation que sous 760 px — au-delà, chaque site
+     garde sa barre horizontale. */
+  @media (max-width: 760px) {
+    .mm {
+      display: block;
+    }
+  }
+
+  .mm-bouton {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    /* 2,75 rem ≈ 44 px : la cible tactile minimale recommandée. */
+  }
+
+  .mm-barres {
+    display: grid;
+    gap: 0.3rem;
+    width: 1.35rem;
+  }
+
+  .mm-barres span {
+    display: block;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition:
+      transform 0.3s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+      opacity 0.2s;
+  }
+
+  /* Les trois barres deviennent une croix : l'utilisateur voit que le même
+     bouton referme, sans avoir à chercher une autre commande. */
+  .is-ouvert .mm-barres span:nth-child(1) {
+    transform: translateY(0.5rem) rotate(45deg);
+  }
+  .is-ouvert .mm-barres span:nth-child(2) {
+    opacity: 0;
+  }
+  .is-ouvert .mm-barres span:nth-child(3) {
+    transform: translateY(-0.5rem) rotate(-45deg);
+  }
+
+  .mm-panneau {
+    /* L'état de départ appartient à la variante, l'état ouvert au socle : sans
+       cette variable, les deux `transform` avaient la même spécificité et la
+       variante, écrite plus bas, gagnait même panneau ouvert. */
+    transform: var(--mm-depart, none);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--mm-haut, 4rem);
+    bottom: 0;
+    z-index: 60;
+    padding: 2rem 1.5rem 3rem;
+    overflow-y: auto;
+    opacity: 0;
+    transition:
+      opacity 0.28s ease,
+      transform 0.34s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  .mm-panneau.is-ouvert {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mm-liste {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mm-liste a,
+  .mm-cta {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Les liens arrivent en cascade : le décalage donne le sens de lecture. */
+  .mm-panneau.is-ouvert .mm-liste li {
+    animation: mm-entree 0.4s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+    animation-delay: calc(var(--i) * 0.05s + 0.06s);
+  }
+
+  @keyframes mm-entree {
+    from {
+      opacity: 0;
+      transform: translateY(0.7rem);
+    }
+  }
+
+  /* ========================= 1. Site principal ========================== */
+
+  .mm-panneau[data-variante='principal'] {
+    background: var(--paper, #f7f6f2);
+    --mm-depart: translateY(-0.8rem);
+  }
+
+  [data-variante='principal'] .mm-liste a {
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-m, 18px);
+    background: var(--paper-raised, #fff);
+    border: 1px solid rgb(18 19 31 / 0.08);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  [data-variante='principal'] .mm-cta {
+    margin-top: 1.4rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: 999px;
+    background: var(--accent, #5352d1);
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* ===================== 2. Association — sportif ======================= */
+
+  .mm-panneau[data-variante='association'] {
+    background: #133326;
+    color: #eaf5ee;
+    --mm-depart: translateX(-1.5rem);
+  }
+
+  [data-variante='association'] .mm-liste a {
+    padding: 1.05rem 1rem 1.05rem 1.4rem;
+    border-left: 4px solid #ffd166;
+    background: rgb(255 255 255 / 0.05);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  [data-variante='association'] .mm-cta {
+    margin-top: 1.4rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: 999px;
+    background: #ffd166;
+    color: #133326;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ==================== 3. Bâtiment — chantier ========================= */
+
+  .mm-panneau[data-variante='batiment'] {
+    background: #16181f;
+    color: #f4f4f6;
+    --mm-depart: translateY(-1.2rem);
+  }
+
+  [data-variante='batiment'] .mm-liste {
+    gap: 0;
+  }
+
+  [data-variante='batiment'] .mm-liste a {
+    padding: 1.15rem 0;
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+  }
+
+  /* Le repère jaune du chantier, posé devant chaque entrée. */
+  [data-variante='batiment'] .mm-liste a::before {
+    content: '';
+    display: inline-block;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-right: 0.8rem;
+    background: #f2b705;
+    transform: skewX(-12deg);
+  }
+
+  [data-variante='batiment'] .mm-cta {
+    margin-top: 1.6rem;
+    padding: 1rem 1.6rem;
+    background: #f2b705;
+    color: #16181f;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transform: skewX(-8deg);
+  }
+
+  /* ==================== 4. Esthétique — douceur ======================== */
+
+  .mm-panneau[data-variante='esthetique'] {
+    background: #fdf8f5;
+    color: #43312c;
+    --mm-depart: scale(0.97);
+  }
+
+  [data-variante='esthetique'] .mm-liste {
+    gap: 0.6rem;
+    text-align: center;
+  }
+
+  [data-variante='esthetique'] .mm-liste a {
+    padding: 1.05rem 1rem;
+    border-radius: 999px;
+    background: #f6e8e2;
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.25rem;
+  }
+
+  [data-variante='esthetique'] .mm-cta {
+    display: block;
+    margin: 1.6rem auto 0;
+    padding: 0.95rem 2rem;
+    border-radius: 999px;
+    background: #9d5141;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* ====================== 5. Artiste — fusain ========================== */
+
+  .mm-panneau[data-variante='artiste'] {
+    background: #e9e2d4;
+    color: #1c1a17;
+    --mm-depart: translateY(-0.6rem) rotate(-0.4deg);
+  }
+
+  [data-variante='artiste'] .mm-liste {
+    gap: 0;
+  }
+
+  [data-variante='artiste'] .mm-liste a {
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgb(28 26 23 / 0.16);
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.55rem;
+    font-weight: 300;
+  }
+
+  [data-variante='artiste'] .mm-cta {
+    margin-top: 1.6rem;
+    padding: 0.9rem 0;
+    border-top: 2px solid #1c1a17;
+    border-bottom: 2px solid #1c1a17;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* ================== 6. Yoga — noir et blanc, lenteur ================= */
+
+  .mm-panneau[data-variante='yoga'] {
+    background: #f6f5f2;
+    color: #0b0b0b;
+    display: grid;
+    align-content: center;
+    /* Le lâcher-prise du site tient à sa lenteur : la seule variante dont
+       l'ouverture prend une seconde entière. */
+    transition:
+      opacity 0.95s ease,
+      transform 0.95s ease;
+  }
+
+  [data-variante='yoga'] .mm-liste {
+    gap: 1.6rem;
+    text-align: center;
+  }
+
+  [data-variante='yoga'] .mm-liste a {
+    padding-block: 0.45rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.16em;
+    text-transform: lowercase;
+  }
+
+  [data-variante='yoga'] .mm-cta {
+    margin-top: 2.6rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #6b6b6b;
+  }
+
+  /* .is-ouvert et data-variante vivent sur le même élément : pas d'espace. */
+  .mm-panneau[data-variante='yoga'].is-ouvert .mm-liste li {
+    animation-duration: 0.9s;
+    animation-delay: calc(var(--i) * 0.16s + 0.2s);
+  }
+
+  /* ================= 7. Restaurant — nuit et dorure ==================== */
+
+  .mm-panneau[data-variante='restaurant'] {
+    background: #14100d;
+    color: #f7f2ea;
+    --mm-depart: translateY(-1rem);
+  }
+
+  [data-variante='restaurant'] .mm-liste {
+    gap: 0;
+    text-align: center;
+  }
+
+  [data-variante='restaurant'] .mm-liste a {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgb(184 137 47 / 0.35);
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.35rem;
+    letter-spacing: 0.04em;
+  }
+
+  [data-variante='restaurant'] .mm-liste li:first-child a {
+    border-top: 1px solid rgb(184 137 47 / 0.35);
+  }
+
+  [data-variante='restaurant'] .mm-cta {
+    display: block;
+    margin-top: 1.8rem;
+    padding: 0.95rem 1.6rem;
+    border: 1px solid #b8892f;
+    color: #d9ae5f;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* ======================== Mouvement réduit ========================== */
+
+  /* Après toutes les variantes, à dessein : `display: grid` du yoga a la même
+     spécificité que ce sélecteur et l'emportait par l'ordre du code. Le
+     panneau restait alors dans la page, invisible mais couvrant tout l'écran,
+     et interceptait le clic destiné au bouton. */
+  .mm-panneau[hidden] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mm-panneau,
+    .mm-barres span {
+      transition-duration: 0.01s;
+    }
+
+    .mm-panneau.is-ouvert .mm-liste li {
+      animation: none;
+    }
+  }
+</style>

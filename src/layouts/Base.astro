@@ -20,6 +20,12 @@ const canonical = new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site);
 // Versions linguistiques de la page courante (hreflang).
 const frUrl = new URL(localePath('fr', rest).replace(/\/?$/, '/'), Astro.site);
 const enUrl = new URL(localePath('en', rest).replace(/\/?$/, '/'), Astro.site);
+// Vignette de partage. Absolue et non relative : les réseaux sociaux ne
+// résolvent pas les chemins, ils exigent une URL complète.
+const ogImage = new URL(
+  withBase(lang === 'fr' ? 'og-image.jpg' : 'og-image-en.jpg'),
+  Astro.site
+).href;
 ---
 
 <!doctype html>
@@ -33,8 +39,22 @@ const enUrl = new URL(localePath('en', rest).replace(/\/?$/, '/'), Astro.site);
     <link rel="alternate" hreflang="fr" href={frUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="x-default" href={frUrl} />
+    <!-- Le SVG d'abord : les navigateurs qui le comprennent s'arrêtent là et
+         obtiennent une icône nette à toute taille. Les autres retombent sur le
+         .ico, qui embarque les tailles 16, 32 et 48. -->
     <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={withBase('favicon-32x32.png')} sizes="32x32" type="image/png" />
+    <link rel="icon" href={withBase('favicon-16x16.png')} sizes="16x16" type="image/png" />
+    <link rel="alternate icon" href={withBase('favicon.ico')} sizes="16x16 32x32 48x48" />
+    <!-- iOS ignore et le SVG et le manifeste : sans cette ligne, un raccourci
+         sur l'écran d'accueil affiche une capture de la page. -->
+    <link rel="apple-touch-icon" href={withBase('apple-touch-icon.png')} sizes="180x180" />
+    <!-- Le libellé sous l'icône, à défaut duquel iOS reprend le <title> — soit
+         72 caractères tronqués en « Atelier Web … ». C'est l'équivalent du
+         `short_name` du manifeste, qu'Android utilise déjà. -->
+    <meta name="apple-mobile-web-app-title" content="Atelier Web" />
     <link rel="sitemap" href={withBase('sitemap-index.xml')} />
+    <link rel="manifest" href={withBase('site.webmanifest')} />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Open Graph / réseaux sociaux -->
@@ -43,7 +63,13 @@ const enUrl = new URL(localePath('en', rest).replace(/\/?$/, '/'), Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : 'en_US'} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <!-- `summary_large_image` et non `summary` : avec une vignette 1200×630,
+         `summary` la rognerait en une petite carrée. -->
+    <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#12131f" />
 
@@ -53,6 +79,32 @@ const enUrl = new URL(localePath('en', rest).replace(/\/?$/, '/'), Astro.site);
     <slot />
 
     <script>
+      /**
+       * Décalage des ancres sous l'en-tête figé.
+       *
+       * Sans lui, un lien vers `#tarifs` amène la section pile en haut de la
+       * fenêtre — donc sous l'en-tête collant, qui masque le titre. Le visiteur
+       * atterrit au milieu du contenu sans savoir où il est.
+       *
+       * La valeur n'est pas la hauteur de l'en-tête mais celle de toute la pile
+       * figée : sur les six modèles, la barre de démonstration reste elle aussi
+       * à l'écran, et l'en-tête se cale 2,35 rem plus bas. `top` calculé donne
+       * ce décalage, on lui ajoute la hauteur.
+       */
+      const enteteFixe = document.querySelector('header');
+      if (enteteFixe) {
+        const calerLesAncres = () => {
+          const decalage = parseFloat(getComputedStyle(enteteFixe).top) || 0;
+          document.documentElement.style.setProperty(
+            '--entete-fixe',
+            `${Math.round(decalage + enteteFixe.offsetHeight)}px`
+          );
+        };
+        calerLesAncres();
+        window.addEventListener('resize', calerLesAncres);
+        if ('ResizeObserver' in window) new ResizeObserver(calerLesAncres).observe(enteteFixe);
+      }
+
       // Apparition des éléments .reveal au défilement.
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const targets = document.querySelectorAll('.reveal');

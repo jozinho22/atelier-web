@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../DemoBar.astro';
+import MenuMobile from '../MenuMobile.astro';
 import AuroraBackdrop from '../AuroraBackdrop.astro';
 import { splitPath, localePath } from '../../lib/i18n';
 import { withBase } from '../../lib/paths';
@@ -16,6 +17,12 @@ const tc = common[lang];
  * Le nom du fichier ne dépend pas de la langue, il reste donc ici.
  */
 const PHOTOS = ['longere.webp', 'extension.webp', 'salle-de-bain.webp'];
+
+const liensMenu = [
+  { href: '#services', label: t.header.nav.services },
+  { href: '#realisations', label: t.header.nav.realisations },
+  { href: '#zone', label: t.header.nav.zone },
+];
 ---
 
 <Base title={t.meta.title} description={t.meta.description}>
@@ -36,6 +43,7 @@ const PHOTOS = ['longere.webp', 'extension.webp', 'salle-de-bain.webp'];
           </ul>
         </nav>
         <a class="b-btn b-btn-plein" href="#devis">{t.header.cta}</a>
+        <MenuMobile variante="batiment" lang={lang} liens={liensMenu} cta={{ href: '#devis', label: t.header.cta }} />
       </div>
       <div class="b-hazard" aria-hidden="true"></div>
     </header>
@@ -799,7 +807,9 @@ const PHOTOS = ['longere.webp', 'extension.webp', 'salle-de-bain.webp'];
   /* Responsive */
 
   @media (max-width: 760px) {
-    .b-header nav {
+    /* La navigation et son bouton cèdent la place au menu dépliable. */
+    .b-header nav,
+    .b-btn {
       display: none;
     }
 

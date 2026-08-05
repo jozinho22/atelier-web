@@ -9,7 +9,7 @@ export const home = {
   fr: {
     title: 'Atelier Web — Sites vitrines pour artisans, indépendants et associations',
     description:
-      "Création de sites vitrines élégants et rapides pour professionnels et associations : soyez visible sur Google et joignable en un clic. Devis gratuit, à partir de 590 €.",
+      "Création de sites vitrines élégants et rapides pour professionnels et associations : soyez visible sur Google et joignable en un clic. Devis gratuit, à partir de 890 €.",
     hero: {
       ariaLabel: 'Introduction',
       kicker: 'Création de sites vitrines',
@@ -37,18 +37,38 @@ export const home = {
         {
           title: 'Être trouvé sur Google',
           desc: 'Référencement soigné dès la conception : votre activité, votre ville, vos services. Vos futurs clients vous cherchent — ils vous trouvent.',
+          points: [
+            'Fiche Google Business configurée',
+            'Mots-clés de votre ville et de votre métier',
+            'Balises et plan de site générés',
+          ],
         },
         {
           title: 'Être joint en un clic',
           desc: 'Téléphone, e-mail, itinéraire : chaque page guide le visiteur vers le contact. Sur mobile, un clic suffit pour vous appeler.',
+          points: [
+            'Numéro cliquable sur mobile',
+            'Formulaire sans serveur ni abonnement',
+            'Itinéraire ouvert d’un geste',
+          ],
         },
         {
           title: 'Faire bonne impression',
           desc: "Un design sur mesure, à votre image. Parce qu'avant de pousser votre porte, vos clients visitent votre site.",
+          points: [
+            'Vos couleurs, vos photos, vos mots',
+            'Typographies choisies, pas prises au hasard',
+            'Lisible autant sur mobile que sur écran',
+          ],
         },
         {
           title: 'Rapide et sans entretien',
           desc: 'Sites statiques ultra-rapides, sécurisés par conception : pas de mises à jour, pas de pannes, pas de mauvaises surprises.',
+          points: [
+            'Pages servies en fichiers statiques',
+            'Aucune base de données à maintenir',
+            'Rien à mettre à jour, jamais',
+          ],
         },
       ],
     },
@@ -201,7 +221,6 @@ export const home = {
       lede: "Un investissement unique — votre site vous appartient. Pas d'abonnement caché, pas de frais surprises.",
       essentiel: {
         name: 'Essentiel',
-        price: '590 €',
         features: [
           'Site une page (vitrine complète)',
           'Design personnalisé à vos couleurs',
@@ -215,7 +234,6 @@ export const home = {
       surMesure: {
         badge: 'Le plus choisi',
         name: 'Sur mesure',
-        price: 'à partir de 990 €',
         features: [
           'Plusieurs pages (services, galerie, actus…)',
           'Design entièrement sur mesure',
@@ -229,7 +247,6 @@ export const home = {
       },
       signature: {
         name: 'Signature',
-        price: 'à partir de 2 500 €',
         features: [
           'Site complet, huit pages et au-delà',
           'Une pièce unique : animation, carte interactive, configurateur…',
@@ -240,7 +257,7 @@ export const home = {
         cta: 'Demander un devis',
         demo: 'Voir le site complet',
       },
-      note: 'Hébergement, nom de domaine et maintenance : 49 €/mois — votre site reste votre propriété, sans engagement.',
+      note: { avant: 'Hébergement, nom de domaine et maintenance : ', apres: ' — votre site reste votre propriété, sans engagement.' },
     },
     contact: {
       titleBefore: 'Et si on parlait de',
@@ -254,7 +271,7 @@ export const home = {
   en: {
     title: 'Atelier Web — Showcase websites for artisans, freelancers and local clubs',
     description:
-      'Elegant, fast showcase websites for professionals and local clubs: get found on Google and reached in one click. Free quote, from 590 €.',
+      'Elegant, fast showcase websites for professionals and local clubs: get found on Google and reached in one click. Free quote, from €890.',
     hero: {
       ariaLabel: 'Introduction',
       kicker: 'Showcase website design',
@@ -282,18 +299,38 @@ export const home = {
         {
           title: 'Get found on Google',
           desc: 'SEO baked in from day one: your trade, your city, your services. Your future customers are searching — and they find you.',
+          points: [
+            'Google Business profile configured',
+            'Keywords for your town and trade',
+            'Meta tags and sitemap generated',
+          ],
         },
         {
           title: 'Get reached in one click',
           desc: 'Phone, email, directions: every page guides visitors toward getting in touch. On mobile, one tap is all it takes to call you.',
+          points: [
+            'Tap-to-call number on mobile',
+            'Form with no server, no subscription',
+            'Directions opened in one tap',
+          ],
         },
         {
           title: 'Make a great impression',
           desc: 'A custom design that looks like you. Because before walking through your door, your customers visit your website.',
+          points: [
+            'Your colours, your photos, your words',
+            'Typefaces chosen, not picked at random',
+            'As readable on mobile as on desktop',
+          ],
         },
         {
           title: 'Fast and maintenance-free',
           desc: 'Ultra-fast static websites, secure by design: no updates, no outages, no unpleasant surprises.',
+          points: [
+            'Pages served as static files',
+            'No database to maintain',
+            'Nothing to update, ever',
+          ],
         },
       ],
     },
@@ -446,7 +483,6 @@ export const home = {
       lede: 'A one-time investment — your website belongs to you. No hidden subscription, no surprise fees.',
       essentiel: {
         name: 'Essential',
-        price: '590 €',
         features: [
           'One-page website (a complete showcase)',
           'Custom design in your colors',
@@ -460,7 +496,6 @@ export const home = {
       surMesure: {
         badge: 'Most popular',
         name: 'Custom',
-        price: 'from 990 €',
         features: [
           'Multiple pages (services, gallery, news…)',
           'Fully bespoke design',
@@ -474,7 +509,6 @@ export const home = {
       },
       signature: {
         name: 'Signature',
-        price: 'from 2,500 €',
         features: [
           'A complete website, eight pages and beyond',
           'One bespoke piece: animation, interactive map, configurator…',
@@ -485,7 +519,7 @@ export const home = {
         cta: 'Request a quote',
         demo: 'See the full site',
       },
-      note: 'Hosting, domain name and maintenance: 49 €/month — your website remains your property, with no commitment.',
+      note: { avant: 'Hosting, domain name and maintenance: ', apres: ' — your website remains your property, with no commitment.' },
     },
     contact: {
       titleBefore: 'Shall we talk about',

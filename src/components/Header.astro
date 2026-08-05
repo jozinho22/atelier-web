@@ -3,6 +3,7 @@
 import { splitPath, localePath } from '../lib/i18n';
 import { common } from '../i18n/common';
 import LanguageSwitch from './LanguageSwitch.astro';
+import MenuMobile from './MenuMobile.astro';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = common[lang];
@@ -31,6 +32,12 @@ const links = [
     </nav>
     <LanguageSwitch />
     <a class="btn btn-primary header-cta" href={`${home}#contact`}>{t.nav.cta}</a>
+    <MenuMobile
+      variante="principal"
+      lang={lang}
+      liens={links}
+      cta={{ href: `${home}#contact`, label: t.nav.cta }}
+    />
   </div>
 </header>
 
@@ -129,7 +136,8 @@ const links = [
   }
 
   @media (max-width: 760px) {
-    nav {
+    nav,
+    .header-cta {
       display: none;
     }
 

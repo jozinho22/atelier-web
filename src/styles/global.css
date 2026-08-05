@@ -50,6 +50,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Les ancres s'arrêtent sous l'en-tête figé, avec un peu d'air, pour que le
+     titre de la section reste visible. La variable est mesurée dans
+     Base.astro ; le repli sert le temps que le script s'exécute. */
+  scroll-padding-top: calc(var(--entete-fixe, 4.5rem) + 1.25rem);
 }
 
 body {

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../DemoBar.astro';
+import MenuMobile from '../MenuMobile.astro';
 import AuroraBackdrop from '../AuroraBackdrop.astro';
 import { splitPath, localePath } from '../../lib/i18n';
 import { common } from '../../i18n/common';
@@ -9,6 +10,12 @@ import { association } from '../../i18n/association';
 const { lang } = splitPath(Astro.url.pathname);
 const t = association[lang];
 const c = common[lang];
+
+const liensMenu = [
+  { href: '#activites', label: t.header.nav.activites },
+  { href: '#actus', label: t.header.nav.actus },
+  { href: '#infos', label: t.header.nav.infos },
+];
 ---
 
 <Base title={t.meta.title} description={t.meta.description}>
@@ -29,6 +36,7 @@ const c = common[lang];
           </ul>
         </nav>
         <a class="a-btn a-btn-sun" href="#adhesion">{t.header.join}</a>
+        <MenuMobile variante="association" lang={lang} liens={liensMenu} />
       </div>
     </header>
 
@@ -827,6 +835,7 @@ const c = common[lang];
   /* ----------------------------- Responsive ----------------------------- */
 
   @media (max-width: 760px) {
+    /* La navigation horizontale cède la place au menu dépliable. */
     .a-header nav {
       display: none;
     }

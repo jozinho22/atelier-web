@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import DemoBar from '../DemoBar.astro';
+import MenuMobile from '../MenuMobile.astro';
 import AuroraBackdrop from '../AuroraBackdrop.astro';
 import { splitPath, localePath } from '../../lib/i18n';
 import { withBase } from '../../lib/paths';
@@ -23,6 +24,12 @@ const PHOTOS_SOINS = [
   'beaute-du-regard.webp',
   'manucure-douceur.webp',
 ];
+
+const liensMenu = [
+  { href: '#soins', label: t.header.nav.soins },
+  { href: '#institut', label: t.header.nav.institut },
+  { href: '#infos', label: t.header.nav.infos },
+];
 ---
 
 <Base title={t.meta.title} description={t.meta.description}>
@@ -42,6 +49,7 @@ const PHOTOS_SOINS = [
           </ul>
         </nav>
         <a class="e-btn" href="tel:+33500000000">{t.header.reserver}</a>
+        <MenuMobile variante="esthetique" lang={lang} liens={liensMenu} cta={{ href: 'tel:+33500000000', label: t.header.reserver }} />
       </div>
     </header>
 
@@ -772,7 +780,9 @@ const PHOTOS_SOINS = [
   /* Responsive */
 
   @media (max-width: 760px) {
-    .e-header nav {
+    /* La navigation et son bouton cèdent la place au menu dépliable. */
+    .e-header nav,
+    .e-btn {
       display: none;
     }
 
