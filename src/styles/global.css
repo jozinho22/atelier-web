@@ -9,6 +9,14 @@
   --ink-soft: #3c3e52;
   --muted: #66677c;
   --paper: #f7f6f2;
+  /* Rampe du mur : le ton monte à mesure qu'on descend la page, pour que
+     l'écart avec le hero sombre se franchisse par paliers plutôt que d'un
+     bond. Plus aucun blanc pur en grande surface — seules les cartes le
+     gardent, ce qui renforce la règle du mur et du cadre. */
+  --mur-1: #eceae2;
+  --mur-2: #f2efe8;
+  --mur-3: #f6f3ec;
+  --mur-4: #faf8f3;
   --paper-raised: #ffffff;
   --accent: #5352d1;
   --accent-strong: #403fb8;
@@ -20,6 +28,9 @@
      clairs, respectivement sur papier (1,82:1) et sur encre (3,07:1). */
   --gold-strong: #916d03;
   --accent-on-ink: #8d8cf0;
+  /* Gris de la famille « sur encre » : le gris atténué n'y tient que 3,74:1. */
+  --gris-sur-encre: #b9bacd;
+  --gris-sur-encre-attenue: #8f90ab;
   /* Les deux arrêts du dégradé du titre du hero : même famille que l'accent
      sur encre, pour que l'emphase reste indigo de bout en bout. */
   --accent-on-ink-soft: #a9a8f6;

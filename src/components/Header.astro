@@ -11,8 +11,8 @@ const home = localePath(lang, '');
 
 const links = [
   { href: `${home}#services`, label: t.nav.services },
-  { href: `${home}#modeles`, label: t.nav.modeles },
   { href: `${home}#methode`, label: t.nav.methode },
+  { href: `${home}#modeles`, label: t.nav.modeles },
   { href: `${home}#tarifs`, label: t.nav.tarifs },
 ];
 ---
@@ -20,7 +20,13 @@ const links = [
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href={home} aria-label="Atelier Web">
-      <span class="brand-mark" aria-hidden="true"></span>
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="5" y="9" width="54" height="46" rx="8" />
+        <path d="M5 24h54" />
+        <circle cx="13.5" cy="16.5" r="2" class="brand-point" />
+        <circle cx="21" cy="16.5" r="2" class="brand-point" />
+        <path d="M14 34h36M14 44h23" />
+      </svg>
       Atelier<strong>Web</strong>
     </a>
     <nav aria-label={lang === 'fr' ? 'Navigation principale' : 'Main navigation'}>
@@ -31,7 +37,6 @@ const links = [
       </ul>
     </nav>
     <LanguageSwitch />
-    <a class="btn btn-primary header-cta" href={`${home}#contact`}>{t.nav.cta}</a>
     <MenuMobile
       variante="principal"
       lang={lang}
@@ -74,17 +79,27 @@ const links = [
     color: var(--accent);
   }
 
+  /* Le glyphe des icônes du site — une fenêtre de navigateur —, redessiné en
+     SVG pour rester net à toute taille et suivre la couleur d'accent. */
   .brand-mark {
-    width: 0.85rem;
-    height: 0.85rem;
-    border-radius: 4px;
-    background: conic-gradient(from 210deg, var(--accent), var(--coral), var(--gold), var(--accent));
-    transform: rotate(12deg);
+    width: 1.45rem;
+    height: 1.45rem;
+    flex: none;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     transition: transform 0.4s var(--ease-out);
   }
 
+  .brand-point {
+    fill: var(--accent);
+    stroke: none;
+  }
+
   .brand:hover .brand-mark {
-    transform: rotate(102deg);
+    transform: translateY(-2px);
   }
 
   nav {
@@ -130,16 +145,9 @@ const links = [
     transform: scaleX(1);
   }
 
-  .header-cta {
-    padding: 0.55rem 1.2rem;
-    font-size: 0.95rem;
-  }
 
   @media (max-width: 760px) {
     nav,
-    .header-cta {
-      display: none;
-    }
 
     .header-inner {
       justify-content: space-between;

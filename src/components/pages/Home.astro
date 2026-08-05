@@ -36,8 +36,9 @@ const modeleMeta = [
   // le visiteur retrouve exactement l'image qui l'attend derrière le lien.
   { path: 'modeles/artiste', image: 'artiste/photographie-de-la-galerie.webp', accent: '#b9a8ff' },
   // Le modèle yoga est en noir et blanc : son accent est un gris, pas une
-  // couleur — sans quoi la vignette trahirait le parti pris du site.
-  { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: '#d7d7d7' },
+  // couleur, et sa vignette est désaturée — sans quoi elle trahirait le parti
+  // pris du site qu'elle annonce.
+  { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: '#d7d7d7', monochrome: true },
   { path: 'modeles/restaurant', image: 'restaurant/four.webp', accent: '#d9ae5f' },
 ];
 // L'inversion se fait APRÈS l'appariement : modeleMeta[i] et items[i] restent
@@ -129,12 +130,21 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     <!-- ============================== HERO ============================== -->
     <section class="hero" aria-label={t.hero.ariaLabel}>
       <div class="hero-bg" aria-hidden="true">
-        <AuroraBackdrop
-          colors={['#5352d1', '#8a5cf5', '#ff6b57', '#f2b705', '#2f6fdb']}
-          background="#12131f"
-          speed={1.3}
-        />
-        <span class="hero-grid"></span>
+        <video
+          class="hero-video"
+          src={withBase('accueil/dark-coder.mp4')}
+          poster={withBase('accueil/dark-coder-affiche.webp')}
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          data-boucle
+        ></video>
+        <!-- Voile indispensable : la vidéo comporte des zones très claires —
+             l'écran, la lampe — sur lesquelles le texte blanc du hero se
+             perdrait. Il est plus dense à gauche, là où le texte se trouve. -->
+        <span class="hero-voile"></span>
       </div>
       <div class="container hero-inner">
         <div class="hero-copy">
@@ -152,27 +162,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
             {t.hero.proof.map((p) => <li>{p}</li>)}
           </ul>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <div class="mock-browser">
-            <div class="mock-chrome">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="mock-body">
-              <div class="mock-hero"></div>
-              <div class="mock-row">
-                <div class="mock-card"></div>
-                <div class="mock-card"></div>
-                <div class="mock-card"></div>
-              </div>
-              <div class="mock-lines">
-                <span></span><span></span><span></span>
-              </div>
-            </div>
-          </div>
-          <div class="float-chip chip-call">📞 {t.hero.chipCall}</div>
-          <div class="float-chip chip-seo" set:html={t.hero.chipSeo} />
-          <div class="float-chip chip-star">★★★★★</div>
-        </div>
       </div>
     </section>
 
@@ -184,7 +173,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     </section>
 
     <!-- =========================== SERVICES ============================ -->
-    <section id="services" class="section">
+    <section id="services" class="section surface rupture" style="--ton: var(--mur-1)">
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">{t.services.eyebrow}</p>
@@ -224,10 +213,11 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
           <span class="circuit-fleche fleche-4" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
         </ol>
       </div>
+
     </section>
 
     <!-- ============================ MODÈLES ============================ -->
-    <section id="modeles" class="section modeles-section">
+    <section id="modeles" class="section modeles-section surface rupture" style="--ton: var(--mur-2)">
       <div class="section-backdrop" aria-hidden="true">
         <AuroraBackdrop
           colors={['#dcdcf8', '#ffe0d8', '#f9ecc2']}
@@ -258,7 +248,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
               style={`--reveal-delay: ${i * 0.08}s; --accent-card: ${m.accent}`}
             >
               <img
-                class="modele-photo"
+                class:list={['modele-photo', { 'modele-photo-nb': m.monochrome }]}
                 src={withBase(`modeles/${m.image}`)}
                 alt=""
                 width="1600"
@@ -386,7 +376,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     </section>
 
     <!-- =========================== PORTFOLIO =========================== -->
-    <section id="portfolio" class="section portfolio-section">
+    <section id="portfolio" class="section portfolio-section surface rupture" style="--ton: var(--mur-3)">
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">{t.portfolio.eyebrow}</p>
@@ -437,7 +427,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     </section>
 
     <!-- ============================ TARIFS ============================= -->
-    <section id="tarifs" class="section">
+    <section id="tarifs" class="section surface rupture" style="--ton: var(--mur-4)">
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">{t.tarifs.eyebrow}</p>
@@ -493,7 +483,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     </section>
 
     <!-- ============================ CONTACT ============================ -->
-    <section id="contact" class="section contact-section">
+    <section id="contact" class="section contact-section rupture">
       <div class="section-backdrop" aria-hidden="true">
         <AuroraBackdrop
           colors={['#b9b8f0', '#ffc9be', '#f6e3a1']}
@@ -533,11 +523,74 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     padding-block: clamp(4.5rem, 10vw, 8rem) clamp(4rem, 9vw, 7rem);
   }
 
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* La vidéo est monochrome : un rien de contraste la raccorde à l'encre. */
+    filter: contrast(1.08);
+  }
+
+  /* Dégradé plus dense à gauche : c'est là que vit le texte, et c'est là que
+     la vidéo est la plus claire (l'écran et la lampe du personnage). */
+  .hero-voile {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(100deg, rgb(18 19 31 / 0.94) 0%, rgb(18 19 31 / 0.82) 42%, rgb(18 19 31 / 0.5) 100%),
+      linear-gradient(rgb(18 19 31 / 0.55), rgb(18 19 31 / 0.2) 45%, rgb(18 19 31 / 0.7));
+  }
+
   .hero-bg {
     position: absolute;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
+  }
+
+  /* ---------------------- Cassures entre sections ----------------------- */
+
+  /* Deux surfaces qui alternent : le crème porte, le blanc se pose. Le
+     changement d'aplat est ce qui dit « vous avez changé de partie » — un
+     dégradé, lui, dissout justement la frontière. */
+  /* Chaque section reçoit son palier de la rampe par `--ton`. */
+  .surface {
+    background: var(--ton, var(--paper));
+  }
+
+  .rupture {
+    position: relative;
+    /* Un ressaut plutôt qu'un simple filet : l'écart crème/blanc ne vaut que
+       1,08 de rapport de luminance — assez pour distinguer deux surfaces
+       côte à côte, pas pour signaler qu'on a changé de partie. L'ombre courte
+       au bord haut donne la marche. */
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      inset 0 14px 22px -18px rgb(18 19 31 / 0.28);
+  }
+
+  /* La cimaise : un filet sur toute la largeur, et le crochet d'accrochage à
+     l'aplomb du texte. Il reprend le liseré de 3 px des cartes modèles. */
+  .rupture::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 1px;
+    background: rgb(18 19 31 / 0.09);
+  }
+
+  .rupture::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: max(1.25rem, calc(50% - var(--container) / 2));
+    width: 5rem;
+    height: 4px;
+    border-radius: 0 0 4px 4px;
+    background: var(--accent);
   }
 
   /* Conteneur des fonds animés de section (AuroraBackdrop). */
@@ -548,15 +601,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     pointer-events: none;
   }
 
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 75%);
-  }
 
   .hero-inner {
     position: relative;
@@ -658,125 +702,23 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 
   /* Maquette flottante du hero */
 
-  .hero-visual {
-    position: relative;
-    animation: hero-in 1s var(--ease-out) 0.4s both;
-  }
 
-  .mock-browser {
-    background: #1c1e30;
-    border: 1px solid rgb(255 255 255 / 0.1);
-    border-radius: var(--radius-m);
-    overflow: hidden;
-    box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
-    transform: rotate(2deg);
-    animation: float 9s ease-in-out infinite;
-  }
 
-  .mock-chrome {
-    display: flex;
-    gap: 0.4rem;
-    padding: 0.7rem 0.9rem;
-    border-bottom: 1px solid rgb(255 255 255 / 0.08);
-  }
 
-  .mock-chrome span {
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 50%;
-    background: rgb(255 255 255 / 0.18);
-  }
 
-  .mock-chrome span:first-child {
-    background: #ff6b57;
-  }
 
-  .mock-body {
-    padding: 1rem;
-    display: grid;
-    gap: 0.8rem;
-  }
 
-  .mock-hero {
-    height: 5.2rem;
-    border-radius: 10px;
-    background: linear-gradient(120deg, #5352d1, #7a5cd6 55%, #ff6b57);
-    background-size: 200% 200%;
-    animation: mock-gradient 8s ease-in-out infinite;
-  }
 
-  @keyframes mock-gradient {
-    0%,
-    100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-  }
 
-  .mock-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.8rem;
-  }
 
-  .mock-card {
-    height: 3.4rem;
-    border-radius: 8px;
-    background: rgb(255 255 255 / 0.07);
-  }
 
-  .mock-lines {
-    display: grid;
-    gap: 0.45rem;
-  }
 
-  .mock-lines span {
-    height: 0.5rem;
-    border-radius: 4px;
-    background: rgb(255 255 255 / 0.12);
-  }
 
-  .mock-lines span:nth-child(2) {
-    width: 80%;
-  }
 
-  .mock-lines span:nth-child(3) {
-    width: 55%;
-  }
 
-  .float-chip {
-    position: absolute;
-    padding: 0.55rem 1rem;
-    border-radius: 999px;
-    background: #fff;
-    color: var(--ink);
-    font-weight: 700;
-    font-size: 0.95rem;
-    box-shadow: var(--shadow-m);
-    white-space: nowrap;
-  }
 
-  .chip-call {
-    top: -1.2rem;
-    left: -1.6rem;
-    animation: float 7s ease-in-out infinite;
-  }
 
-  .chip-seo {
-    bottom: 22%;
-    right: -1.8rem;
-    background: #6ee7a0;
-    animation: float 8s ease-in-out 1s infinite;
-  }
 
-  .chip-star {
-    bottom: -1.1rem;
-    left: 18%;
-    color: var(--gold-strong);
-    animation: float 9s ease-in-out 0.5s infinite;
-  }
 
   /* ------------------------------ Marquee ------------------------------- */
 
@@ -877,7 +819,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
   .modeles-section {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(var(--paper), #efeee8);
   }
 
   .modeles-section .container {
@@ -924,6 +865,12 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     /* Liseré aux couleurs du métier, comme le visuel des deux autres packs. */
     border-bottom: 3px solid var(--accent-card);
     transition: transform 0.6s var(--ease-out);
+  }
+
+  /* Désaturation complète, y compris au survol : le noir et blanc n'est pas
+     un effet, c'est le sujet du modèle. */
+  .modele-photo-nb {
+    filter: saturate(0);
   }
 
   .modele-card:hover .modele-photo {
@@ -1673,9 +1620,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 
   /* ---------------------------- Portfolio ------------------------------- */
 
-  .portfolio-section {
-    background: linear-gradient(#efeee8, var(--paper));
-  }
 
   /* Le carrousel repose sur le défilement natif avec accroche : sans
      JavaScript, la piste reste parcourable au doigt et au clavier. Les
@@ -1868,9 +1812,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
       grid-template-columns: 1fr;
     }
 
-    .hero-visual {
-      max-width: 26rem;
-    }
 
     .modele-grid {
       grid-template-columns: 1fr;

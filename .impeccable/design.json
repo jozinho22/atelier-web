@@ -273,6 +273,66 @@
           "oklch(84% 0.111 284.03)",
           "oklch(95% 0.111 284.03)"
         ]
+      },
+      "mur-1": {
+        "role": "neutral",
+        "displayName": "Mur, palier 1",
+        "canonical": "oklch(93.64% 0.0109 95.17)",
+        "tonalRamp": [
+          "oklch(15% 0.0109 95.17)",
+          "oklch(26% 0.0109 95.17)",
+          "oklch(38% 0.0109 95.17)",
+          "oklch(49% 0.0109 95.17)",
+          "oklch(61% 0.0109 95.17)",
+          "oklch(72% 0.0109 95.17)",
+          "oklch(84% 0.0109 95.17)",
+          "oklch(95% 0.0109 95.17)"
+        ]
+      },
+      "mur-2": {
+        "role": "neutral",
+        "displayName": "Mur, palier 2",
+        "canonical": "oklch(95.25% 0.0099 87.47)",
+        "tonalRamp": [
+          "oklch(15% 0.0099 87.47)",
+          "oklch(26% 0.0099 87.47)",
+          "oklch(38% 0.0099 87.47)",
+          "oklch(49% 0.0099 87.47)",
+          "oklch(61% 0.0099 87.47)",
+          "oklch(72% 0.0099 87.47)",
+          "oklch(84% 0.0099 87.47)",
+          "oklch(95% 0.0099 87.47)"
+        ]
+      },
+      "mur-3": {
+        "role": "neutral",
+        "displayName": "Mur, palier 3",
+        "canonical": "oklch(96.45% 0.0098 87.47)",
+        "tonalRamp": [
+          "oklch(15% 0.0098 87.47)",
+          "oklch(26% 0.0098 87.47)",
+          "oklch(38% 0.0098 87.47)",
+          "oklch(49% 0.0098 87.47)",
+          "oklch(61% 0.0098 87.47)",
+          "oklch(72% 0.0098 87.47)",
+          "oklch(84% 0.0098 87.47)",
+          "oklch(95% 0.0098 87.47)"
+        ]
+      },
+      "mur-4": {
+        "role": "neutral",
+        "displayName": "Mur, palier 4",
+        "canonical": "oklch(97.93% 0.007 88.64)",
+        "tonalRamp": [
+          "oklch(15% 0.007 88.64)",
+          "oklch(26% 0.007 88.64)",
+          "oklch(38% 0.007 88.64)",
+          "oklch(49% 0.007 88.64)",
+          "oklch(61% 0.007 88.64)",
+          "oklch(72% 0.007 88.64)",
+          "oklch(84% 0.007 88.64)",
+          "oklch(95% 0.007 88.64)"
+        ]
       }
     },
     "typographyMeta": {
@@ -485,6 +545,11 @@
         "name": "La règle des cinq formes",
         "section": "shapes",
         "body": "Cinq rayons existent : 4, 10, 18, 28 et la pilule. Une sixième valeur se ramène au pas le plus proche."
+      },
+      {
+        "name": "La règle du blanc réservé",
+        "section": "colors",
+        "body": "Le blanc pur n'existe qu'en cadre : cartes, panneaux, encarts. Aucune grande surface ne le prend."
       }
     ],
     "dos": [

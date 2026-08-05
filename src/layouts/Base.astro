@@ -39,10 +39,9 @@ const ogImage = new URL(
     <link rel="alternate" hreflang="fr" href={frUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="x-default" href={frUrl} />
-    <!-- Le SVG d'abord : les navigateurs qui le comprennent s'arrêtent là et
-         obtiennent une icône nette à toute taille. Les autres retombent sur le
-         .ico, qui embarque les tailles 16, 32 et 48. -->
-    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
+    <!-- Le .ico embarque les tailles 16, 32 et 48 ; les PNG servent aux
+         navigateurs qui les préfèrent. Plus de SVG : celui d'origine portait
+         l'ancien monogramme et primait sur les nouvelles icônes. -->
     <link rel="icon" href={withBase('favicon-32x32.png')} sizes="32x32" type="image/png" />
     <link rel="icon" href={withBase('favicon-16x16.png')} sizes="16x16" type="image/png" />
     <link rel="alternate icon" href={withBase('favicon.ico')} sizes="16x16 32x32 48x48" />
@@ -103,6 +102,21 @@ const ogImage = new URL(
         calerLesAncres();
         window.addEventListener('resize', calerLesAncres);
         if ('ResizeObserver' in window) new ResizeObserver(calerLesAncres).observe(enteteFixe);
+      }
+
+      /**
+       * Boucles décoratives : en mouvement réduit, on rend la main à
+       * l'utilisateur. La vidéo s'arrête sur son affiche et reçoit ses
+       * commandes, plutôt que de tourner indéfiniment.
+       */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll<HTMLVideoElement>('[data-boucle]').forEach((v) => {
+          v.autoplay = false;
+          v.loop = false;
+          v.controls = true;
+          v.removeAttribute('aria-hidden');
+          v.pause();
+        });
       }
 
       // Apparition des éléments .reveal au défilement.

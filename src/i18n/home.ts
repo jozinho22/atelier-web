@@ -20,9 +20,7 @@ export const home = {
       ctaQuote: 'Demander un devis gratuit',
       proofAria: 'Points forts',
       proof: ['Livré en 3 semaines', 'Optimisé Google', 'Sans abonnement obligatoire'],
-      chipCall: 'Appeler',
       /** Injecté via set:html pour conserver l'exposant. */
-      chipSeo: '1<sup>re</sup> page Google',
     },
     metiers: [
       'Plombier', 'Club de foot', 'Institut de beauté', 'Peintre', 'Électricien',
@@ -282,9 +280,7 @@ export const home = {
       ctaQuote: 'Get a free quote',
       proofAria: 'Key points',
       proof: ['Delivered in 3 weeks', 'Google-optimized', 'No subscription required'],
-      chipCall: 'Call',
       /** Injecté via set:html pour conserver l'exposant. */
-      chipSeo: 'Page 1 on Google',
     },
     metiers: [
       'Plumber', 'Soccer club', 'Beauty salon', 'Painter', 'Electrician',

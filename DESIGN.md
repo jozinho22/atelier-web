@@ -13,6 +13,10 @@ colors:
   encre-adoucie: "#3c3e52"
   gris-attenue: "#66677c"
   papier-creme: "#f7f6f2"
+  mur-1: "#eceae2"
+  mur-2: "#f2efe8"
+  mur-3: "#f6f3ec"
+  mur-4: "#faf8f3"
   papier-souleve: "#ffffff"
   indigo-sur-encre: "#8d8cf0"
   indigo-sur-encre-doux: "#a9a8f6"
@@ -182,7 +186,17 @@ chaudes tenues en réserve.
 - **Gris atténué** (`#66677c`) : légendes, mentions, métadonnées. Calé pour
   tenir 4,5:1 sur le fond le plus soutenu du site, celui de la section Contact
   (`#efeee8`) — l'ancienne valeur `#6d6f85` y tombait à 4,24:1.
-- **Papier crème** (`#f7f6f2`) : le fond de page. C'est le mur de la salle.
+- **Papier crème** (`#f7f6f2`) : le fond du document, visible partout où aucune
+  section ne pose son propre ton.
+- **La rampe du mur** (`#eceae2` → `#f2efe8` → `#f6f3ec` → `#faf8f3`) : le mur
+  n'a pas un ton mais quatre, qui montent à mesure qu'on descend la page. La
+  salle s'éclaire en s'enfonçant. Chaque palier tient au moins 15:1 avec
+  l'encre et 4,59:1 avec le gris courant.
+
+  La raison est concrète : le hero est une vidéo sur encre à 0,007 de
+  luminance. Face à un mur unique à 0,92, la marche était brutale. La rampe la
+  franchit en quatre temps, et le point le plus clair — les Tarifs — coïncide
+  avec le moment de la décision.
 - **Papier soulevé** (`#ffffff`) : toute surface posée sur le mur — cartes,
   panneaux, encarts. Le blanc n'est pas le fond par défaut : c'est un signal.
 
@@ -233,9 +247,14 @@ distinguent Essentiel, Sur mesure et Signature sont locales à la section Tarifs
 Elles n'existent pas ailleurs et ne sont pas des tokens du système : ne pas les
 reprendre pour colorer autre chose.
 
-**La règle du mur et du cadre.** Le crème porte, le blanc se pose. Une surface
+**La règle du mur et du cadre.** Le mur porte, le blanc se pose. Une surface
 blanche annonce un contenu autonome. Enchaîner des blocs blancs sur toute une
 page dissout le mur et fait perdre au système sa seule hiérarchie de fond.
+
+**La règle du blanc réservé.** Le blanc pur n'existe qu'en cadre : cartes,
+panneaux, encarts. Aucune grande surface ne le prend — c'est ce qui garde au
+cadre son pouvoir de détachement, et ce qui évite qu'une page entière vienne
+heurter le hero sombre.
 
 ## Typography
 
