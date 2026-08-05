@@ -10,7 +10,7 @@ export const common = {
     nav: {
       services: 'Services',
       modeles: 'Modèles',
-      methode: 'Méthode',
+      methode: 'Le déroulé',
       tarifs: 'Tarifs',
       cta: 'Discutons-en',
     },
@@ -39,7 +39,7 @@ export const common = {
     nav: {
       services: 'Services',
       modeles: 'Templates',
-      methode: 'Process',
+      methode: 'Timeline',
       tarifs: 'Pricing',
       cta: "Let's talk",
     },

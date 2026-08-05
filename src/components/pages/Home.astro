@@ -28,6 +28,36 @@ const jsonLd = {
 };
 
 // Visuels et couleurs des cartes modèles (identiques dans les deux langues).
+/**
+ * Icônes des Services et du Déroulé — tracés dessinés pour ce site, dans la
+ * même grammaire que le logo : viewBox 64, épaisseur constante, extrémités
+ * arrondies. Aucune bibliothèque : le site ne fait aucune requête externe, et
+ * un jeu d'icônes reconnaissable trahirait le gabarit qu'il prétend éviter.
+ */
+const ICONES_SERVICES = [
+  // Loupe
+  '<circle cx="28" cy="28" r="17"/><path d="M40.5 40.5 55 55"/>',
+  // Curseur, éclat sur la pointe
+  '<path d="M20 12 20 50 29 41 35 54 42 51 36 38 48 37z"/><path d="M14 8 9 3M12 17H5M19 4 17 -1"/>',
+  // Costume : les deux pans du veston écartés, la cravate seule dans
+  // l'échancrure — c'est l'écart qui les distingue à petite taille.
+  '<path d="M11 58V33c0-8 6-15 14-17l6 14"/><path d="M53 58V33c0-8-6-15-14-17l-6 14"/><path d="M27 13h10l2.5 8H24.5z"/><path d="M25 21h14l-4.5 25-2.5 5-2.5-5z"/>',
+  // Éclair
+  '<path d="M36 4 16 34h12l-4 26 20-32H32z"/>',
+];
+
+const ICONES_ETAPES = [
+  // Smartphone
+  '<rect x="19" y="4" width="26" height="56" rx="5"/><path d="M28 11h8"/><path d="M27 53h10"/>',
+  // Deux engrenages engrenés : le petit décalé d'un demi-pas pour que les
+  // dents s'emboîtent au lieu de se heurter.
+  '<circle cx="25" cy="25" r="12"/><circle cx="25" cy="25" r="4.5"/><path d="M37.0 25.0L43.0 25.0M33.5 33.5L37.7 37.7M25.0 37.0L25.0 43.0M16.5 33.5L12.3 37.7M13.0 25.0L7.0 25.0M16.5 16.5L12.3 12.3M25.0 13.0L25.0 7.0M33.5 16.5L37.7 12.3"/><circle cx="45" cy="45" r="8.5"/><circle cx="45" cy="45" r="3.2"/><path d="M52.4 49.2L57.1 52.0M45.0 53.5L45.0 59.0M37.6 49.2L32.9 52.0M37.6 40.8L32.9 38.0M45.0 36.5L45.0 31.0M52.4 40.8L57.1 38.0"/>',
+  // Clé à molette
+  '<path d="M46 10a13 13 0 0 0-17 17L12 44a5 5 0 0 0 0 7l1 1a5 5 0 0 0 7 0l17-17a13 13 0 0 0 17-17l-8 8-8-2-2-8z"/>',
+  // Toile : rayons et fils qui pendent entre eux
+  '<path d="M32 32L32.0 7.0M32 32L53.7 19.5M32 32L53.7 44.5M32 32L32.0 57.0M32 32L10.3 44.5M32 32L10.3 19.5M32.0 18.0Q36.2 24.7 44.1 25.0M44.1 25.0Q40.4 32.0 44.1 39.0M44.1 39.0Q36.2 39.3 32.0 46.0M32.0 46.0Q27.8 39.3 19.9 39.0M19.9 39.0Q23.6 32.0 19.9 25.0M19.9 25.0Q27.8 24.7 32.0 18.0M32.0 9.0Q38.9 20.0 51.9 20.5M51.9 20.5Q45.8 32.0 51.9 43.5M51.9 43.5Q38.9 44.0 32.0 55.0M32.0 55.0Q25.1 44.0 12.1 43.5M12.1 43.5Q18.2 32.0 12.1 20.5M12.1 20.5Q25.1 20.0 32.0 9.0"/>',
+];
+
 const modeleMeta = [
   { path: 'modeles/association', image: 'association.webp', accent: '#7fe0a8' },
   { path: 'modeles/batiment', image: 'batiment.webp', accent: '#f2b705' },
@@ -183,6 +213,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
         <div class="service-grid">
           {t.services.items.map((s, i) => (
             <article class="service-card reveal" style={`--reveal-delay: ${i * 0.1}s`}>
+              <svg class="service-icone" viewBox="0 0 64 64" aria-hidden="true" set:html={ICONES_SERVICES[i]} />
               <h3>{s.title}</h3>
               <p>{s.desc}</p>
               <ul class="service-points">
@@ -194,7 +225,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 
         <!-- La méthode, dans la même section : elle répond au « comment »
              quand ce qui précède répond au « pourquoi ». -->
-        <div id="methode" class="section-head methode-head reveal">
+        <div id="deroule" class="section-head methode-head reveal">
           <p class="eyebrow">{t.methode.eyebrow}</p>
           <h2 class="section-title">{t.methode.title}</h2>
         </div>
@@ -202,6 +233,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
         <ol class="circuit reveal">
           {etapes.map((e, i) => (
             <li class={`circuit-etape etape-${i + 1}`}>
+              <svg class="circuit-icone" viewBox="0 0 64 64" aria-hidden="true" set:html={ICONES_ETAPES[i]} />
               <span class="circuit-num" aria-hidden="true">{e.num}</span>
               <h3>{e.title}</h3>
               <p>{e.desc}</p>
@@ -210,7 +242,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
           <span class="circuit-fleche fleche-1" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
           <span class="circuit-fleche fleche-2" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
           <span class="circuit-fleche fleche-3" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
-          <span class="circuit-fleche fleche-4" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
         </ol>
       </div>
 
@@ -775,6 +806,23 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     box-shadow: var(--shadow-m);
   }
 
+  .service-icone {
+    display: block;
+    width: 2.35rem;
+    height: 2.35rem;
+    margin-bottom: 1rem;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .service-card:hover .service-icone {
+    transform: translateY(-3px);
+  }
+
   .service-points {
     display: grid;
     gap: 0.4rem;
@@ -986,7 +1034,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     grid-template-areas:
       'e1 f1 e2'
-      'f4 .  f2'
+      '.  .  f2'
       'e4 f3 e3';
     align-items: stretch;
     gap: 1.1rem;
@@ -1018,6 +1066,31 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     box-shadow: var(--shadow-m);
   }
 
+  /* L'icône se pose dans l'angle haut droit, le numéro garde l'angle gauche :
+     l'œil lit d'abord l'étape, l'icône la qualifie sans la précéder. */
+  .circuit-icone {
+    position: absolute;
+    top: 1.45rem;
+    right: 1.6rem;
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* Discrète au repos, franche au survol : c'est le titre qui porte. */
+    opacity: 0.55;
+    transition:
+      opacity 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+
+  .circuit-etape:hover .circuit-icone {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+
   .circuit-num {
     display: block;
     font-family: var(--font-serif);
@@ -1029,6 +1102,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 
   .circuit-etape h3 {
     margin-top: 0.6rem;
+    padding-right: 2.6rem;
     font-size: 1.15rem;
     font-weight: 600;
   }
@@ -1065,10 +1139,8 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
   .fleche-1 { grid-area: f1; }
   .fleche-2 { grid-area: f2; }
   .fleche-3 { grid-area: f3; }
-  .fleche-4 { grid-area: f4; }
   .fleche-2 svg { transform: rotate(90deg); }
   .fleche-3 svg { transform: rotate(180deg); }
-  .fleche-4 svg { transform: rotate(270deg); }
 
   /* Une fois pivotées, les flèches verticales occupent leur largeur en
      hauteur : à 4,5 rem elles mordaient sur les cartes du dessus et du
@@ -1092,10 +1164,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     .fleche-2 svg,
     .fleche-3 svg {
       transform: rotate(90deg);
-    }
-
-    .fleche-4 {
-      display: none;
     }
   }
 

@@ -192,7 +192,7 @@ export const home = {
       ],
     },
     methode: {
-      eyebrow: 'La méthode',
+      eyebrow: 'Le déroulé',
       title: 'Simple pour vous, du début à la fin',
       steps: [
         {
@@ -452,7 +452,7 @@ export const home = {
       ],
     },
     methode: {
-      eyebrow: 'The process',
+      eyebrow: 'The timeline',
       title: 'Simple for you, from start to finish',
       steps: [
         {
