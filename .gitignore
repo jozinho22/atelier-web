@@ -18,3 +18,8 @@ dist/
 # Divers
 *.log
 .DS_Store
+
+# impeccable — état de session (design.json et config.json restent suivis)
+.impeccable/hook.cache.json
+.impeccable/hook.pending.json
+.impeccable/config.local.json

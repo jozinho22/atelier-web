@@ -1,0 +1,514 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-05T00:00:00Z",
+  "title": "Design System: Atelier Web",
+  "extensions": {
+    "colorMeta": {
+      "indigo-profond": {
+        "role": "primary",
+        "displayName": "Indigo profond",
+        "canonical": "oklch(51.51% 0.1905 277.71)",
+        "tonalRamp": [
+          "oklch(15% 0.1905 277.71)",
+          "oklch(26% 0.1905 277.71)",
+          "oklch(38% 0.1905 277.71)",
+          "oklch(49% 0.1905 277.71)",
+          "oklch(61% 0.1905 277.71)",
+          "oklch(72% 0.1905 277.71)",
+          "oklch(84% 0.1905 277.71)",
+          "oklch(95% 0.1905 277.71)"
+        ]
+      },
+      "indigo-soutenu": {
+        "role": "primary",
+        "displayName": "Indigo soutenu",
+        "canonical": "oklch(44.86% 0.1851 276.28)",
+        "tonalRamp": [
+          "oklch(15% 0.1851 276.28)",
+          "oklch(26% 0.1851 276.28)",
+          "oklch(38% 0.1851 276.28)",
+          "oklch(49% 0.1851 276.28)",
+          "oklch(61% 0.1851 276.28)",
+          "oklch(72% 0.1851 276.28)",
+          "oklch(84% 0.1851 276.28)",
+          "oklch(95% 0.1851 276.28)"
+        ]
+      },
+      "indigo-voile": {
+        "role": "primary",
+        "displayName": "Indigo voilé",
+        "canonical": "oklch(93.12% 0.0283 285.84)",
+        "tonalRamp": [
+          "oklch(15% 0.0283 285.84)",
+          "oklch(26% 0.0283 285.84)",
+          "oklch(38% 0.0283 285.84)",
+          "oklch(49% 0.0283 285.84)",
+          "oklch(61% 0.0283 285.84)",
+          "oklch(72% 0.0283 285.84)",
+          "oklch(84% 0.0283 285.84)",
+          "oklch(95% 0.0283 285.84)"
+        ]
+      },
+      "corail-chaud": {
+        "role": "secondary",
+        "displayName": "Corail chaud",
+        "canonical": "oklch(70.83% 0.1845 30.07)",
+        "tonalRamp": [
+          "oklch(15% 0.1845 30.07)",
+          "oklch(26% 0.1845 30.07)",
+          "oklch(38% 0.1845 30.07)",
+          "oklch(49% 0.1845 30.07)",
+          "oklch(61% 0.1845 30.07)",
+          "oklch(72% 0.1845 30.07)",
+          "oklch(84% 0.1845 30.07)",
+          "oklch(95% 0.1845 30.07)"
+        ]
+      },
+      "corail-voile": {
+        "role": "secondary",
+        "displayName": "Corail voilé",
+        "canonical": "oklch(94.38% 0.0284 31.13)",
+        "tonalRamp": [
+          "oklch(15% 0.0284 31.13)",
+          "oklch(26% 0.0284 31.13)",
+          "oklch(38% 0.0284 31.13)",
+          "oklch(49% 0.0284 31.13)",
+          "oklch(61% 0.0284 31.13)",
+          "oklch(72% 0.0284 31.13)",
+          "oklch(84% 0.0284 31.13)",
+          "oklch(95% 0.0284 31.13)"
+        ]
+      },
+      "or-ambre": {
+        "role": "tertiary",
+        "displayName": "Or ambré",
+        "canonical": "oklch(81.14% 0.1656 84.96)",
+        "tonalRamp": [
+          "oklch(15% 0.1656 84.96)",
+          "oklch(26% 0.1656 84.96)",
+          "oklch(38% 0.1656 84.96)",
+          "oklch(49% 0.1656 84.96)",
+          "oklch(61% 0.1656 84.96)",
+          "oklch(72% 0.1656 84.96)",
+          "oklch(84% 0.1656 84.96)",
+          "oklch(95% 0.1656 84.96)"
+        ]
+      },
+      "encre-bleutee": {
+        "role": "neutral",
+        "displayName": "Encre bleutée",
+        "canonical": "oklch(19.19% 0.0243 280.16)",
+        "tonalRamp": [
+          "oklch(15% 0.0243 280.16)",
+          "oklch(26% 0.0243 280.16)",
+          "oklch(38% 0.0243 280.16)",
+          "oklch(49% 0.0243 280.16)",
+          "oklch(61% 0.0243 280.16)",
+          "oklch(72% 0.0243 280.16)",
+          "oklch(84% 0.0243 280.16)",
+          "oklch(95% 0.0243 280.16)"
+        ]
+      },
+      "encre-adoucie": {
+        "role": "neutral",
+        "displayName": "Encre adoucie",
+        "canonical": "oklch(37.04% 0.0344 280.12)",
+        "tonalRamp": [
+          "oklch(15% 0.0344 280.12)",
+          "oklch(26% 0.0344 280.12)",
+          "oklch(38% 0.0344 280.12)",
+          "oklch(49% 0.0344 280.12)",
+          "oklch(61% 0.0344 280.12)",
+          "oklch(72% 0.0344 280.12)",
+          "oklch(84% 0.0344 280.12)",
+          "oklch(95% 0.0344 280.12)"
+        ]
+      },
+      "gris-attenue": {
+        "role": "neutral",
+        "displayName": "Gris atténué",
+        "canonical": "oklch(52.06% 0.0329 283.04)",
+        "tonalRamp": [
+          "oklch(15% 0.0329 283.04)",
+          "oklch(26% 0.0329 283.04)",
+          "oklch(38% 0.0329 283.04)",
+          "oklch(49% 0.0329 283.04)",
+          "oklch(61% 0.0329 283.04)",
+          "oklch(72% 0.0329 283.04)",
+          "oklch(84% 0.0329 283.04)",
+          "oklch(95% 0.0329 283.04)"
+        ]
+      },
+      "papier-creme": {
+        "role": "neutral",
+        "displayName": "Papier crème",
+        "canonical": "oklch(97.28% 0.0054 95.1)",
+        "tonalRamp": [
+          "oklch(15% 0.0054 95.1)",
+          "oklch(26% 0.0054 95.1)",
+          "oklch(38% 0.0054 95.1)",
+          "oklch(49% 0.0054 95.1)",
+          "oklch(61% 0.0054 95.1)",
+          "oklch(72% 0.0054 95.1)",
+          "oklch(84% 0.0054 95.1)",
+          "oklch(95% 0.0054 95.1)"
+        ]
+      },
+      "papier-souleve": {
+        "role": "neutral",
+        "displayName": "Papier soulevé",
+        "canonical": "oklch(100.0% 0.0 89.88)",
+        "tonalRamp": [
+          "oklch(15% 0.0 89.88)",
+          "oklch(26% 0.0 89.88)",
+          "oklch(38% 0.0 89.88)",
+          "oklch(49% 0.0 89.88)",
+          "oklch(61% 0.0 89.88)",
+          "oklch(72% 0.0 89.88)",
+          "oklch(84% 0.0 89.88)",
+          "oklch(95% 0.0 89.88)"
+        ]
+      },
+      "indigo-sur-encre": {
+        "role": "primary",
+        "displayName": "Indigo sur encre",
+        "canonical": "oklch(68.42% 0.1452 282.32)",
+        "tonalRamp": [
+          "oklch(15% 0.1452 282.32)",
+          "oklch(26% 0.1452 282.32)",
+          "oklch(38% 0.1452 282.32)",
+          "oklch(49% 0.1452 282.32)",
+          "oklch(61% 0.1452 282.32)",
+          "oklch(72% 0.1452 282.32)",
+          "oklch(84% 0.1452 282.32)",
+          "oklch(95% 0.1452 282.32)"
+        ]
+      },
+      "indigo-surface-survol": {
+        "role": "primary",
+        "displayName": "Indigo sur encre profond",
+        "canonical": "oklch(58.09% 0.1764 280.14)",
+        "tonalRamp": [
+          "oklch(15% 0.1764 280.14)",
+          "oklch(26% 0.1764 280.14)",
+          "oklch(38% 0.1764 280.14)",
+          "oklch(49% 0.1764 280.14)",
+          "oklch(61% 0.1764 280.14)",
+          "oklch(72% 0.1764 280.14)",
+          "oklch(84% 0.1764 280.14)",
+          "oklch(95% 0.1764 280.14)"
+        ]
+      },
+      "gris-sur-encre": {
+        "role": "neutral",
+        "displayName": "Gris sur encre",
+        "canonical": "oklch(79.41% 0.0267 283.37)",
+        "tonalRamp": [
+          "oklch(15% 0.0267 283.37)",
+          "oklch(26% 0.0267 283.37)",
+          "oklch(38% 0.0267 283.37)",
+          "oklch(49% 0.0267 283.37)",
+          "oklch(61% 0.0267 283.37)",
+          "oklch(72% 0.0267 283.37)",
+          "oklch(84% 0.0267 283.37)",
+          "oklch(95% 0.0267 283.37)"
+        ]
+      },
+      "gris-sur-encre-attenue": {
+        "role": "neutral",
+        "displayName": "Gris sur encre atténué",
+        "canonical": "oklch(66.18% 0.0398 283.58)",
+        "tonalRamp": [
+          "oklch(15% 0.0398 283.58)",
+          "oklch(26% 0.0398 283.58)",
+          "oklch(38% 0.0398 283.58)",
+          "oklch(49% 0.0398 283.58)",
+          "oklch(61% 0.0398 283.58)",
+          "oklch(72% 0.0398 283.58)",
+          "oklch(84% 0.0398 283.58)",
+          "oklch(95% 0.0398 283.58)"
+        ]
+      },
+      "vert-sur-encre": {
+        "role": "tertiary",
+        "displayName": "Vert sur encre",
+        "canonical": "oklch(83.99% 0.1492 155.5)",
+        "tonalRamp": [
+          "oklch(15% 0.1492 155.5)",
+          "oklch(26% 0.1492 155.5)",
+          "oklch(38% 0.1492 155.5)",
+          "oklch(49% 0.1492 155.5)",
+          "oklch(61% 0.1492 155.5)",
+          "oklch(72% 0.1492 155.5)",
+          "oklch(84% 0.1492 155.5)",
+          "oklch(95% 0.1492 155.5)"
+        ]
+      },
+      "or-lisible": {
+        "role": "tertiary",
+        "displayName": "Or lisible",
+        "canonical": "oklch(55.57% 0.113 85.41)",
+        "tonalRamp": [
+          "oklch(15% 0.113 85.41)",
+          "oklch(26% 0.113 85.41)",
+          "oklch(38% 0.113 85.41)",
+          "oklch(49% 0.113 85.41)",
+          "oklch(61% 0.113 85.41)",
+          "oklch(72% 0.113 85.41)",
+          "oklch(84% 0.113 85.41)",
+          "oklch(95% 0.113 85.41)"
+        ]
+      },
+      "indigo-sur-encre-doux": {
+        "role": "primary",
+        "displayName": "Indigo sur encre doux",
+        "canonical": "oklch(76.2% 0.111 284.03)",
+        "tonalRamp": [
+          "oklch(15% 0.111 284.03)",
+          "oklch(26% 0.111 284.03)",
+          "oklch(38% 0.111 284.03)",
+          "oklch(49% 0.111 284.03)",
+          "oklch(61% 0.111 284.03)",
+          "oklch(72% 0.111 284.03)",
+          "oklch(84% 0.111 284.03)",
+          "oklch(95% 0.111 284.03)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Titre d'accroche, une seule fois par page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Titres de section (.section-title)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Titres de carte et intertitres."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texte courant, borné à 65-75 caractères."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Chapô .eyebrow, capitales espacées, toujours en indigo."
+      },
+      "serif": {
+        "displayName": "Serif d'accent",
+        "purpose": "Fraunces, par éclats ponctuels — jamais un second système."
+      },
+      "subhead": {
+        "displayName": "Subhead",
+        "purpose": "Titres de bloc à l'intérieur d'une section."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Chapô sous un titre de section, un paragraphe au plus."
+      },
+      "body-small": {
+        "displayName": "Body small",
+        "purpose": "Texte dense : corps de carte, listes de points."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Légendes, notes, mentions."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Badges et étiquettes minuscules. Plancher absolu du système."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ombre-repos",
+        "value": "0 1px 3px rgb(18 19 31 / 0.08), 0 4px 14px rgb(18 19 31 / 0.06)",
+        "purpose": "Surface blanche au repos sur le papier crème. Presque invisible, volontairement."
+      },
+      {
+        "name": "ombre-reponse",
+        "value": "0 2px 6px rgb(18 19 31 / 0.08), 0 14px 34px rgb(18 19 31 / 0.12)",
+        "purpose": "État survolé d'une carte ou d'un panneau interactif."
+      },
+      {
+        "name": "halo-action",
+        "value": "0 8px 22px rgb(83 82 209 / 0.35)",
+        "purpose": "Bouton principal seulement. Seule ombre colorée du système."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Easing unique de tout le système."
+      },
+      {
+        "name": "duree-bouton",
+        "value": "0.25s",
+        "purpose": "Transitions d'état des boutons."
+      },
+      {
+        "name": "duree-carte",
+        "value": "0.4s",
+        "purpose": "Soulèvement des cartes au survol."
+      },
+      {
+        "name": "duree-reveal",
+        "value": "0.7s",
+        "purpose": "Apparition au défilement, échelonnée par pas de 0.08s."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "large",
+        "value": "900px"
+      },
+      {
+        "name": "colonne-unique",
+        "value": "760px"
+      },
+      {
+        "name": "fin",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Bouton principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "L'unique appel à l'action. Pilule totale, halo indigo.",
+      "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\">Demander un devis</a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem; padding: 0.85rem 1.6rem; border-radius: 999px; border: 2px solid transparent; font-family: 'Outfit Variable', system-ui, sans-serif; font-weight: 600; font-size: 1rem; text-decoration: none; transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.25s, color 0.25s, border-color 0.25s; } .ds-btn-primary { background: #5352d1; color: #fff; box-shadow: 0 8px 22px rgb(83 82 209 / 0.35); } .ds-btn-primary:hover { background: #403fb8; transform: translateY(-2px); } .ds-btn-primary:focus-visible { outline: 3px solid #403fb8; outline-offset: 3px; }"
+    },
+    {
+      "name": "Bouton fantôme",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Action secondaire. Hérite la couleur du texte environnant.",
+      "html": "<a class=\"ds-btn ds-btn-ghost\" href=\"#\">Voir les modèles</a>",
+      "css": ".ds-btn-ghost { background: transparent; color: #12131f; border-color: currentColor; border-radius: 999px; padding: 0.85rem 1.6rem; font-family: 'Outfit Variable', system-ui, sans-serif; font-weight: 600; display: inline-flex; align-items: center; text-decoration: none; transition: background-color 0.25s, color 0.25s; } .ds-btn-ghost:hover { background: #12131f; color: #f7f6f2; } .ds-btn-ghost:focus-visible { outline: 3px solid #5352d1; outline-offset: 3px; }"
+    },
+    {
+      "name": "Chapô de section",
+      "kind": "custom",
+      "refersTo": "eyebrow",
+      "description": "Étiquette en capitales espacées. N'existe jamais sans un titre juste en dessous.",
+      "html": "<p class=\"ds-eyebrow\">Nos modèles</p>",
+      "css": ".ds-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; margin: 0; font-family: 'Outfit Variable', system-ui, sans-serif; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5352d1; }"
+    },
+    {
+      "name": "Carte modèle",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Le cadre accroché au mur : blanc sur crème, image affleurante, soulèvement au survol.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card-media\"></div><div class=\"ds-card-body\"><p class=\"ds-card-tag\">Restaurant</p><h3 class=\"ds-card-title\">Restaurant italien</h3><p class=\"ds-card-desc\">Nuit, braise et or : une carte qui se lit comme un menu.</p></div></a>",
+      "css": ".ds-card { display: flex; flex-direction: column; text-decoration: none; color: #12131f; background: #fff; border: 1px solid rgb(18 19 31 / 0.08); border-radius: 28px; overflow: hidden; box-shadow: 0 1px 3px rgb(18 19 31 / 0.08), 0 4px 14px rgb(18 19 31 / 0.06); transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s cubic-bezier(0.22,1,0.36,1); font-family: 'Outfit Variable', system-ui, sans-serif; max-width: 22rem; } .ds-card:hover { transform: translateY(-6px); box-shadow: 0 2px 6px rgb(18 19 31 / 0.08), 0 14px 34px rgb(18 19 31 / 0.12); } .ds-card-media { aspect-ratio: 16/9; background: linear-gradient(135deg, #e6e6fb, #ffe6e1); border-bottom: 3px solid #d9ae5f; } .ds-card-body { padding: 1.6rem; } .ds-card-tag { margin: 0; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5352d1; } .ds-card-title { margin: 0.4rem 0 0; font-size: 1.35rem; font-weight: 600; line-height: 1.3; } .ds-card-desc { margin: 0.5rem 0 0; font-size: 1.0625rem; line-height: 1.6; color: #6d6f85; }"
+    },
+    {
+      "name": "Lien de navigation",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Encre adoucie au repos, encre pleine au survol. Aucun soulignement permanent.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">Modèles</a><a href=\"#\">Méthode</a><a href=\"#\">Tarifs</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 1.6rem; font-family: 'Outfit Variable', system-ui, sans-serif; } .ds-nav a { position: relative; text-decoration: none; font-weight: 500; font-size: 0.98rem; color: #3c3e52; transition: color 0.2s; } .ds-nav a:hover { color: #12131f; } .ds-nav a:focus-visible { outline: 2px solid #5352d1; outline-offset: 4px; border-radius: 4px; }"
+    },
+    {
+      "name": "Pastille d'emphase",
+      "kind": "chip",
+      "refersTo": null,
+      "description": "Fond indigo voilé, texte indigo soutenu pour tenir le contraste.",
+      "html": "<span class=\"ds-chip\">Pack Essentiel</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; padding: 0.35rem 0.9rem; border-radius: 999px; background: #e6e6fb; color: #403fb8; font-family: 'Outfit Variable', system-ui, sans-serif; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.02em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "La galerie éclairée",
+    "overview": "Atelier Web vend des sites vitrines en montrant des sites vitrines. Le site n'est donc pas la vitrine : il est la salle qui les accroche. Le fond crème est le mur, les cartes blanches sont les cadres, les fonds aurora en mouvement lent sont l'éclairage de la salle — présents, jamais regardés. Six mondes visuels entièrement différents cohabitent derrière les liens, et le rôle du site est de les mettre en valeur sans jamais rivaliser avec eux.\n\nCela impose une retenue précise. La salle a du caractère — un indigo saturé, une typographie large, des angles très arrondis — mais elle ne prend jamais le pas sur ce qu'elle expose. Chaque fois qu'un choix hésite entre « affirmer le site » et « servir les modèles », il tranche pour le second.\n\nLe registre reste chaleureux plutôt qu'institutionnel. La clientèle est faite d'artisans, d'indépendants et d'associations : la densité est basse, le texte respire, les formes sont douces.",
+    "keyCharacteristics": [
+      "Un seul accent structurel, l'indigo, sur un fond papier crème",
+      "Angles très arrondis (jusqu'à 28 px) et boutons en pilule totale",
+      "Une seule famille de caractères pour l'interface, la graisse portant la hiérarchie",
+      "Profondeur par le ton d'abord, l'ombre ne répondant qu'à l'interaction",
+      "Mouvement lent et permanent en arrière-plan, jamais au premier plan"
+    ],
+    "rules": [
+      {
+        "name": "La règle du seul accent",
+        "section": "colors",
+        "body": "L'indigo gouverne. Corail et or ponctuent et ne portent jamais de sens fonctionnel : aucun lien, aucun bouton, aucun état. Le titre du hero s'y tient : son dégradé reste dans la seule famille indigo."
+      },
+      {
+        "name": "La règle des deux mondes",
+        "section": "colors",
+        "body": "Une couleur est faite pour le papier ou pour l'encre, jamais pour les deux. Avant de poser une teinte sur fond sombre, la prendre dans la famille « sur encre »."
+      },
+      {
+        "name": "La règle des trois packs",
+        "section": "colors",
+        "body": "Les teintes #5352d1, #b83a24 et #7d5a06 sont locales à la section Tarifs. Elles ne sont pas des tokens du système."
+      },
+      {
+        "name": "La règle du mur et du cadre",
+        "section": "colors",
+        "body": "Le crème porte, le blanc se pose. Enchaîner des blocs blancs dissout le mur et fait perdre au système sa seule hiérarchie de fond."
+      },
+      {
+        "name": "La règle d'une seule voix",
+        "section": "typography",
+        "body": "Une famille pour toute l'interface, la graisse portant la hiérarchie. Fraunces est une exception ponctuelle, jamais un second système."
+      },
+      {
+        "name": "La règle du chapô attaché",
+        "section": "typography",
+        "body": "Un .eyebrow n'existe jamais seul : il précède immédiatement un titre et le qualifie."
+      },
+      {
+        "name": "La règle de l'ombre qui répond",
+        "section": "elevation",
+        "body": "Aucune ombre ne signale une hiérarchie au repos. Si un élément doit paraître plus important, il change de ton, pas d'altitude."
+      },
+      {
+        "name": "La règle du rayon hérité",
+        "section": "shapes",
+        "body": "Un élément posé dans un conteneur arrondi ne redéfinit pas son rayon : il se laisse découper par le parent."
+      },
+      {
+        "name": "La règle des dix pas",
+        "section": "typography",
+        "body": "Toute taille de police vient de l'échelle. Une valeur inédite est une dérive, pas une nuance : à l'œil, 0.96rem et 0.95rem sont le même texte."
+      },
+      {
+        "name": "La règle des cinq formes",
+        "section": "shapes",
+        "body": "Cinq rayons existent : 4, 10, 18, 28 et la pilule. Une sixième valeur se ramène au pas le plus proche."
+      }
+    ],
+    "dos": [
+      "Do faire passer tout lien ou action par l'indigo profond (#5352d1), et par l'indigo soutenu (#403fb8) dès qu'il s'agit de texte devant tenir 4,5:1.",
+      "Do poser le blanc sur le crème pour créer une surface, avant d'envisager une ombre.",
+      "Do vérifier le contraste à chaque changement de couleur : plusieurs teintes du système sont trop claires pour porter du texte, l'or en particulier.",
+      "Do échelonner les apparitions d'une même rangée par pas de 0,08 s.",
+      "Do borner les blocs de lecture autour de 65 à 75 caractères.",
+      "Do laisser le parent arrondi découper ses images par overflow: hidden.",
+      "Do prendre toute couleur destinée à un fond encre dans la famille « sur encre ».",
+      "Do puiser chaque taille de police dans les dix pas de l'échelle."
+    ],
+    "donts": [
+      "Don't utiliser le corail ou l'or pour un lien, un bouton ou un état : ils ponctuent, ils ne signalent pas.",
+      "Don't ajouter une troisième famille de caractères. La hiérarchie se fait à la graisse.",
+      "Don't poser une ombre pour hiérarchiser au repos — changer le ton.",
+      "Don't reprendre les teintes de pack (#b83a24, #7d5a06) hors de la section Tarifs.",
+      "Don't laisser un .eyebrow sans titre juste en dessous.",
+      "Don't introduire un angle vif : le système est intégralement arrondi.",
+      "Don't appliquer ce fichier aux six modèles vitrines. Chacun est un monde visuel autonome et délibérément étranger à celui-ci.",
+      "Don't poser l'indigo profond ou le gris atténué en texte sur fond encre : ils y échouent au contraste (3,07:1 et 3,74:1).",
+      "Don't employer le vert sur autre chose qu'un fond encre — il tombe à 1,43:1 sur le papier crème.",
+      "Don't inventer une taille intermédiaire parce qu'un pas paraît trop grand.",
+      "Don't poser l'or ambré (#f2b705) en texte ou en glyphe sur fond clair : 1,82:1. Utiliser l'or lisible (#916d03)."
+    ]
+  }
+}

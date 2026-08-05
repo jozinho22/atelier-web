@@ -7,7 +7,7 @@
   /* Couleurs — site principal */
   --ink: #12131f;
   --ink-soft: #3c3e52;
-  --muted: #6d6f85;
+  --muted: #66677c;
   --paper: #f7f6f2;
   --paper-raised: #ffffff;
   --accent: #5352d1;
@@ -16,6 +16,14 @@
   --coral: #ff6b57;
   --coral-soft: #ffe6e1;
   --gold: #f2b705;
+  /* Variantes porteuses de texte : l'or et l'indigo du système sont trop
+     clairs, respectivement sur papier (1,82:1) et sur encre (3,07:1). */
+  --gold-strong: #916d03;
+  --accent-on-ink: #8d8cf0;
+  /* Les deux arrêts du dégradé du titre du hero : même famille que l'accent
+     sur encre, pour que l'emphase reste indigo de bout en bout. */
+  --accent-on-ink-soft: #a9a8f6;
+  --accent-on-ink-deep: #6a68df;
 
   --radius-s: 10px;
   --radius-m: 18px;
@@ -135,7 +143,7 @@ button {
 
 .section-lede {
   margin-top: 1rem;
-  font-size: 1.125rem;
+  font-size: 1.15rem;
   color: var(--muted);
   max-width: 40rem;
 }
@@ -151,7 +159,7 @@ button {
   border-radius: 999px;
   border: 2px solid transparent;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-decoration: none;
   transition:
     transform 0.25s var(--ease-out),

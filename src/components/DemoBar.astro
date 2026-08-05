@@ -81,8 +81,10 @@ const home = localePath(lang, '');
     transition: background-color 0.2s;
   }
 
+  /* #6f6ee0 ne laissait que 4,21:1 au texte blanc, sous le seuil AA : survoler
+     rendait le bouton moins lisible qu'au repos. */
   .demo-cta:hover {
-    background: #6f6ee0;
+    background: var(--accent-on-ink-deep);
   }
 
   @media (max-width: 640px) {

@@ -53,34 +53,48 @@ const modeles = modeleMeta
   .reverse();
 
 /**
- * Le modèle « Signature » n'est pas une page de démonstration comme les quatre
- * autres : c'est un site complet, qui vit dans son propre dépôt et se déploie
- * seul. On pointe donc une URL absolue, et le lien s'ouvre dans un nouvel
- * onglet — le visiteur quitte l'atelier pour visiter un vrai site.
+ * Packs « Sur mesure » et « Signature » : ce ne sont pas des pages de
+ * démonstration comme les six vitrines, mais des sites complets, chacun dans
+ * son propre dépôt et déployé seul. D'où des URL absolues et une ouverture
+ * dans un nouvel onglet — le visiteur quitte l'atelier pour un vrai site.
  *
- * ⚠️ Cette adresse ne répondra qu'une fois le dépôt `modele-golf` publié et
- * GitHub Pages activé dessus (Settings → Pages → Source = « GitHub Actions »).
+ * Le texte du pack (chapô, titre, liste des points) est commun : il décrit ce
+ * que contient un site de ce niveau, pas un site en particulier. Seules
+ * l'identité et la vignette changent d'un modèle à l'autre.
+ *
+ * `accent` colore le liseré de la vignette ET l'étiquette de secteur : il doit
+ * donc tenir 4,5:1 sur blanc — c'est pourquoi il reprend la teinte la plus
+ * sombre de la palette du site, jamais celle qui domine son hero.
+ *
+ * Les vignettes sont des captures du hero de chaque site, prises depuis le
+ * dépôt local (`npm run build`, `astro preview`, puis Chrome en
+ * `--headless --window-size=1600,873 --screenshot`). Un build local n'active
+ * pas `SITE_DEMO`, donc le bandeau de démonstration n'y apparaît pas.
+ *
+ * ⚠️ Les adresses ne répondront qu'une fois les dépôts publiés et GitHub Pages
+ * activé dessus (Settings → Pages → Source = « GitHub Actions »).
  */
-const signature = {
-  url: 'https://jozinho22.github.io/modele-golf/',
-  image: 'golf.webp',
-  // Vert assombri : l'accent sert aussi de couleur de texte (étiquette du
-  // modèle), et #3e9c6a n'atteignait que 3,4:1 sur blanc au lieu de 4,5:1.
-  accent: '#2b7350',
-};
+const surMesureModeles = [
+  { depot: 'modele-salon-de-the', image: 'salon-de-the.webp', accent: '#c0202e' },
+  { depot: 'modele-hotel-de-luxe', image: 'hotel-de-luxe.webp', accent: '#8d6d2c' },
+];
 
-/**
- * Même principe pour le modèle « Sur mesure » : un site complet dans son propre
- * dépôt, et non une page de démonstration hébergée ici.
- *
- * ⚠️ Cette adresse ne répondra qu'une fois le dépôt `modele-salon-de-the`
- * publié et GitHub Pages activé dessus.
- */
-const surMesure = {
-  url: 'https://jozinho22.github.io/modele-salon-de-the/',
-  image: 'salon-de-the.webp',
-  accent: '#c0202e',
-};
+const signatureModeles = [
+  { depot: 'modele-golf', image: 'golf.webp', accent: '#2b7350' },
+  { depot: 'modele-centre-equestre', image: 'centre-equestre.webp', accent: '#96581f' },
+];
+
+/** Assemble un modèle de pack avec ses textes traduits, dans l'ordre du tableau. */
+const packModeles = (metas: { depot: string; image: string; accent: string }[],
+                     textes: readonly { tag: string; name: string; desc: string }[]) =>
+  metas.map((m, i) => ({
+    ...m,
+    ...textes[i],
+    url: `https://jozinho22.github.io/${m.depot}/`,
+  }));
+
+const surMesure = packModeles(surMesureModeles, t.surMesure.modeles);
+const signature = packModeles(signatureModeles, t.signature.modeles);
 
 /**
  * Portfolio : sites réellement livrés. Les favicons sont copiés dans
@@ -89,9 +103,11 @@ const surMesure = {
  * site du client change. `icon` absent ⇒ monogramme dessiné en CSS.
  */
 const portfolioMeta = [
-  { url: 'https://api-jawa.fr', icon: 'api-jawa.png', accent: '#c98a3f' },
-  { url: 'https://expert-maths-lycee.fr', accent: '#2f6fdb' },
-  { url: 'https://xn--monmtr-evac.com', icon: 'monmetre.svg', accent: '#1f8a70' },
+  // `accent` colore le liseré et le monogramme ; `accentText` est sa variante
+  // assombrie, seule autorisée à porter le domaine en toutes lettres.
+  { url: 'https://api-jawa.fr', icon: 'api-jawa.png', accent: '#c98a3f', accentText: '#9b682c' },
+  { url: 'https://expert-maths-lycee.fr', accent: '#2f6fdb', accentText: '#2f6fdb' },
+  { url: 'https://xn--monmtr-evac.com', icon: 'monmetre.svg', accent: '#1f8a70', accentText: '#1d8169' },
 ];
 const portfolio = portfolioMeta.map((p, i) => ({
   ...p,
@@ -248,96 +264,102 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
           </p>
         </div>
 
-        <!-- ------------------------- Modèle Sur mesure ------------------ -->
-        <div class="pack-bloc signature reveal" style={`--accent-card: ${surMesure.accent}`}>
-          <a
-            class="signature-visuel"
-            href={surMesure.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${t.surMesure.cta} — ${t.surMesure.name}`}
-          >
-            <img
-              src={withBase(`modeles/${surMesure.image}`)}
-              alt=""
-              width="1600"
-              height="873"
-              loading="lazy"
-              decoding="async"
-            />
-            <span class="signature-loupe" aria-hidden="true">{t.surMesure.cta} ↗</span>
-          </a>
-
+        <!-- ------------------------- Pack Sur mesure -------------------- -->
+        <div class="pack-bloc signature pack-surmesure reveal">
           <div class="signature-texte">
             <p class="pack-chip pack-surmesure">
               <span class="pack-dot" aria-hidden="true"></span>{t.surMesure.packBadge}
             </p>
             <p class="eyebrow signature-eyebrow">{t.surMesure.eyebrow}</p>
             <h2 class="signature-title">{t.surMesure.title}</h2>
-
-            <p class="signature-identite">
-              <span class="modele-tag">{t.surMesure.tag}</span>
-              <strong>{t.surMesure.name}</strong>
-            </p>
             <p class="signature-desc">{t.surMesure.desc}</p>
 
             <ul class="signature-points">
               {t.surMesure.points.map((point) => <li>{point}</li>)}
             </ul>
-
-            <p class="signature-actions">
-              <a class="btn btn-primary" href={surMesure.url} target="_blank" rel="noopener noreferrer">
-                {t.surMesure.cta} <span class="arrow" aria-hidden="true">↗</span>
-              </a>
-            </p>
-            <p class="signature-note">{t.surMesure.note}</p>
           </div>
+
+          <!-- Un modèle par vignette ; le texte ci-dessus vaut pour les deux. -->
+          <ul class="signature-vitrines">
+            {surMesure.map((m) => (
+              <li class="vitrine" style={`--accent-card: ${m.accent}`}>
+                <a
+                  class="signature-visuel"
+                  href={m.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${t.surMesure.cta} — ${m.name}`}
+                >
+                  <img
+                    src={withBase(`modeles/${m.image}`)}
+                    alt=""
+                    width="1600"
+                    height="900"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="signature-loupe" aria-hidden="true">{t.surMesure.cta} ↗</span>
+                </a>
+                <p class="vitrine-tag">{m.tag}</p>
+                <p class="vitrine-nom">{m.name}</p>
+                <p class="vitrine-desc">{m.desc}</p>
+                <a class="vitrine-lien" href={m.url} target="_blank" rel="noopener noreferrer">
+                  {t.surMesure.cta} <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <p class="signature-note">{t.surMesure.note}</p>
         </div>
 
-        <!-- ------------------------- Modèle Signature ------------------- -->
-        <div class="pack-bloc signature reveal" style={`--accent-card: ${signature.accent}`}>
-          <a
-            class="signature-visuel"
-            href={signature.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${t.signature.cta} — ${t.signature.name}`}
-          >
-            <img
-              src={withBase(`modeles/${signature.image}`)}
-              alt=""
-              width="1600"
-              height="873"
-              loading="lazy"
-              decoding="async"
-            />
-            <span class="signature-loupe" aria-hidden="true">{t.signature.cta} ↗</span>
-          </a>
-
+        <!-- ------------------------- Pack Signature --------------------- -->
+        <div class="pack-bloc signature pack-signature reveal">
           <div class="signature-texte">
             <p class="pack-chip pack-signature">
               <span class="pack-dot" aria-hidden="true"></span>{t.signature.packBadge}
             </p>
             <p class="eyebrow signature-eyebrow">{t.signature.eyebrow}</p>
             <h2 class="signature-title">{t.signature.title}</h2>
-
-            <p class="signature-identite">
-              <span class="modele-tag">{t.signature.tag}</span>
-              <strong>{t.signature.name}</strong>
-            </p>
             <p class="signature-desc">{t.signature.desc}</p>
 
             <ul class="signature-points">
               {t.signature.points.map((point) => <li>{point}</li>)}
             </ul>
-
-            <p class="signature-actions">
-              <a class="btn btn-primary" href={signature.url} target="_blank" rel="noopener noreferrer">
-                {t.signature.cta} <span class="arrow" aria-hidden="true">↗</span>
-              </a>
-            </p>
-            <p class="signature-note">{t.signature.note}</p>
           </div>
+
+          <!-- Un modèle par vignette ; le texte ci-dessus vaut pour les deux. -->
+          <ul class="signature-vitrines">
+            {signature.map((m) => (
+              <li class="vitrine" style={`--accent-card: ${m.accent}`}>
+                <a
+                  class="signature-visuel"
+                  href={m.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${t.signature.cta} — ${m.name}`}
+                >
+                  <img
+                    src={withBase(`modeles/${m.image}`)}
+                    alt=""
+                    width="1600"
+                    height="900"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="signature-loupe" aria-hidden="true">{t.signature.cta} ↗</span>
+                </a>
+                <p class="vitrine-tag">{m.tag}</p>
+                <p class="vitrine-nom">{m.name}</p>
+                <p class="vitrine-desc">{m.desc}</p>
+                <a class="vitrine-lien" href={m.url} target="_blank" rel="noopener noreferrer">
+                  {t.signature.cta} <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <p class="signature-note">{t.signature.note}</p>
         </div>
       </div>
     </section>
@@ -358,7 +380,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
           <ul class="carrousel-piste" data-carrousel-piste>
             {portfolio.map((p) => (
-              <li class="carrousel-item" style={`--accent-card: ${p.accent}`}>
+              <li class="carrousel-item" style={`--accent-card: ${p.accent}; --accent-card-text: ${p.accentText}`}>
                 <a class="projet" href={p.url} target="_blank" rel="noopener noreferrer">
                   {p.icon ? (
                     <img
@@ -567,9 +589,12 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     animation: hero-in 0.8s var(--ease-out) 0.12s both;
   }
 
+  /* Le titre porte l'emphase de la page : il reste dans le seul accent
+     structurel. Le dégradé garde le relief, sans convoquer corail ni or —
+     qui ponctuent le site mais n'y portent jamais de sens. */
   .hero-title em {
     font-style: normal;
-    background: linear-gradient(100deg, #8d8cf0, #ff8a76 55%, #f2b705);
+    background: linear-gradient(100deg, var(--accent-on-ink-soft), var(--accent-on-ink-deep));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -608,7 +633,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     list-style: none;
     margin: 2.4rem 0 0;
     padding: 0;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #8f90ab;
     animation: hero-in 0.8s var(--ease-out) 0.48s both;
   }
@@ -733,7 +758,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     background: #fff;
     color: var(--ink);
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     box-shadow: var(--shadow-m);
     white-space: nowrap;
   }
@@ -754,7 +779,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   .chip-star {
     bottom: -1.1rem;
     left: 18%;
-    color: var(--gold);
+    color: var(--gold-strong);
     animation: float 9s ease-in-out 0.5s infinite;
   }
 
@@ -785,7 +810,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .marquee-item::after {
     content: '✳';
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     opacity: 0.6;
   }
 
@@ -831,7 +856,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .service-card p {
-    font-size: 0.97rem;
+    font-size: 0.95rem;
     color: var(--muted);
   }
 
@@ -902,7 +927,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .modele-tag {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.13em;
     text-transform: uppercase;
@@ -931,7 +956,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   .modele-desc {
     margin-top: 0.4rem;
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     line-height: 1.45;
   }
 
@@ -944,7 +969,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     list-style: none;
     margin: 0.5rem 0 0;
     padding: 0;
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
     color: var(--muted);
   }
 
@@ -961,7 +986,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     margin-top: auto;
     padding-top: 0.7rem;
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     color: var(--accent);
   }
 
@@ -979,7 +1004,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     max-width: 34rem;
     margin-inline: auto;
     color: var(--muted);
-    font-size: 0.98rem;
+    font-size: 0.95rem;
   }
 
   .modele-note a {
@@ -994,6 +1019,11 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     overflow: hidden;
     background: var(--ink);
     color: #fff;
+  }
+
+  /* Sur fond encre, l'indigo du système ne tient que 3,07:1. */
+  .methode-section .eyebrow {
+    color: var(--accent-on-ink);
   }
 
   .methode-section .container {
@@ -1040,7 +1070,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     height: 2.8rem;
     border-radius: 12px;
     background: rgb(255 255 255 / 0.08);
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     transition:
       transform 0.35s var(--ease-out),
       background-color 0.35s;
@@ -1118,7 +1148,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     border-radius: 999px;
     background: var(--pack-soft);
     color: var(--pack);
-    font-size: 0.82rem;
+    font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 0.04em;
   }
@@ -1222,13 +1252,67 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     clear: both;
   }
 
+  /* Les deux modèles d'un pack, côte à côte sous le texte qui vaut pour les
+     deux. auto-fit plutôt qu'un nombre fixe : un troisième modèle s'ajouterait
+     sans toucher au CSS. */
+  .signature-vitrines {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.6rem;
+    list-style: none;
+    margin: 1.8rem 0 0;
+    padding: 0;
+  }
+
+  .vitrine-tag {
+    margin-top: 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-card);
+  }
+
+  .vitrine-nom {
+    margin-top: 0.15rem;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .vitrine-desc {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .vitrine-lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+    text-decoration: none;
+  }
+
+  .vitrine-lien:hover {
+    text-decoration: underline;
+  }
+
+  .vitrine:hover .signature-visuel,
+  .vitrine-lien:hover ~ .signature-visuel {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-m);
+  }
+
   .signature-visuel {
     position: relative;
-    float: left;
-    width: 21rem;
-    max-width: 45%;
+    width: 100%;
     aspect-ratio: 16 / 9;
-    margin: 0.35rem 1.4rem 0.9rem 0;
     border-radius: var(--radius-m);
     overflow: hidden;
     box-shadow: var(--shadow-s);
@@ -1281,7 +1365,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     background: rgb(18 19 31 / 0.82);
     backdrop-filter: blur(8px);
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     white-space: nowrap;
     opacity: 0;
@@ -1312,8 +1396,9 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     }
   }
 
+  /* Le chapô qualifie le pack, pas un modèle : il prend la couleur du pack. */
   .signature-eyebrow {
-    color: var(--accent-card);
+    color: var(--pack);
   }
 
   .signature-title {
@@ -1324,20 +1409,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
 
-  .signature-identite {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgb(18 19 31 / 0.1);
-  }
 
-  .signature-identite strong {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 600;
-  }
 
   .signature-desc {
     margin-top: 0.5rem;
@@ -1349,7 +1421,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     display: grid;
     gap: 0.45rem;
     margin-top: 1.1rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     list-style: none;
     padding: 0;
   }
@@ -1359,6 +1431,9 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     padding-left: 1.35rem;
   }
 
+  /* Les points décrivent le pack, pas un modèle : la puce suit --pack.
+     Elle utilisait --accent-card, qui ne vit plus que sur les vignettes — les
+     puces étaient devenues invisibles. */
   .signature-points li::before {
     content: '';
     position: absolute;
@@ -1367,20 +1442,14 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     width: 0.45rem;
     height: 0.45rem;
     border-radius: 50%;
-    background: var(--accent-card);
+    background: var(--pack);
   }
 
-  .signature-actions {
-    margin-top: 1.6rem;
-  }
 
-  .signature-actions .arrow {
-    margin-left: 0.15rem;
-  }
 
   .signature-note {
     margin-top: 0.75rem;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     color: var(--muted);
   }
 
@@ -1423,7 +1492,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     left: auto;
     background: var(--pack, var(--accent));
     color: #fff;
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     padding: 0.3rem 0.9rem;
@@ -1431,7 +1500,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .tarif-name {
-    font-size: 1.05rem;
+    font-size: 1.0625rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -1451,7 +1520,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     padding: 0;
     display: grid;
     gap: 0.65rem;
-    font-size: 0.97rem;
+    font-size: 0.95rem;
     color: var(--ink-soft);
   }
 
@@ -1491,7 +1560,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .tarif-note {
     margin-top: 1.8rem;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     color: var(--muted);
     max-width: 40rem;
     margin-inline: auto;
@@ -1533,7 +1602,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .contact-lede {
     margin-top: 1.1rem;
-    font-size: 1.1rem;
+    font-size: 1.0625rem;
     color: var(--muted);
   }
 
@@ -1546,7 +1615,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
   }
 
   .contact-btn {
-    font-size: 1.05rem;
+    font-size: 1.0625rem;
   }
 
   .contact-tel {
@@ -1602,7 +1671,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     border: 1px solid rgb(18 19 31 / 0.14);
     background: var(--paper-raised);
     color: var(--ink);
-    font-size: 1.1rem;
+    font-size: 1.0625rem;
     box-shadow: var(--shadow-s);
     transition:
       transform 0.25s var(--ease-out),
@@ -1684,22 +1753,22 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
   .projet-nom {
     margin-top: 0.9rem;
-    font-size: 1.1rem;
+    font-size: 1.0625rem;
     font-weight: 700;
     letter-spacing: -0.01em;
   }
 
   .projet-domaine {
     margin-top: 0.15rem;
-    font-size: 0.8rem;
-    color: var(--accent-card);
+    font-size: 0.8125rem;
+    color: var(--accent-card-text, var(--accent-card));
     font-weight: 600;
     word-break: break-all;
   }
 
   .projet-desc {
     margin-top: 0.6rem;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     color: var(--muted);
     line-height: 1.5;
     flex-grow: 1;
@@ -1710,7 +1779,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
     align-items: center;
     gap: 0.35rem;
     margin-top: 1rem;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--accent);
   }
@@ -1774,7 +1843,7 @@ const etapes = etapeDeco.map((e, i) => ({ ...e, ...t.methode.steps[i] }));
 
     .modele-desc,
     .modele-link {
-      font-size: 0.96rem;
+      font-size: 0.95rem;
     }
   }
 </style>
