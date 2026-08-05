@@ -322,8 +322,15 @@ const liensMenu = [
     transition: transform 0.45s var(--ease-out);
   }
 
-  .a-nav a:hover::after {
+  .a-nav a:hover::after,
+  .a-nav a[aria-current]::after {
     transform: scaleX(1);
+  }
+
+  /* Le filet doré demeure sous la section courante, et le texte passe à l'or
+     clair : la salle indique où l'on est sans hausser le ton. */
+  .a-nav a[aria-current] {
+    color: var(--a-or-clair);
   }
 
   /* ------------------------------- Boutons --------------------------- */

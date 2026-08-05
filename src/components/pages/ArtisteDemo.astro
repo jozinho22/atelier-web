@@ -344,8 +344,15 @@ const liensMenu = [
     transition: transform 0.4s var(--ease-out);
   }
 
-  .f-nav a:hover::after {
+  .f-nav a:hover::after,
+  .f-nav a[aria-current]::after {
     transform: scaleX(1) skewX(-12deg);
+  }
+
+  /* Le trait biseauté du fusain reste tiré sous la section courante, à pleine
+     encre au lieu des 75 % du survol. */
+  .f-nav a[aria-current]::after {
+    opacity: 1;
   }
 
   /* ------------------------------- Boutons --------------------------- */

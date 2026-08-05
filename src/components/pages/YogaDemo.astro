@@ -373,8 +373,15 @@ const liensMenu = [
     transition: color 0.3s;
   }
 
-  .y-nav a:hover {
+  .y-nav a:hover,
+  .y-nav a[aria-current] {
     color: var(--y-blanc);
+  }
+
+  /* Pas de gras ici : le modèle vit de sa retenue. Une lettre plus espacée
+     suffit à désigner la section courante. */
+  .y-nav a[aria-current] {
+    letter-spacing: 0.24em;
   }
 
   /* ------------------------------- Boutons --------------------------- */

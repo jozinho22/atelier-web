@@ -258,6 +258,28 @@ const id = `menu-${variante}`;
     color: inherit;
   }
 
+  /* Section courante : le panneau reprend le repère de l'en-tête, sinon il
+     disparaîtrait précisément là où la barre horizontale n'existe plus. */
+  .mm-liste a[aria-current] {
+    font-weight: 800;
+  }
+
+  .mm-liste a[aria-current]::before {
+    content: '';
+    position: absolute;
+    left: -0.9rem;
+    top: 50%;
+    width: 0.35rem;
+    height: 1.15rem;
+    border-radius: 2px;
+    background: currentColor;
+    transform: translateY(-50%);
+  }
+
+  .mm-liste li {
+    position: relative;
+  }
+
   /* Les liens arrivent en cascade : le décalage donne le sens de lecture. */
   .mm-panneau.is-ouvert .mm-liste li {
     animation: mm-entree 0.4s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;

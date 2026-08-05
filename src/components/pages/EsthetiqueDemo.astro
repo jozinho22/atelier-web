@@ -298,9 +298,16 @@ const liensMenu = [
     color: var(--e-terra-deep);
   }
 
-  .e-nav a:hover::after {
+  .e-nav a:hover::after,
+  .e-nav a[aria-current]::after {
     opacity: 1;
     transform: translateX(-50%) scale(1);
+  }
+
+  /* La pastille reste posée sous la section courante, et le texte prend la
+     terracotta profonde — le modèle joue sur la douceur, pas sur le gras. */
+  .e-nav a[aria-current] {
+    color: var(--e-terra-deep);
   }
 
   /* ------------------------------ Boutons ------------------------------- */

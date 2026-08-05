@@ -6,6 +6,32 @@ import { common } from '../i18n/common';
 const { lang } = splitPath(Astro.url.pathname);
 const t = common[lang].footer;
 const year = new Date().getFullYear();
+
+/**
+ * Les six vitrines dans l'ordre de la page d'accueil, du plus récent au plus
+ * ancien. Le pied de page les listait à l'envers : deux classements pour la
+ * même chose, ce qui n'aide personne à se repérer.
+ */
+const vitrines = [
+  { chemin: 'restaurant', label: t.models.restaurant },
+  { chemin: 'yoga', label: t.models.yoga },
+  { chemin: 'artiste', label: t.models.artiste },
+  { chemin: 'esthetique', label: t.models.esthetique },
+  { chemin: 'batiment', label: t.models.batiment },
+  { chemin: 'association', label: t.models.association },
+];
+
+const depot = (nom: string) => `https://jozinho22.github.io/${nom}/`;
+
+const surMesure = [
+  { url: depot('modele-salon-de-the'), label: t.packs.salonDeThe },
+  { url: depot('modele-hotel-de-luxe'), label: t.packs.hotel },
+];
+
+const signature = [
+  { url: depot('modele-golf'), label: t.packs.golf },
+  { url: depot('modele-centre-equestre'), label: t.packs.equestre },
+];
 ---
 
 <footer class="site-footer">
@@ -17,14 +43,37 @@ const year = new Date().getFullYear();
     <nav class="footer-nav" aria-label={lang === 'fr' ? 'Pied de page' : 'Footer'}>
       <p class="footer-heading">{t.modelsHeading}</p>
       <ul>
-        <li><a href={localePath(lang, 'modeles/association')}>{t.models.association}</a></li>
-        <li><a href={localePath(lang, 'modeles/batiment')}>{t.models.batiment}</a></li>
-        <li><a href={localePath(lang, 'modeles/esthetique')}>{t.models.esthetique}</a></li>
-        <li><a href={localePath(lang, 'modeles/artiste')}>{t.models.artiste}</a></li>
-        <li><a href={localePath(lang, 'modeles/yoga')}>{t.models.yoga}</a></li>
-        <li><a href={localePath(lang, 'modeles/restaurant')}>{t.models.restaurant}</a></li>
+        {vitrines.map((v) => (
+          <li><a href={localePath(lang, `modeles/${v.chemin}`)}>{v.label}</a></li>
+        ))}
       </ul>
     </nav>
+
+    <!-- Les deux packs supérieurs ne sont pas des pages d'ici : ce sont des
+         sites complets, chacun sur son domaine. D'où l'ouverture dans un
+         nouvel onglet, comme dans la section Modèles. -->
+    <div class="footer-nav">
+      <p class="footer-heading">{t.surMesureHeading}</p>
+      <ul>
+        {surMesure.map((m) => (
+          <li>
+            <a href={m.url} target="_blank" rel="noopener noreferrer">
+              {m.label} <span class="footer-ext" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="footer-heading footer-heading-2">{t.signatureHeading}</p>
+      <ul>
+        {signature.map((m) => (
+          <li>
+            <a href={m.url} target="_blank" rel="noopener noreferrer">
+              {m.label} <span class="footer-ext" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
     <div class="footer-contact">
       <p class="footer-heading">{t.contactHeading}</p>
       <ul>
@@ -48,7 +97,7 @@ const year = new Date().getFullYear();
 
   .footer-inner {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-columns: 1.2fr 1fr 1fr 0.9fr;
     gap: 2.5rem;
     padding-bottom: 2.5rem;
   }
@@ -67,6 +116,18 @@ const year = new Date().getFullYear();
     margin-top: 0.6rem;
     max-width: 22rem;
     font-size: 0.95rem;
+  }
+
+  /* Le second titre ouvre un nouveau groupe : son écart doit être nettement
+     plus grand que les 14 px qui séparent un titre de sa propre liste, sinon
+     les deux packs se lisent comme une seule colonne. */
+  .footer-heading-2 {
+    margin-top: 2.6rem;
+  }
+
+  .footer-ext {
+    opacity: 0.55;
+    font-size: 0.82em;
   }
 
   .footer-heading {

@@ -286,8 +286,13 @@ const liensMenu = [
     transition: border-color 0.25s;
   }
 
-  .b-nav a:hover {
+  .b-nav a:hover,
+  .b-nav a[aria-current] {
     border-color: var(--b-jaune);
+  }
+
+  .b-nav a[aria-current] {
+    font-weight: 800;
   }
 
   /* ------------------------------ Boutons ------------------------------- */

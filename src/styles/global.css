@@ -7,16 +7,16 @@
   /* Couleurs — site principal */
   --ink: #12131f;
   --ink-soft: #3c3e52;
-  --muted: #66677c;
+  --muted: #5b5b6e;
   --paper: #f7f6f2;
   /* Rampe du mur : le ton monte à mesure qu'on descend la page, pour que
      l'écart avec le hero sombre se franchisse par paliers plutôt que d'un
      bond. Plus aucun blanc pur en grande surface — seules les cartes le
      gardent, ce qui renforce la règle du mur et du cadre. */
-  --mur-1: #eceae2;
-  --mur-2: #f2efe8;
-  --mur-3: #f6f3ec;
-  --mur-4: #faf8f3;
+  --mur-1: #dcd8cc;
+  --mur-2: #e3dfd4;
+  --mur-3: #eae6dc;
+  --mur-4: #f1eee6;
   --paper-raised: #ffffff;
   --accent: #5352d1;
   --accent-strong: #403fb8;
@@ -129,6 +129,9 @@ button {
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
+/* Sur le palier le plus sombre du mur, l'accent ne tient que 4,22:1 à 13 px.
+   Sa variante soutenue monte à 5,62 — plutôt que d'assombrir la couleur de
+   marque elle-même, qui sert partout ailleurs sur fond blanc. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -137,7 +140,7 @@ button {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .eyebrow::before {

@@ -130,8 +130,19 @@ const links = [
     transition: transform 0.3s var(--ease-out);
   }
 
-  .nav-link:hover {
+  .nav-link:hover,
+  .nav-link[aria-current] {
     color: var(--ink);
+  }
+
+  /* Section courante : le trait du survol, mais figé et en graisse pleine —
+     c'est ce qui le distingue d'un simple survol de passage. */
+  .nav-link[aria-current] {
+    font-weight: 700;
+  }
+
+  .nav-link[aria-current]::after {
+    transform: scaleX(1);
   }
 
   .nav-link:hover::after {
@@ -140,7 +151,10 @@ const links = [
 
 
   @media (max-width: 760px) {
-    nav,
+    /* La navigation horizontale cède la place au menu dépliable. */
+    nav {
+      display: none;
+    }
 
     .header-inner {
       justify-content: space-between;

@@ -11,12 +11,12 @@ colors:
   or-lisible: "#916d03"
   encre-bleutee: "#12131f"
   encre-adoucie: "#3c3e52"
-  gris-attenue: "#66677c"
+  gris-attenue: "#5b5b6e"
   papier-creme: "#f7f6f2"
-  mur-1: "#eceae2"
-  mur-2: "#f2efe8"
-  mur-3: "#f6f3ec"
-  mur-4: "#faf8f3"
+  mur-1: "#dcd8cc"
+  mur-2: "#e3dfd4"
+  mur-3: "#eae6dc"
+  mur-4: "#f1eee6"
   papier-souleve: "#ffffff"
   indigo-sur-encre: "#8d8cf0"
   indigo-sur-encre-doux: "#a9a8f6"
@@ -188,15 +188,21 @@ chaudes tenues en réserve.
   (`#efeee8`) — l'ancienne valeur `#6d6f85` y tombait à 4,24:1.
 - **Papier crème** (`#f7f6f2`) : le fond du document, visible partout où aucune
   section ne pose son propre ton.
-- **La rampe du mur** (`#eceae2` → `#f2efe8` → `#f6f3ec` → `#faf8f3`) : le mur
+- **La rampe du mur** (`#dcd8cc` → `#e3dfd4` → `#eae6dc` → `#f1eee6`) : le mur
   n'a pas un ton mais quatre, qui montent à mesure qu'on descend la page. La
-  salle s'éclaire en s'enfonçant. Chaque palier tient au moins 15:1 avec
-  l'encre et 4,59:1 avec le gris courant.
+  salle s'éclaire en s'enfonçant. Chaque palier tient au moins 12,9:1 avec
+  l'encre et 4,65:1 avec le gris courant.
 
   La raison est concrète : le hero est une vidéo sur encre à 0,007 de
-  luminance. Face à un mur unique à 0,92, la marche était brutale. La rampe la
-  franchit en quatre temps, et le point le plus clair — les Tarifs — coïncide
-  avec le moment de la décision.
+  luminance. Un mur unique et clair imposait une marche de 0,697 — les trois
+  quarts de l'amplitude de la page franchis d'un coup. La rampe descend
+  jusqu'à 0,687 au premier palier, et le point le plus clair — les Tarifs —
+  coïncide avec le moment de la décision.
+
+  **Le passage du hero au mur ne se fait pas d'un bord mais en trois temps** :
+  la vidéo se dissout dans l'encre sur son dernier quart, le bandeau des
+  métiers tient le palier intermédiaire, et un fondu le raccorde au mur. La
+  plus grande marche restante vaut 0,237.
 - **Papier soulevé** (`#ffffff`) : toute surface posée sur le mur — cartes,
   panneaux, encarts. Le blanc n'est pas le fond par défaut : c'est un signal.
 
