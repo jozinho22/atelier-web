@@ -120,6 +120,16 @@ button {
   margin-inline: auto;
 }
 
+/* Sur un écran de 320 px, 2,5 rem de gouttière prennent 12,5 % de la largeur
+   et ne laissent que 11 px de battement à la ligne de l'en-tête, où logo,
+   FR/EN et bouton du menu occupent déjà 252 px sur 280. On descend à la
+   gouttière usuelle des téléphones, qui rend 16 px à la page entière. */
+@media (max-width: 420px) {
+  .container {
+    width: min(var(--container), 100% - 2rem);
+  }
+}
+
 .section {
   padding-block: clamp(4rem, 9vw, 7rem);
 }

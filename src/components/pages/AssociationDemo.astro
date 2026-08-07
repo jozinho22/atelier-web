@@ -36,7 +36,12 @@ const liensMenu = [
           </ul>
         </nav>
         <a class="a-btn a-btn-sun" href="#adhesion">{t.header.join}</a>
-        <MenuMobile variante="association" lang={lang} liens={liensMenu} />
+        <MenuMobile
+          variante="association"
+          lang={lang}
+          liens={liensMenu}
+          cta={{ href: '#adhesion', label: t.header.join }}
+        />
       </div>
     </header>
 
@@ -840,8 +845,9 @@ const liensMenu = [
   /* ----------------------------- Responsive ----------------------------- */
 
   @media (max-width: 760px) {
-    /* La navigation horizontale cède la place au menu dépliable. */
-    .a-header nav {
+    /* La navigation et son bouton cèdent la place au menu dépliable. */
+    .a-header nav,
+    .a-header .a-btn {
       display: none;
     }
 

@@ -158,6 +158,10 @@ const links = [
 
     .header-inner {
       justify-content: space-between;
+      /* `space-between` fixe déjà l'écart réel : ce `gap` n'est plus qu'un
+         plancher. Le laisser à 1,5 rem imposait 48 px incompressibles qui, à
+         320 px, poussaient le bouton du menu hors de l'écran. */
+      gap: 0.5rem;
     }
   }
 </style>
