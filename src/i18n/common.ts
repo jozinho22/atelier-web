@@ -35,7 +35,19 @@ export const common = {
         equestre: 'Haras du Clos-Ferrand',
       },
       legal: 'Mentions légales',
+      cgv: 'Conditions générales de vente',
+      equipe: 'Qui sommes-nous ?',
       rights: 'Tous droits réservés.',
+    },
+    /**
+     * Navigation des pages juridiques. Elles n'ont ni menu ni ancre : sans ces
+     * deux liens, le visiteur qui y arrive depuis un moteur de recherche n'a
+     * que le bouton « précédent » pour en sortir.
+     */
+    juridique: {
+      accueil: 'Retour à l’accueil',
+      versCgv: 'Voir les conditions générales de vente',
+      versLegal: 'Voir les mentions légales',
     },
     demo: {
       label: 'Modèle de démonstration',
@@ -72,7 +84,14 @@ export const common = {
         equestre: 'Haras du Clos-Ferrand',
       },
       legal: 'Legal notice',
+      cgv: 'Terms and conditions of sale',
+      equipe: 'Who are we?',
       rights: 'All rights reserved.',
+    },
+    juridique: {
+      accueil: 'Back to home',
+      versCgv: 'Read the terms and conditions of sale',
+      versLegal: 'Read the legal notice',
     },
     demo: {
       label: 'Demo template',

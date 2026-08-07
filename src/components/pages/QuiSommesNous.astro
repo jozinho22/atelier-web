@@ -1,0 +1,190 @@
+---
+/**
+ * Page « Qui sommes-nous » — la présentation de l'atelier.
+ *
+ * C'était une section de la page d'accueil ; elle vit désormais seule, liée
+ * depuis le pied de page aux côtés des mentions légales et des CGV.
+ *
+ * Elle ne porte donc plus de ton de mur : la rampe organise la descente d'une
+ * page unique, elle n'a rien à dire sur une page isolée, qui reste sur le
+ * papier crème comme les pages juridiques.
+ *
+ * Les titres montent d'un cran : le titre de la page passe en h1 et le nom de
+ * chaque associé en h2. Un seul h1 par page, comme partout ailleurs — et cette
+ * note reste ici plutôt qu'en commentaire HTML, qui serait servi au visiteur.
+ */
+import Base from '../../layouts/Base.astro';
+import Header from '../Header.astro';
+import Footer from '../Footer.astro';
+import { withBase } from '../../lib/paths';
+import { splitPath, localePath } from '../../lib/i18n';
+import { common } from '../../i18n/common';
+import { equipe } from '../../i18n/equipe';
+
+const { lang } = splitPath(Astro.url.pathname);
+const t = equipe[lang];
+// Même sortie que sur les pages juridiques : cette page n'a ni ancre ni fil
+// d'Ariane, et le pied de page est le seul chemin qui y mène.
+const accueil = { href: localePath(lang), label: common[lang].juridique.accueil };
+---
+
+<Base title={t.meta.title} description={t.meta.description}>
+  <Header />
+  <main class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="section-title">{t.title}</h1>
+        <p class="section-lede">{t.lede}</p>
+      </div>
+
+      <div class="equipe">
+        {t.membres.map((m, i) => (
+          <article class="equipe-membre reveal" style={`--reveal-delay: ${i * 0.1}s`}>
+            <span class="equipe-portrait">
+              <img
+                src={withBase(`profiles/profil-${m.prenom.toLowerCase()}.webp`)}
+                alt={m.alt}
+                width="1600"
+                height="1687"
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+            <h2 class="equipe-nom">
+              {m.prenom}
+              <span class="equipe-role">{m.role}</span>
+            </h2>
+            <p class="equipe-bio">{m.bio}</p>
+          </article>
+        ))}
+      </div>
+
+      <nav class="equipe-sortie" aria-label={accueil.label}>
+        <a class="bouton-retour" href={accueil.href}>
+          <span class="bouton-retour-fleche" aria-hidden="true">←</span>
+          {accueil.label}
+        </a>
+      </nav>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  /* Repris de la navigation basse des pages juridiques : même filet, même
+     respiration. Le bouton lui-même vient de `.bouton-retour` (global.css),
+     partagé par les trois pages — une seule définition à retoucher. */
+  .equipe-sortie {
+    margin-top: 3rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgb(18 19 31 / 0.1);
+  }
+
+  .equipe {
+    display: grid;
+    gap: 3rem;
+    max-width: 52rem;
+    margin: 0 auto;
+  }
+
+  .equipe-membre::after {
+    /* Le flottant doit être purgé, sinon la biographie du second associé
+       viendrait s'enrouler autour du portrait du premier. */
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  /* Le portrait est flotté et découpé en cercle. `shape-outside` fait suivre
+     au texte la courbe du disque plutôt que son carré englobant : sans lui, le
+     coin vide entre la joue et la première ligne se voit.
+
+     Le disque est un conteneur et non l'image elle-même : `overflow` n'a aucun
+     effet sur un élément remplacé, il faut donc un parent pour rogner le
+     zoom appliqué ci-dessous. */
+  .equipe-portrait {
+    display: block;
+    float: left;
+    width: clamp(8rem, 16vw, 11rem);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    shape-outside: circle(50%);
+    shape-margin: 1.1rem;
+    margin: 0.3rem 1.4rem 0.8rem 0;
+    background: var(--mur-2);
+    box-shadow: 0 10px 26px -14px rgb(18 19 31 / 0.5);
+  }
+
+  /* Les sources sont presque carrées (1600×1687) : cadrées telles quelles, le
+     visage occupait 57 % du disque et se retrouvait à 34 % de sa hauteur — la
+     moitié basse du cercle ne montrait que la chemise.
+
+     Mesuré sur les deux images : crâne à y=100, menton à y=1020, épaules
+     au-delà. Un agrandissement de 1,25 depuis le bord haut porte le visage à
+     72 % du disque et son centre à 42 % de la hauteur, avec 12 px de marge
+     au-dessus du crâne. */
+  .equipe-portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.25);
+    transform-origin: 50% 0;
+  }
+
+  /* Le second portrait passe à droite : deux disques alignés du même côté
+     créeraient une colonne vide au milieu du paragraphe. */
+  .equipe-membre:nth-child(even) .equipe-portrait {
+    float: right;
+    shape-outside: circle(50%);
+    margin: 0.3rem 0 0.8rem 1.4rem;
+  }
+
+  .equipe-nom {
+    font-family: var(--font-display, inherit);
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .equipe-role {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent-strong);
+  }
+
+  .equipe-bio {
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  /* Sous 600 px, la colonne ne fait plus que 40 caractères : un flottant de
+     8 rem n'y laisserait que deux ou trois mots par ligne. Le portrait repasse
+     donc dans le flux, centré au-dessus de la biographie. */
+  @media (max-width: 600px) {
+    .equipe {
+      gap: 2.5rem;
+    }
+
+    .equipe-portrait,
+    .equipe-membre:nth-child(even) .equipe-portrait {
+      float: none;
+      shape-outside: none;
+      display: block;
+      width: clamp(7rem, 34vw, 9rem);
+      margin: 0 auto 1rem;
+    }
+
+    .equipe-nom {
+      text-align: center;
+    }
+  }
+</style>

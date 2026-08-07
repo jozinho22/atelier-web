@@ -1,24 +1,12 @@
 import type { Lang } from '../lib/i18n';
+import type { DocumentLegalTexte } from './document-legal';
 
 /**
  * Textes de la page « Mentions légales ».
  *
- * Chaque paragraphe est une liste de segments afin que les liens et retours
- * à la ligne restent de vrais éléments rendus par le gabarit (les styles
- * scopés d'Astro ne s'appliquent pas au HTML injecté via set:html) :
- * - { text }        : texte brut ;
- * - { br: true }    : retour à la ligne ;
- * - { link, href }  : lien (mailto:, tel:), identique dans les deux langues.
+ * La structure (segments, blocs, sections) est partagée avec les conditions
+ * générales de vente : voir [src/i18n/document-legal.ts](./document-legal.ts).
  */
-export type LegalSegment =
-  | { readonly text: string }
-  | { readonly br: true }
-  | { readonly link: string; readonly href: string };
-
-export interface LegalSection {
-  readonly heading: string;
-  readonly paragraphs: readonly (readonly LegalSegment[])[];
-}
 
 export const legal = {
   fr: {
@@ -32,7 +20,7 @@ export const legal = {
     sections: [
       {
         heading: 'Éditeur du site',
-        paragraphs: [
+        blocs: [
           [
             { text: 'Atelier Web — [Nom Prénom]' },
             { br: true },
@@ -52,7 +40,7 @@ export const legal = {
       },
       {
         heading: 'Hébergement',
-        paragraphs: [
+        blocs: [
           [
             { text: 'Ce site est hébergé par :' },
             { br: true },
@@ -66,7 +54,7 @@ export const legal = {
       },
       {
         heading: 'Propriété intellectuelle',
-        paragraphs: [
+        blocs: [
           [
             {
               text: "L'ensemble du contenu de ce site (textes, visuels, mise en page) est la propriété d'Atelier Web, sauf mention contraire. Toute reproduction, même partielle, est soumise à autorisation préalable.",
@@ -76,7 +64,7 @@ export const legal = {
       },
       {
         heading: 'Données personnelles',
-        paragraphs: [
+        blocs: [
           [
             {
               text: "Ce site ne collecte aucune donnée personnelle : pas de formulaire, pas de cookie de suivi, pas d'outil de mesure d'audience. Les échanges se font uniquement par e-mail ou téléphone, à votre initiative.",
@@ -93,7 +81,7 @@ export const legal = {
       },
       {
         heading: 'Crédits',
-        paragraphs: [[{ text: 'Conception et réalisation : Atelier Web.' }]],
+        blocs: [[{ text: 'Conception et réalisation : Atelier Web.' }]],
       },
     ],
   },
@@ -108,7 +96,7 @@ export const legal = {
     sections: [
       {
         heading: 'Site publisher',
-        paragraphs: [
+        blocs: [
           [
             { text: 'Atelier Web — [Full name]' },
             { br: true },
@@ -128,7 +116,7 @@ export const legal = {
       },
       {
         heading: 'Hosting',
-        paragraphs: [
+        blocs: [
           [
             { text: 'This site is hosted by:' },
             { br: true },
@@ -142,7 +130,7 @@ export const legal = {
       },
       {
         heading: 'Intellectual property',
-        paragraphs: [
+        blocs: [
           [
             {
               text: 'All content on this site (text, visuals, layout) is the property of Atelier Web unless stated otherwise. Any reproduction, in whole or in part, requires prior permission.',
@@ -152,7 +140,7 @@ export const legal = {
       },
       {
         heading: 'Personal data',
-        paragraphs: [
+        blocs: [
           [
             {
               text: 'This site collects no personal data: no forms, no tracking cookies, no audience analytics. All communication happens by email or phone, and only at your initiative.',
@@ -169,8 +157,8 @@ export const legal = {
       },
       {
         heading: 'Credits',
-        paragraphs: [[{ text: 'Design and development: Atelier Web.' }]],
+        blocs: [[{ text: 'Design and development: Atelier Web.' }]],
       },
     ],
   },
-} as const satisfies Record<Lang, unknown>;
+} as const satisfies Record<Lang, DocumentLegalTexte>;

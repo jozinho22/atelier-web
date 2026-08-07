@@ -8,9 +8,23 @@ const t = common[lang].footer;
 const year = new Date().getFullYear();
 
 /**
- * Les six vitrines dans l'ordre de la page d'accueil, du plus récent au plus
- * ancien. Le pied de page les listait à l'envers : deux classements pour la
- * même chose, ce qui n'aide personne à se repérer.
+ * La pastille ne dit pas quel modèle c'est, mais de quelle OFFRE il relève :
+ * trois couleurs pour trois packs, et non dix pour dix modèles. Le pied de page
+ * répète ainsi le code couleur des cartes tarifaires.
+ *
+ * Variante « sur encre » : les teintes de base sont taillées pour du texte sur
+ * fond clair et ne tiennent pas le seuil de 3:1 sur le fond sombre d'ici.
+ */
+const PASTILLE = {
+  essentiel: 'var(--pack-essentiel-sur-encre)',
+  surmesure: 'var(--pack-surmesure-sur-encre)',
+  signature: 'var(--pack-signature-sur-encre)',
+} as const;
+
+/**
+ * Les six vitrines, dans l'ordre de la page d'accueil, du plus récent au plus
+ * ancien — le pied de page les listait à l'envers. Toutes illustrent le pack
+ * Essentiel, elles portent donc la même pastille.
  */
 const vitrines = [
   { chemin: 'restaurant', label: t.models.restaurant },
@@ -44,7 +58,11 @@ const signature = [
       <p class="footer-heading">{t.modelsHeading}</p>
       <ul>
         {vitrines.map((v) => (
-          <li><a href={localePath(lang, `modeles/${v.chemin}`)}>{v.label}</a></li>
+          <li>
+            <a href={localePath(lang, `modeles/${v.chemin}`)} style={`--pastille: ${PASTILLE.essentiel}`}>
+              <span class="footer-pastille" aria-hidden="true"></span>{v.label}
+            </a>
+          </li>
         ))}
       </ul>
     </nav>
@@ -57,8 +75,9 @@ const signature = [
       <ul>
         {surMesure.map((m) => (
           <li>
-            <a href={m.url} target="_blank" rel="noopener noreferrer">
-              {m.label} <span class="footer-ext" aria-hidden="true">↗</span>
+            <a href={m.url} target="_blank" rel="noopener noreferrer" style={`--pastille: ${PASTILLE.surmesure}`}>
+              <span class="footer-pastille" aria-hidden="true"></span>{m.label}
+              <span class="footer-ext" aria-hidden="true">↗</span>
             </a>
           </li>
         ))}
@@ -67,8 +86,9 @@ const signature = [
       <ul>
         {signature.map((m) => (
           <li>
-            <a href={m.url} target="_blank" rel="noopener noreferrer">
-              {m.label} <span class="footer-ext" aria-hidden="true">↗</span>
+            <a href={m.url} target="_blank" rel="noopener noreferrer" style={`--pastille: ${PASTILLE.signature}`}>
+              <span class="footer-pastille" aria-hidden="true"></span>{m.label}
+              <span class="footer-ext" aria-hidden="true">↗</span>
             </a>
           </li>
         ))}
@@ -84,7 +104,11 @@ const signature = [
   </div>
   <div class="container footer-legal">
     <p>© {year} Atelier Web — {t.rights}</p>
-    <a href={localePath(lang, 'mentions-legales')}>{t.legal}</a>
+    <nav class="footer-legal-liens" aria-label={t.legal}>
+      <a href={localePath(lang, 'mentions-legales')}>{t.legal}</a>
+      <a href={localePath(lang, 'cgv')}>{t.cgv}</a>
+      <a href={localePath(lang, 'qui-sommes-nous')}>{t.equipe}</a>
+    </nav>
   </div>
 </footer>
 
@@ -157,6 +181,37 @@ const signature = [
     color: #fff;
   }
 
+  /* Pastille du code couleur des trois offres. Purement indicative — le nom du
+     modèle reste lisible sans elle —, d'où l'aria-hidden, et le titre de
+     colonne nomme déjà le pack. Les trois variantes « sur encre » tiennent
+     4,5:1 sur ce fond, bien au-dessus du seuil de 3:1. */
+  .footer-pastille {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-right: 0.55rem;
+    border-radius: 50%;
+    background: var(--pastille);
+    /* `flex-shrink` inopérant ici (contexte en ligne) : la largeur fixe et
+       `vertical-align` suffisent à la caler sur la ligne de base du texte. */
+    vertical-align: 0.05em;
+    transition: transform 0.2s var(--ease-out);
+  }
+
+  .site-footer a:hover .footer-pastille {
+    transform: scale(1.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-pastille {
+      transition: none;
+    }
+
+    .site-footer a:hover .footer-pastille {
+      transform: none;
+    }
+  }
+
   .footer-legal {
     display: flex;
     justify-content: space-between;
@@ -165,6 +220,28 @@ const signature = [
     padding-block: 1.4rem;
     border-top: 1px solid rgb(255 255 255 / 0.1);
     font-size: 0.85rem;
+    color: #8f90ab;
+  }
+
+  /* Les trois liens de bas de page restent groupés à droite, séparés par des
+     points médians — la barre garde ainsi ses deux blocs, copyright à gauche
+     et liens à droite, au lieu de quatre éléments alignés au hasard. */
+  .footer-legal-liens {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.9rem;
+  }
+
+  .footer-legal-liens a + a {
+    position: relative;
+  }
+
+  .footer-legal-liens a + a::before {
+    content: '·';
+    position: absolute;
+    left: -0.55rem;
     color: #8f90ab;
   }
 
@@ -177,6 +254,22 @@ const signature = [
     .footer-legal {
       flex-direction: column;
       text-align: center;
+    }
+  }
+
+  /* Les trois intitulés bout à bout mesurent 460 px : à 500 px de fenêtre ils
+     occupaient déjà la largeur disponible au pixel près. Plutôt que de les
+     laisser se rompre n'importe où — le point médian se retrouverait en tête de
+     seconde ligne —, on les empile sous 620 px et on retire le séparateur, qui
+     n'a plus rien à séparer. */
+  @media (max-width: 620px) {
+    .footer-legal-liens {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-legal-liens a + a::before {
+      display: none;
     }
   }
 </style>

@@ -1,0 +1,15 @@
+---
+// TODO : compléter l'identité du prestataire et le médiateur de la
+// consommation, et faire relire par un professionnel, avant la mise en ligne.
+// Voir l'avertissement en tête de src/i18n/cgv.ts.
+//
+// En frontmatter et non en commentaire HTML : servi au visiteur, ce rappel
+// annoncerait sur la page même que le contrat n'est pas encore validé.
+import DocumentLegal from '../DocumentLegal.astro';
+import { splitPath } from '../../lib/i18n';
+import { cgv } from '../../i18n/cgv';
+
+const { lang } = splitPath(Astro.url.pathname);
+---
+
+<DocumentLegal texte={cgv(lang)} doc="cgv" />

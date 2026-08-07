@@ -227,7 +227,7 @@ export const home = {
           'Mise en ligne incluse',
         ],
         cta: 'Demander un devis',
-        demo: 'Voir les 4 modèles',
+        demo: { un: 'Voir le modèle', plusieurs: 'Voir les {n} modèles' },
       },
       surMesure: {
         badge: 'Le plus choisi',
@@ -241,7 +241,7 @@ export const home = {
           'Accompagnement 3 mois inclus',
         ],
         cta: 'Demander un devis',
-        demo: 'Voir le site complet',
+        demo: { un: 'Voir le site complet', plusieurs: 'Voir les {n} sites complets' },
       },
       signature: {
         name: 'Signature',
@@ -253,7 +253,7 @@ export const home = {
           'Formation et accompagnement 6 mois',
         ],
         cta: 'Demander un devis',
-        demo: 'Voir le site complet',
+        demo: { un: 'Voir le site complet', plusieurs: 'Voir les {n} sites complets' },
       },
       note: { avant: 'Hébergement, nom de domaine et maintenance : ', apres: ' — votre site reste votre propriété, sans engagement.' },
     },
@@ -487,7 +487,7 @@ export const home = {
           'Launch included',
         ],
         cta: 'Request a quote',
-        demo: 'See the 4 templates',
+        demo: { un: 'See the template', plusieurs: 'See the {n} templates' },
       },
       surMesure: {
         badge: 'Most popular',
@@ -501,7 +501,7 @@ export const home = {
           '3 months of support included',
         ],
         cta: 'Request a quote',
-        demo: 'See the full site',
+        demo: { un: 'See the full site', plusieurs: 'See the {n} full sites' },
       },
       signature: {
         name: 'Signature',
@@ -513,7 +513,7 @@ export const home = {
           'Training and 6 months of support',
         ],
         cta: 'Request a quote',
-        demo: 'See the full site',
+        demo: { un: 'See the full site', plusieurs: 'See the {n} full sites' },
       },
       note: { avant: 'Hosting, domain name and maintenance: ', apres: ' — your website remains your property, with no commitment.' },
     },

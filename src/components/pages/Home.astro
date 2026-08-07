@@ -8,6 +8,7 @@ import { withBase } from '../../lib/paths';
 import { splitPath, localePath } from '../../lib/i18n';
 import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
+import { ACCENTS } from '../../data/modeles';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = home[lang];
@@ -62,17 +63,17 @@ const ICONES_ETAPES = [
 ];
 
 const modeleMeta = [
-  { path: 'modeles/association', image: 'association.webp', accent: '#7fe0a8' },
-  { path: 'modeles/batiment', image: 'batiment.webp', accent: '#f2b705' },
-  { path: 'modeles/esthetique', image: 'esthetique.webp', accent: '#f3c9bd' },
+  { path: 'modeles/association', image: 'association.webp', accent: ACCENTS.association },
+  { path: 'modeles/batiment', image: 'batiment.webp', accent: ACCENTS.batiment },
+  { path: 'modeles/esthetique', image: 'esthetique.webp', accent: ACCENTS.esthetique },
   // La vignette reprend la photographie de la galerie visible sur le modèle :
   // le visiteur retrouve exactement l'image qui l'attend derrière le lien.
-  { path: 'modeles/artiste', image: 'artiste/photographie-de-la-galerie.webp', accent: '#b9a8ff' },
+  { path: 'modeles/artiste', image: 'artiste/photographie-de-la-galerie.webp', accent: ACCENTS.artiste },
   // Le modèle yoga est en noir et blanc : son accent est un gris, pas une
   // couleur, et sa vignette est désaturée — sans quoi elle trahirait le parti
   // pris du site qu'elle annonce.
-  { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: '#d7d7d7', monochrome: true },
-  { path: 'modeles/restaurant', image: 'restaurant/four.webp', accent: '#d9ae5f' },
+  { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: ACCENTS.yoga, monochrome: true },
+  { path: 'modeles/restaurant', image: 'restaurant/four.webp', accent: ACCENTS.restaurant },
 ];
 // L'inversion se fait APRÈS l'appariement : modeleMeta[i] et items[i] restent
 // alignés, seul l'ordre d'affichage change (et avec lui l'échelonnement des
@@ -108,13 +109,13 @@ const modeles = modeleMeta
  * activé dessus (Settings → Pages → Source = « GitHub Actions »).
  */
 const surMesureModeles = [
-  { depot: 'modele-salon-de-the', image: 'salon-de-the.webp', accent: '#c0202e' },
-  { depot: 'modele-hotel-de-luxe', image: 'hotel-de-luxe.webp', accent: '#8d6d2c' },
+  { depot: 'modele-salon-de-the', image: 'salon-de-the.webp', accent: ACCENTS.salonDeThe },
+  { depot: 'modele-hotel-de-luxe', image: 'hotel-de-luxe.webp', accent: ACCENTS.hotel },
 ];
 
 const signatureModeles = [
-  { depot: 'modele-golf', image: 'golf.webp', accent: '#2b7350' },
-  { depot: 'modele-centre-equestre', image: 'centre-equestre.webp', accent: '#96581f' },
+  { depot: 'modele-golf', image: 'golf.webp', accent: ACCENTS.golf },
+  { depot: 'modele-centre-equestre', image: 'centre-equestre.webp', accent: ACCENTS.equestre },
 ];
 
 /** Assemble un modèle de pack avec ses textes traduits, dans l'ordre du tableau. */
@@ -128,6 +129,17 @@ const packModeles = (metas: { depot: string; image: string; accent: string }[],
 
 const surMesure = packModeles(surMesureModeles, t.surMesure.modeles);
 const signature = packModeles(signatureModeles, t.signature.modeles);
+
+/**
+ * Libellé du lien de démonstration d'une carte tarifaire, accordé au nombre
+ * réel de modèles.
+ *
+ * Le compte vient des tableaux eux-mêmes : les libellés annonçaient « 4 modèles »
+ * pour six vitrines, et « le site complet » au singulier pour deux sites. Ajouter
+ * ou retirer un modèle suffit désormais à corriger la phrase.
+ */
+const libelleDemo = (l: { un: string; plusieurs: string }, n: number) =>
+  n === 1 ? l.un : l.plusieurs.replace('{n}', String(n));
 
 /**
  * Portfolio : sites réellement livrés. Les favicons sont copiés dans
@@ -482,7 +494,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
             </ul>
             <a class="btn btn-ghost tarif-btn" href="#contact">{t.tarifs.essentiel.cta}</a>
             <a class="tarif-demo" href="#modeles">
-              {t.tarifs.essentiel.demo} <span class="arrow" aria-hidden="true">↓</span>
+              {libelleDemo(t.tarifs.essentiel.demo, modeles.length)} <span class="arrow" aria-hidden="true">↓</span>
             </a>
           </article>
           <article class="tarif-card pack-surmesure tarif-featured reveal" style="--reveal-delay: 0.12s">
@@ -497,7 +509,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
               class="tarif-demo"
               href={surMesure[0].url}
               target="_blank"
-              rel="noopener noreferrer">{t.tarifs.surMesure.demo} <span class="arrow" aria-hidden="true">↗</span></a
+              rel="noopener noreferrer">{libelleDemo(t.tarifs.surMesure.demo, surMesure.length)} <span class="arrow" aria-hidden="true">↗</span></a
             >
           </article>
           <article class="tarif-card pack-signature reveal" style="--reveal-delay: 0.24s">
@@ -511,7 +523,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
               class="tarif-demo"
               href={signature[0].url}
               target="_blank"
-              rel="noopener noreferrer">{t.tarifs.signature.demo} <span class="arrow" aria-hidden="true">↗</span></a
+              rel="noopener noreferrer">{libelleDemo(t.tarifs.signature.demo, signature.length)} <span class="arrow" aria-hidden="true">↗</span></a
             >
           </article>
         </div>
@@ -1216,7 +1228,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
      libellé écrit accompagne toujours la couleur — jamais de couleur seule. */
 
   .pack-essentiel {
-    --pack: #5352d1;
+    --pack: var(--pack-essentiel);
     --pack-soft: #e6e6fb;
   }
 
@@ -1224,12 +1236,12 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
      et doivent tenir le contraste AA (4,5:1) sur blanc comme sur --pack-soft. */
 
   .pack-surmesure {
-    --pack: #b83a24;
+    --pack: var(--pack-surmesure);
     --pack-soft: #ffe6e1;
   }
 
   .pack-signature {
-    --pack: #7d5a06;
+    --pack: var(--pack-signature);
     --pack-soft: #f8ecc9;
   }
 
@@ -1576,8 +1588,153 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     border-top-width: 4px;
   }
 
+  /* ------------------ Brillance des cartes au survol -------------------- */
+
+  /**
+   * Deux effets distincts, portés par les deux pseudo-éléments de la carte :
+   * ::before fait tourner un anneau de lumière sur la bordure, ::after fait
+   * traverser un reflet incliné.
+   *
+   * Aucun `overflow: hidden` sur la carte : le bandeau « Le plus choisi » est
+   * en `position: absolute; top: -0.85rem` et dépasse volontairement. Le reflet
+   * ne se déplace donc pas par translation — il déplace sa POSITION DE FOND,
+   * qui ne peut rien faire déborder.
+   *
+   * Les épaisseurs de bordure sont reprises en variables : le pseudo-élément
+   * est calé sur la boîte de bordure, or `inset` se mesure depuis la boîte de
+   * padding. Sans ces valeurs, l'anneau se décalerait de la bordure haute de
+   * 4 px, et de 1 px ailleurs.
+   */
+  .tarif-card {
+    --bord: 1px;
+    --bord-haut: 4px;
+  }
+
+  .tarif-featured {
+    --bord: 2px;
+  }
+
+  .tarif-card::before,
+  .tarif-card::after {
+    content: '';
+    position: absolute;
+    border-radius: inherit;
+    /* Décoratifs : ils ne doivent jamais intercepter le clic destiné au bouton
+       de la carte, ni apparaître aux outils d'accessibilité. */
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* L'anneau. Le dégradé conique va de la couleur du pack au blanc de la carte,
+     trois fois sur le tour : c'est cette alternance qui donne le tournoiement,
+     la rotation ne faisant que la promener. */
+  .tarif-card::before {
+    inset: calc(var(--bord-haut) * -1) calc(var(--bord) * -1) calc(var(--bord) * -1);
+    padding: 2px;
+    background: conic-gradient(
+      from var(--angle-brillance),
+      var(--pack, var(--accent)),
+      var(--paper-raised),
+      var(--pack, var(--accent)),
+      var(--paper-raised),
+      var(--pack, var(--accent))
+    );
+    /* Ne garder que l'anneau : on peint la boîte entière, puis on retire la
+       zone de contenu. Les deux masques se soustraient, il reste le padding —
+       soit exactement les 2 px du pourtour. */
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    transition: opacity 0.35s var(--ease-out);
+  }
+
+  /* Le reflet. Teinté et non blanc : la carte EST blanche (--paper-raised),
+     un reflet blanc y serait rigoureusement invisible. L'inclinaison de 105°
+     donne la diagonale demandée — 90° serait une barre verticale. */
+  .tarif-card::after {
+    inset: 0;
+    /* Bande étroite : 38 %–62 % couvraient 60 % de la largeur de la carte, ce
+       qui donnait un lavis de couleur et non un éclat. 44 %–56 % la ramènent à
+       30 %, soit une vraie bande de lumière qui passe. */
+    background-image: linear-gradient(
+      105deg,
+      transparent 44%,
+      var(--pack, var(--accent)) 50%,
+      transparent 56%
+    );
+    background-repeat: no-repeat;
+    /* Deux fois et demie la largeur : la bande reste fine une fois inclinée,
+       et il reste de la course de part et d'autre pour entrer et sortir. */
+    background-size: 250% 100%;
+    background-position: -75% 0;
+  }
+
+  /* Le survol seulement là où il existe vraiment : sur un écran tactile, :hover
+     reste collé après le toucher et l'animation tournerait indéfiniment. */
+  @media (hover: hover) {
+    .tarif-card:hover::before {
+      opacity: 1;
+      animation: anneau-tournoie 4s linear infinite;
+    }
+
+    /* `linear` et non `--ease-out` : cette courbe est très chargée au départ,
+       la bande franchissait la carte en un quart du temps puis rampait hors
+       champ pendant le reste. Un reflet traverse à vitesse constante. */
+    .tarif-card:hover::after {
+      animation: reflet-traverse 1.1s linear;
+    }
+  }
+
+  @keyframes anneau-tournoie {
+    to {
+      --angle-brillance: 360deg;
+    }
+  }
+
+  @keyframes reflet-traverse {
+    0% {
+      background-position: -75% 0;
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.16;
+    }
+    88% {
+      opacity: 0.16;
+    }
+    100% {
+      background-position: 175% 0;
+      opacity: 0;
+    }
+  }
+
+  /* En mouvement réduit, l'anneau se pose sans tourner et le reflet ne part
+     pas : la carte reste signalée au survol, sans rien qui bouge. */
+  @media (prefers-reduced-motion: reduce) {
+    .tarif-card::before {
+      transition: none;
+    }
+
+    .tarif-card:hover::before {
+      animation: none;
+    }
+
+    .tarif-card:hover::after {
+      animation: none;
+    }
+  }
+
   .tarif-badge {
     position: absolute;
+    /* Au-dessus du reflet : le bandeau chevauche le bord de la carte, or le
+       reflet s'arrête à ce bord. Sans ce plan, la bande le couperait net à
+       l'horizontale — un défaut de rendu, pas un effet de lumière. */
+    z-index: 1;
     top: -0.85rem;
     /* Coin haut droit : le nom du pack occupe le coin gauche, le bandeau ne
        doit jamais venir le serrer — surtout sur trois colonnes, où les cartes

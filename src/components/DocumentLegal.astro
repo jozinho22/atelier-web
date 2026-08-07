@@ -1,0 +1,218 @@
+---
+/**
+ * Gabarit commun aux documents juridiques : mentions légales et CGV.
+ *
+ * Les deux pages ne diffèrent que par leur texte. Les garder sur un seul
+ * gabarit évite qu'elles divergent de mise en forme au fil des retouches —
+ * c'est justement leur ressemblance qui les rend lisibles comme un ensemble.
+ */
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import { splitPath, localePath } from '../lib/i18n';
+import { common } from '../i18n/common';
+import { estListe, type DocumentLegalTexte } from '../i18n/document-legal';
+
+interface Props {
+  texte: DocumentLegalTexte;
+  /** Identifie la page courante : l'autre document devient sa page jumelle. */
+  doc: 'mentions-legales' | 'cgv';
+}
+
+const { texte, doc } = Astro.props;
+const { lang } = splitPath(Astro.url.pathname);
+const t = common[lang];
+
+// La page jumelle : les CGV renvoient aux mentions légales, et réciproquement.
+const jumelle =
+  doc === 'cgv'
+    ? { href: localePath(lang, 'mentions-legales'), label: t.juridique.versLegal }
+    : { href: localePath(lang, 'cgv'), label: t.juridique.versCgv };
+
+const accueil = { href: localePath(lang), label: t.juridique.accueil };
+const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigation';
+---
+
+<Base title={texte.meta.title} description={texte.meta.description}>
+  <Header />
+  <main class="section">
+    <div class="container legal">
+      <!-- Répétée en tête et en pied : ces pages n'ont ni ancre ni menu, et le
+           visiteur venu d'un moteur de recherche y atterrit sans contexte. -->
+      <nav class="legal-nav" aria-label={etiquette}>
+        <a class="bouton-retour" href={accueil.href}>
+          <span class="bouton-retour-fleche" aria-hidden="true">←</span>
+          {accueil.label}
+        </a>
+        <a class="legal-nav-jumelle" href={jumelle.href}>{jumelle.label}</a>
+      </nav>
+
+      <p class="eyebrow">{texte.eyebrow}</p>
+      <h1 class="section-title">{texte.title}</h1>
+      {texte.maj && <p class="legal-maj">{texte.maj}</p>}
+
+      {
+        texte.sections.map((section) => (
+          <section>
+            <h2>{section.heading}</h2>
+            {section.blocs.map((bloc) =>
+              estListe(bloc) ? (
+                <ul>
+                  {bloc.liste.map((item) => (
+                    <li>
+                      {item.map((segment) =>
+                        'br' in segment ? (
+                          <br />
+                        ) : 'href' in segment ? (
+                          <a href={segment.href}>{segment.link}</a>
+                        ) : (
+                          segment.text
+                        )
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  {bloc.map((segment) =>
+                    'br' in segment ? (
+                      <br />
+                    ) : 'href' in segment ? (
+                      <a href={segment.href}>{segment.link}</a>
+                    ) : (
+                      segment.text
+                    )
+                  )}
+                </p>
+              )
+            )}
+          </section>
+        ))
+      }
+
+      <nav class="legal-nav legal-nav-bas" aria-label={etiquette}>
+        <a class="bouton-retour" href={accueil.href}>
+          <span class="bouton-retour-fleche" aria-hidden="true">←</span>
+          {accueil.label}
+        </a>
+        <a class="legal-nav-jumelle" href={jumelle.href}>{jumelle.label}</a>
+      </nav>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .legal {
+    max-width: 46rem;
+  }
+
+  .legal h1 {
+    margin-bottom: 1rem;
+  }
+
+  /* Date de dernière mise à jour : présente sur les CGV, absente des mentions
+     légales. Discrète, mais c'est elle qui date la version du contrat que le
+     client a acceptée. */
+  .legal-maj {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .legal section {
+    margin-top: 2.4rem;
+  }
+
+  .legal h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+  }
+
+  .legal p {
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  .legal p + p {
+    margin-top: 0.8rem;
+  }
+
+  /* Texte justifié : c'est la mise en page attendue d'un document contractuel.
+     Mais la justification a besoin de lignes assez longues pour répartir le
+     blanc. Le seuil de 600 px vient de la mesure, pas d'un usage : en prenant
+     l'espace inter-mots médian rapporté à sa largeur naturelle, on relève
+     1,68× à 375 px, 1,44× à 480 px, puis 1,17× à 640 px. C'est entre 480 et
+     640 px que le texte cesse d'être distendu. En dessous, fer à gauche.
+
+     Sans ce garde-fou, 40 % des espaces dépassaient le double de leur largeur
+     à 375 px, avec des pointes à 10,8× : des rivières de blanc visibles en
+     travers du paragraphe.
+
+     `hyphens: auto` aide là où le navigateur dispose du dictionnaire de césure
+     français (il s'appuie sur l'attribut `lang` porté par <html>). On ne peut
+     pas compter dessus — il était inopérant sur le navigateur de test —, d'où
+     le point de rupture plutôt que la seule césure. */
+  @media (min-width: 600px) {
+    .legal section p,
+    .legal li {
+      text-align: justify;
+      hyphens: auto;
+    }
+  }
+
+  .legal ul {
+    margin: 0.8rem 0 0;
+    padding-left: 1.15rem;
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  .legal li + li {
+    margin-top: 0.35rem;
+  }
+
+  .legal li::marker {
+    color: var(--accent);
+  }
+
+  /* `.legal section a` et non `.legal a` : cette règle vise les liens du TEXTE,
+     tous contenus dans une section. Trop large, elle écrasait aussi les liens
+     de navigation — le bouton de retour s'affichait violet sur violet. */
+  .legal section a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ------------------------- Navigation du document ---------------------- */
+
+  .legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .legal-nav-bas {
+    margin-top: 3rem;
+    margin-bottom: 0;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgb(18 19 31 / 0.1);
+  }
+
+  /* Le retour à l'accueil est le lien proéminent : c'est la sortie que le
+     visiteur cherche. Il est plein là où le lien jumeau reste du texte — voir
+     `.bouton-retour` dans global.css, partagé avec « Qui sommes-nous ». */
+
+  .legal-nav-jumelle {
+    color: var(--accent-strong);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .legal-nav-jumelle:hover {
+    color: var(--ink);
+  }
+</style>

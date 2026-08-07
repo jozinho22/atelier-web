@@ -277,7 +277,7 @@
       "mur-1": {
         "role": "neutral",
         "displayName": "Mur, palier 1",
-        "canonical": "oklch(93.64% 0.0109 95.17)",
+        "canonical": "oklch(88.21% 0.0168 91.57)",
         "tonalRamp": [
           "oklch(15% 0.0109 95.17)",
           "oklch(26% 0.0109 95.17)",
@@ -292,7 +292,7 @@
       "mur-2": {
         "role": "neutral",
         "displayName": "Mur, palier 2",
-        "canonical": "oklch(95.25% 0.0099 87.47)",
+        "canonical": "oklch(90.38% 0.0154 90.24)",
         "tonalRamp": [
           "oklch(15% 0.0099 87.47)",
           "oklch(26% 0.0099 87.47)",
@@ -307,7 +307,7 @@
       "mur-3": {
         "role": "neutral",
         "displayName": "Mur, palier 3",
-        "canonical": "oklch(96.45% 0.0098 87.47)",
+        "canonical": "oklch(92.53% 0.0141 88.69)",
         "tonalRamp": [
           "oklch(15% 0.0098 87.47)",
           "oklch(26% 0.0098 87.47)",
@@ -322,7 +322,7 @@
       "mur-4": {
         "role": "neutral",
         "displayName": "Mur, palier 4",
-        "canonical": "oklch(97.93% 0.007 88.64)",
+        "canonical": "oklch(94.92% 0.0111 89.72)",
         "tonalRamp": [
           "oklch(15% 0.007 88.64)",
           "oklch(26% 0.007 88.64)",

@@ -17,6 +17,23 @@
   --mur-2: #e3dfd4;
   --mur-3: #eae6dc;
   --mur-4: #f1eee6;
+
+  /* Code couleur des trois offres. Partagé plutôt que local : la page d'accueil
+     le pose sur les cartes tarifaires et les badges, le pied de page sur ses
+     pastilles. Deux définitions divergeraient tôt ou tard.
+
+     Les teintes de base sont sombres — elles servent de couleur de TEXTE sur
+     fond clair et doivent y tenir 4,5:1. Sur le fond d'encre du pied de page
+     elles ne tiennent plus : Signature tombait à 2,93:1, sous le seuil de 3:1
+     exigé d'un élément graphique. D'où les variantes « sur encre », éclaircies
+     à teinte et saturation constantes jusqu'à 4,5:1 — les trois ensemble, pour
+     que la famille reste lisible comme une famille. */
+  --pack-essentiel: #5352d1;
+  --pack-surmesure: #b83a24;
+  --pack-signature: #7d5a06;
+  --pack-essentiel-sur-encre: #7372da;
+  --pack-surmesure-sur-encre: #d85038;
+  --pack-signature-sur-encre: #a47608;
   --paper-raised: #ffffff;
   --accent: #5352d1;
   --accent-strong: #403fb8;
@@ -49,6 +66,25 @@
   --container: 72rem;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- Propriétés animables ---------------------------------------------- */
+
+/**
+ * Une propriété personnalisée n'est interpolable qu'une fois son type déclaré :
+ * sans ce bloc, `--angle-brillance` serait traitée comme une chaîne et sauterait
+ * de 0deg à 360deg au lieu de tourner. C'est ce qui fait tourner l'anneau de
+ * brillance des cartes tarifaires.
+ *
+ * L'enregistrement est global, où qu'il soit écrit — le placer ici plutôt que
+ * dans un composant évite de le croire scopé. Sur un navigateur qui ignore
+ * `@property`, le dégradé conique reste affiché mais immobile : l'effet perd son
+ * mouvement, jamais sa lisibilité.
+ */
+@property --angle-brillance {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 
 /* --- Reset léger ------------------------------------------------------- */
@@ -209,6 +245,58 @@ button {
 .btn-ghost {
   border-color: currentColor;
   background: transparent;
+}
+
+/**
+ * Bouton « Retour à l'accueil ».
+ *
+ * Partagé par les pages qui n'ont ni ancre ni fil d'Ariane — mentions légales,
+ * CGV, « Qui sommes-nous » : le visiteur venu d'un moteur de recherche y arrive
+ * sans contexte, et ce bouton est sa sortie.
+ *
+ * Ici plutôt que dans un composant : les styles Astro étant scopés, chaque page
+ * aurait sinon sa propre copie, et les trois divergeraient à la première
+ * retouche. Plus compact et moins arrondi que `.btn`, dont la pilule est
+ * réservée aux appels à l'action commerciaux.
+ */
+.bouton-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-s);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    transform 0.25s var(--ease-out);
+}
+
+.bouton-retour:hover {
+  background: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.bouton-retour-fleche {
+  transition: transform 0.25s var(--ease-out);
+}
+
+.bouton-retour:hover .bouton-retour-fleche {
+  transform: translateX(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton-retour,
+  .bouton-retour-fleche {
+    transition: none;
+  }
+
+  .bouton-retour:hover,
+  .bouton-retour:hover .bouton-retour-fleche {
+    transform: none;
+  }
 }
 
 /* --- Apparition au défilement ------------------------------------------ */

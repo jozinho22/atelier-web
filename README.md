@@ -18,7 +18,60 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 | `/modeles/batiment` · `/en/…` | Démo « Moreau Rénovation » — métiers du bâtiment |
 | `/modeles/esthetique` · `/en/…` | Démo « L'Écrin de Soi » — institut de beauté |
 | `/modeles/artiste` · `/en/…` | Démo « Claire Aubry » — blog/portfolio d'artiste peintre |
+| `/modeles/yoga` · `/en/…` | Démo « Studio Anahata » — studio de yoga |
+| `/modeles/restaurant` · `/en/…` | Démo « La Table d'Argile » — restaurant |
 | `/mentions-legales` · `/en/…` | Mentions légales (minimalistes, à compléter) |
+| `/cgv` · `/en/…` | Conditions générales de vente (à compléter et à faire relire) |
+| `/qui-sommes-nous` · `/en/…` | Présentation de l'atelier (biographies fictives) |
+
+## Pages juridiques
+
+Les mentions légales et les CGV partagent un gabarit unique,
+[src/components/DocumentLegal.astro](src/components/DocumentLegal.astro) : même
+largeur de colonne, même hiérarchie de titres, mêmes styles de lien et de
+liste. Les deux pages ne diffèrent que par leur dictionnaire —
+[legal.ts](src/i18n/legal.ts) et [cgv.ts](src/i18n/cgv.ts) — tous deux typés par
+[document-legal.ts](src/i18n/document-legal.ts).
+
+Les CGV sont le seul dictionnaire qui soit une **fonction** de la langue plutôt
+qu'un objet : les montants (packs, acompte, allers-retours, abonnement) sont lus
+depuis [src/data/tarifs.ts](src/data/tarifs.ts) et mis en forme selon la locale.
+Une hausse de prix se répercute donc d'elle-même sur le contrat comme sur la
+page d'accueil, qui ne peuvent pas se contredire.
+
+Chaque page porte, en tête **et** en pied, un retour à l'accueil et un lien vers
+son document jumeau — ces pages n'ont ni menu d'ancres ni fil d'Ariane, et un
+visiteur venu d'un moteur de recherche y arrive sans contexte.
+
+Le corps de texte est **justifié à partir de 600 px** seulement. Le seuil est
+mesuré : l'espace inter-mots médian rapporté à sa largeur naturelle vaut 1,68×
+à 375 px contre 1,17× à 640 px. En dessous, la colonne est trop étroite (40
+caractères par ligne) et la justification creuse des rivières de blanc.
+
+**À compléter avant la mise en ligne** — identité du prestataire et SIRET (les
+deux pages), et coordonnées du médiateur de la consommation, obligatoires dès
+lors qu'on vend à un particulier. Le texte des CGV est une rédaction de départ,
+pas un avis juridique : il suppose la franchise en base de TVA, une clientèle
+incluant des consommateurs et un abonnement sans engagement, et mérite une
+relecture professionnelle.
+
+## Qui sommes-nous
+
+Page autonome ([src/components/pages/QuiSommesNous.astro](src/components/pages/QuiSommesNous.astro),
+textes dans [src/i18n/equipe.ts](src/i18n/equipe.ts)), atteinte depuis le pied de
+page aux côtés des mentions légales et des CGV — délibérément absente de la page
+d'accueil et de la navigation principale.
+
+Les portraits (`public/profiles/`) sont flottés dans un disque, avec
+`shape-outside: circle(50%)` pour que le texte suive la courbe. Les sources sont
+presque carrées : cadrées telles quelles, le visage tombait à 34 % de la hauteur
+du disque et la moitié basse ne montrait que la chemise. Un agrandissement de
+1,25 depuis le bord haut le porte à 72 % du disque, centré à 40 %. Sous 600 px le
+portrait repasse dans le flux, centré au-dessus de la biographie.
+
+**⚠️ Biographies fictives**, à remplacer avant la mise en ligne — et à
+réconcilier avec les mentions légales et les CGV, qui déclarent un
+« entrepreneur individuel » au singulier.
 
 ## Internationalisation (FR/EN)
 
@@ -61,15 +114,48 @@ npm run preview  # prévisualiser le build
 - HTML sémantique, un seul `h1` par page, `<html lang>` selon la langue servie
 - Polices auto-hébergées (Fontsource), zéro requête externe
 
+## Écran d'accueil mobile
+
+Ajouté à l'écran d'accueil d'un téléphone, le site s'affiche sous le libellé
+**« Atelier Web »** et avec une vraie icône, non un favicon 32×32 agrandi.
+Deux déclarations le permettent, et il faut les deux :
+
+- `short_name` du manifeste
+  ([src/pages/site.webmanifest.ts](src/pages/site.webmanifest.ts)), lu par
+  Android ;
+- `<meta name="apple-mobile-web-app-title">` dans
+  [src/layouts/Base.astro](src/layouts/Base.astro), car **iOS ignore le
+  manifeste**. Sans elle, iOS retombe sur le `<title>` — une phrase entière,
+  tronquée à quelques caractères.
+
+Les deux valent « Atelier Web » (11 caractères, sous la limite de troncature
+d'environ 12). Les modifier ensemble, jamais l'une sans l'autre.
+
+Le champ `id` du manifeste, lui, **ne doit jamais changer** : il est l'identité
+de l'application. Il inclut le chemin de base parce qu'il se résout contre
+l'ORIGINE, et que `jozinho22.github.io` héberge tous les dépôts — un `id` réduit
+à `/` y serait partagé avec chaque autre projet du compte.
+
+Icônes déclarées (toutes présentes dans `public/`) : 32, 192 et 512 en `any`,
+plus `icon-512-maskable.png` en `purpose: "maskable"` — celle-là seulement,
+parce qu'elle a été dessinée avec la marge que le masque Android exige.
+
 ## Déploiement — trois cibles, un seul code
 
 Convention (commune à tous les projets Astro) : **le défaut décrit la cible
 finale** — site servi à la racine, dev local sur `/`. Le sous-chemin
 `github.io/<depot>/` n'existe que pendant la phase démo, géré par le workflow.
 Les liens internes passent par `withBase()`
-([src/lib/paths.ts](src/lib/paths.ts)) ; URL canoniques, sitemap et
-`robots.txt` ([src/pages/robots.txt.ts](src/pages/robots.txt.ts)) suivent
-automatiquement.
+([src/lib/paths.ts](src/lib/paths.ts)) ; URL canoniques, sitemap,
+`robots.txt` ([src/pages/robots.txt.ts](src/pages/robots.txt.ts)) et
+`site.webmanifest` ([src/pages/site.webmanifest.ts](src/pages/site.webmanifest.ts))
+suivent automatiquement.
+
+Ces deux derniers sont des **routes générées** et non des fichiers de
+`public/` : un fichier statique figerait des chemins absolus, valides à la
+racine et rompus sous `/atelier-web/`. Pour le manifeste la panne serait
+silencieuse — un `scope` qui ne contient pas la page courante l'invalide en
+entier, et l'icône reperdrait son libellé sans autre symptôme.
 
 | Cible | Comment | URL |
 | --- | --- | --- |
