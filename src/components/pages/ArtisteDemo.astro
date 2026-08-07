@@ -360,6 +360,12 @@ const liensMenu = [
   .f-btn {
     display: inline-flex;
     align-items: center;
+    /* L'adresse de contact passe dans un bouton : en capitales et à 0,16 em
+       d'interlettrage, elle mesure 308 px et sortait de l'écran à 320. Elle se
+       replie plutôt sur deux lignes — `anywhere` parce qu'aucune espace n'y
+       offre de point de coupure. */
+    max-width: 100%;
+    overflow-wrap: anywhere;
     padding: 0.72rem 1.6rem;
     border: 1px solid var(--f-charbon);
     font-size: 0.8rem;
@@ -593,7 +599,9 @@ const liensMenu = [
 
   .f-galerie {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    /* `min()` sinon la colonne garde ses 18 rem alors que `.f-wrap` n'en fait
+       que 17,5 à 320 px. */
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     gap: clamp(2.5rem, 5vw, 4rem);
     align-items: start;
   }

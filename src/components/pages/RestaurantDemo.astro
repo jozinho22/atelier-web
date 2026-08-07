@@ -558,7 +558,7 @@ const liensMenu = [
 
   .a-carte {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     gap: clamp(2rem, 4vw, 3.5rem);
   }
 
@@ -627,7 +627,9 @@ const liensMenu = [
   .a-four,
   .a-cave {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    /* `min()` sinon la colonne garde ses 19 rem alors que `.a-wrap` n'en fait
+       que 17,5 à 320 px : la section débordait de 24 px. */
+    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
     gap: clamp(2rem, 4vw, 3.5rem);
     align-items: center;
   }

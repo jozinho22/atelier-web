@@ -666,7 +666,9 @@ const liensMenu = [
 
   .e-temoignages {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    /* `min()` sinon la colonne garde ses 18 rem alors que `.wrap` n'en fait
+       que 17,5 à 320 px. */
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     gap: 1.5rem;
     max-width: 52rem;
     margin-inline: auto;

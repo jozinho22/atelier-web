@@ -105,6 +105,10 @@ const DRAPEAUX = {
     display: block;
     width: 1.25rem;
     height: auto;
+    /* Sans cela, la bascule étant le seul élément compressible de l'en-tête et
+       du bandeau de démo, c'est le drapeau qui encaissait le manque de place :
+       il tombait à 10 px sur un écran de 320. */
+    flex: none;
     aspect-ratio: 3 / 2;
     border-radius: 2px;
     /* Le drapeau de la langue inactive perd ses couleurs : la sélection se lit
@@ -134,6 +138,19 @@ const DRAPEAUX = {
     height: 0.85rem;
     background: currentColor;
     opacity: 0.22;
+  }
+
+  /* Drapeaux compris, la bascule mesure 124 px. Sur un écran de 320 px,
+     l'en-tête doit y loger en plus le logo (137) et le bouton du menu (44) :
+     la ligne réclame 305 px pour 288 disponibles, et le bandeau de démo est
+     plus serré encore. Quelque chose doit céder — le drapeau, pas le code
+     langue : le commentaire en tête de ce fichier dit pourquoi un drapeau
+     désigne un pays et non une langue. On garde donc ce qui porte le sens et
+     on laisse partir l'ornement, ce qui rend 53 px aux deux barres. */
+  @media (max-width: 420px) {
+    .drapeau {
+      display: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

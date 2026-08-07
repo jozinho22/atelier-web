@@ -92,4 +92,25 @@ const home = localePath(lang, '');
       display: none;
     }
   }
+
+  /* À 320 px, le retour (88), la bascule de langue (71 une fois ses drapeaux
+     repliés) et l'appel à l'action (115) réclament 307 px pour 288 disponibles
+     — et rien ici ne sait rétrécir : le bandeau débordait de 16 px, sur les
+     six modèles à la fois. Plutôt que de sacrifier l'un des trois, on les
+     resserre. `space-between` fixant l'écart réel, le `gap` n'est qu'un
+     plancher. */
+  @media (max-width: 420px) {
+    .demo-bar {
+      font-size: 0.78rem;
+    }
+
+    .demo-bar-inner,
+    .demo-actions {
+      gap: 0.5rem;
+    }
+
+    .demo-cta {
+      padding-inline: 0.6rem;
+    }
+  }
 </style>
