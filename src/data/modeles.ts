@@ -21,8 +21,27 @@ export const ACCENTS = {
   /** Gris et non couleur : le modèle yoga est intégralement en noir et blanc. */
   yoga: '#d7d7d7',
   restaurant: '#d9ae5f',
-  // Les deux modèles du pack « Sur mesure ».
-  salonDeThe: '#c0202e',
+  /**
+   * Rose de diner, et non le cerise du site lui-même (#c0202e). Sur une carte
+   * vitrine, l'accent est le FOND d'une pastille au texte encre : le cerise n'y
+   * donnait que 3,06:1, sous le seuil de 4,5. Celui-ci en donne 7,80, dans la
+   * bande de luminance des six autres accents.
+   *
+   * Le modèle garde son cerise d'origine pour son propre décor — il vit dans
+   * SalonDeTheDemo.astro, pas ici.
+   */
+  salonDeThe: '#f58993',
+  /**
+   * Cuivre clair — les casseroles du mur et la croûte. Choisi pour deux
+   * contraintes mesurées : 7,58:1 pour l'encre sur la pastille, et ΔE 26,6 du
+   * plus proche voisin (le rose du salon de thé), là où toutes les nuances de
+   * mie testées se pressaient sous 20 contre le rose pêche de l'esthétique.
+   *
+   * Le modèle emploie un cuivre plus profond pour son propre texte : celui-ci
+   * ne sert qu'à la pastille et au liseré de sa vignette.
+   */
+  boulangerie: '#ee8d63',
+  // Le modèle restant du pack « Sur mesure ».
   hotel: '#8d6d2c',
   // Les deux modèles du pack « Signature ».
   golf: '#2b7350',

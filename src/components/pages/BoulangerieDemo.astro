@@ -1,0 +1,891 @@
+---
+/**
+ * Démonstration « Le Fournil de Kerlann » — boulangerie-pâtisserie.
+ *
+ * Huitième vitrine. Elle reprend l'ossature commune aux sept autres — barre de
+ * démonstration, en-tête collant, menu dépliable dans son propre habillage,
+ * apparitions au défilement, pied de page — et n'en change que l'habillage.
+ *
+ * Aucune police n'est ajoutée : Fraunces et Outfit sont déjà chargées par le
+ * gabarit de base. Une boulangerie se raconte très bien en serif, et le projet
+ * en a déjà une.
+ *
+ * Préfixe `.bo-` : les styles Astro sont scopés, mais les huit démos partagent
+ * MenuMobile, dont les habillages vivent dans un seul fichier — deux préfixes
+ * identiques s'y heurteraient.
+ */
+import Base from '../../layouts/Base.astro';
+import DemoBar from '../DemoBar.astro';
+import MenuMobile from '../MenuMobile.astro';
+import { splitPath } from '../../lib/i18n';
+import { withBase } from '../../lib/paths';
+import { boulangerie } from '../../i18n/boulangerie';
+
+const { lang } = splitPath(Astro.url.pathname);
+const t = boulangerie[lang];
+
+const photo = (nom: string) => withBase(`modeles/boulangerie/${nom}`);
+
+const liensMenu = [
+  { href: '#fournil', label: t.nav.fournil },
+  { href: '#pains', label: t.nav.pains },
+  { href: '#patisserie', label: t.nav.patisserie },
+  { href: '#chocolats', label: t.nav.chocolats },
+  { href: '#venir', label: t.nav.venir },
+];
+---
+
+<Base title={t.title} description={t.description}>
+  <DemoBar label={t.demoLabel} />
+  <div class="bo">
+    <!-- ============================== EN-TÊTE ============================= -->
+    <header class="bo-header">
+      <div class="bo-wrap bo-header-inner">
+        <a class="bo-logo" href="#haut" aria-label="Le Fournil de Kerlann">
+          <span class="bo-logo-nom">Le Fournil</span>
+          <span class="bo-logo-sous" aria-hidden="true">de Kerlann</span>
+        </a>
+        <nav aria-label={lang === 'fr' ? 'Navigation de la boulangerie' : 'Bakery navigation'}>
+          <ul class="bo-nav">
+            {liensMenu.map((l) => (
+              <li><a href={l.href}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <a class="bo-btn bo-btn-cuivre" href="#venir">{t.nav.cta}</a>
+        <MenuMobile
+          variante="boulangerie"
+          lang={lang}
+          liens={liensMenu}
+          cta={{ href: '#venir', label: t.nav.cta }}
+        />
+      </div>
+    </header>
+
+    <main id="haut">
+      <!-- =============================== HERO ============================= -->
+      <section class="bo-hero" aria-label={t.hero.ariaLabel}>
+        <img
+          class="bo-hero-photo"
+          src={photo('devanture.webp')}
+          alt=""
+          width="1600"
+          height="873"
+          fetchpriority="high"
+        />
+        <span class="bo-hero-voile" aria-hidden="true"></span>
+
+        <div class="bo-wrap bo-hero-contenu">
+          <p class="bo-kicker bo-hero-lieu">{t.hero.lieu}</p>
+          <h1 class="bo-hero-titre">
+            <span class="bo-hero-titre-1">{t.hero.titre.ligne}</span>
+            <span class="bo-hero-titre-2">{t.hero.titre.script}</span>
+          </h1>
+          <p class="bo-hero-accroche">{t.hero.accroche}</p>
+          <p class="bo-lede bo-hero-chapo">{t.hero.chapo}</p>
+          <p class="bo-hero-actions">
+            <a class="bo-btn bo-btn-cuivre" href="#patisserie">{t.hero.ctaCarte}</a>
+            <a class="bo-btn bo-btn-fantome" href="#venir">{t.hero.ctaVenir}</a>
+          </p>
+          <ul class="bo-hero-reperes">
+            {t.hero.reperes.map((r) => <li>{r}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================= CHIFFRES =========================== -->
+      <section class="bo-chiffres" aria-label={t.fournil.sur}>
+        <div class="bo-wrap bo-chiffres-grille">
+          {t.chiffres.map((c, i) => (
+            <div class="bo-chiffre reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+              <p class="bo-chiffre-valeur">{c.valeur}</p>
+              <p class="bo-chiffre-libelle">{c.libelle}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ============================= LE FOURNIL ========================= -->
+      <section id="fournil" class="bo-section">
+        <div class="bo-wrap bo-duo">
+          <figure class="bo-photo reveal">
+            <img
+              src={photo('interieur.webp')}
+              alt={t.fournil.photoAlt}
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>{t.fournil.legende}</figcaption>
+          </figure>
+          <div class="bo-duo-texte reveal">
+            <p class="bo-kicker">{t.fournil.sur}</p>
+            <h2 class="bo-titre">{t.fournil.titre}</h2>
+            <p class="bo-lede">{t.fournil.texte}</p>
+            <p class="bo-texte">{t.fournil.texte2}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== LES PAINS ========================= -->
+      <section id="pains" class="bo-section bo-section-sunk">
+        <div class="bo-wrap">
+          <div class="bo-tete reveal">
+            <p class="bo-kicker">{t.pains.sur}</p>
+            <h2 class="bo-titre">{t.pains.titre}</h2>
+            <p class="bo-lede">{t.pains.lede}</p>
+          </div>
+          <ul class="bo-ardoise reveal">
+            {t.pains.articles.map((a) => (
+              <li>
+                <span class="bo-ardoise-nom">{a.nom}</span>
+                <span class="bo-ardoise-pointilles" aria-hidden="true"></span>
+                <span class="bo-ardoise-prix">{a.prix}</span>
+                <span class="bo-ardoise-detail">{a.detail}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================ LA PÂTISSERIE ======================= -->
+      <section id="patisserie" class="bo-section">
+        <div class="bo-wrap bo-duo bo-duo-inverse">
+          <div class="bo-duo-texte reveal">
+            <p class="bo-kicker">{t.patisserie.sur}</p>
+            <h2 class="bo-titre">{t.patisserie.titre}</h2>
+            <p class="bo-lede">{t.patisserie.lede}</p>
+            <ul class="bo-liste-prix">
+              {t.patisserie.articles.map((a) => (
+                <li>
+                  <span class="bo-liste-nom">{a.nom}</span>
+                  <span class="bo-liste-prix-valeur">{a.prix}</span>
+                  <span class="bo-liste-detail">{a.detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <figure class="bo-photo reveal">
+            <img
+              src={photo('patisseries.webp')}
+              alt={t.patisserie.photoAlt}
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <!-- ============================ LES CHOCOLATS ======================= -->
+      <section id="chocolats" class="bo-section bo-section-nuit">
+        <div class="bo-wrap bo-duo">
+          <figure class="bo-photo reveal">
+            <img
+              src={photo('chocolats.webp')}
+              alt={t.chocolats.photoAlt}
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="bo-duo-texte reveal">
+            <p class="bo-kicker">{t.chocolats.sur}</p>
+            <h2 class="bo-titre">{t.chocolats.titre}</h2>
+            <p class="bo-lede">{t.chocolats.lede}</p>
+            <ul class="bo-liste-prix">
+              {t.chocolats.articles.map((a) => (
+                <li>
+                  <span class="bo-liste-nom">{a.nom}</span>
+                  <span class="bo-liste-prix-valeur">{a.prix}</span>
+                  <span class="bo-liste-detail">{a.detail}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="bo-note">{t.chocolats.note}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= NOUS TROUVER ======================= -->
+      <section id="venir" class="bo-section">
+        <div class="bo-wrap bo-venir">
+          <div class="bo-duo-texte reveal">
+            <p class="bo-kicker">{t.venir.sur}</p>
+            <h2 class="bo-titre">{t.venir.titre}</h2>
+            <p class="bo-lede">{t.venir.lede}</p>
+          </div>
+
+          <div class="bo-venir-cols">
+            <div class="reveal">
+              <h3 class="bo-sous-titre">{t.venir.horairesTitre}</h3>
+              <table class="bo-horaires">
+                <tbody>
+                  {t.venir.horaires.map((h) => (
+                    <tr>
+                      <th scope="row">{h.jours}</th>
+                      <td>
+                        {h.heures}
+                        {'note' in h && h.note && <span class="bo-horaires-note">{h.note}</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="reveal" style="--reveal-delay: 0.1s">
+              <h3 class="bo-sous-titre">{t.venir.contactTitre}</h3>
+              <p class="bo-texte">{t.venir.contactTexte}</p>
+              <p class="bo-venir-actions">
+                <a class="bo-btn bo-btn-cuivre" href={`tel:${t.venir.telephoneLien}`}>
+                  {t.venir.ctaAppeler}
+                </a>
+                <a class="bo-lien-mail" href={`mailto:${t.venir.email}`}>{t.venir.email}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================= PIED DE PAGE ========================= -->
+    <footer class="bo-footer">
+      <div class="bo-wrap bo-footer-inner">
+        <div>
+          <p class="bo-footer-nom">Le Fournil de Kerlann</p>
+          <p class="bo-footer-baseline">{t.footer.baseline}</p>
+        </div>
+        <div class="bo-footer-coord">
+          <p>{t.footer.adresse}</p>
+          <p>
+            <a href={`tel:${t.venir.telephoneLien}`}>{t.venir.telephone}</a>
+            {' · '}
+            <a href={`mailto:${t.venir.email}`}>{t.venir.email}</a>
+          </p>
+        </div>
+      </div>
+      <p class="bo-wrap bo-footer-fictif">{t.footer.mentionFictif}</p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  /* ======================= Jetons propres au modèle ====================== */
+
+  .bo {
+    --bo-ink: #2a1d12;
+    --bo-ink-soft: #4d3a28;
+    --bo-muted: #6f5b46;
+    --bo-paper: #faf4e9;
+    --bo-paper-raised: #fffdf8;
+    --bo-paper-sunk: #f0e6d5;
+
+    /* Cuivre : la couleur des casseroles au mur et de la croûte. La variante
+       profonde porte le texte sur crème, la claire sur la nuit. */
+    --bo-cuivre: #c1683a;
+    --bo-cuivre-deep: #9c4f28;
+    --bo-cuivre-clair: #e79a6e;
+    --bo-ble: #c9922f;
+    --bo-nuit: #2a1d12;
+    --bo-nuit-soft: #3a2818;
+
+    --bo-radius: 14px;
+    --bo-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    background: var(--bo-paper);
+    color: var(--bo-ink);
+  }
+
+  .bo-wrap {
+    width: min(74rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+
+  @media (max-width: 420px) {
+    .bo-wrap {
+      width: min(74rem, 100% - 2rem);
+    }
+  }
+
+  .bo-section {
+    padding-block: clamp(4rem, 9vw, 7rem);
+  }
+
+  .bo-section-sunk {
+    background: var(--bo-paper-sunk);
+  }
+
+  .bo-section-nuit {
+    background: var(--bo-nuit);
+    color: #f3e7d6;
+  }
+
+  /* ---------------------------- Typographie ------------------------------ */
+
+  .bo-titre,
+  .bo-logo-nom,
+  .bo-hero-titre,
+  .bo-chiffre-valeur,
+  .bo-footer-nom {
+    font-family: var(--font-serif, Georgia, serif);
+    font-weight: 600;
+  }
+
+  .bo-titre {
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+  }
+
+  .bo-sous-titre {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .bo-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bo-cuivre-deep);
+  }
+
+  .bo-kicker::before {
+    content: '';
+    width: 1.6rem;
+    height: 2px;
+    background: currentColor;
+  }
+
+  /* Sur la nuit, le cuivre profond tombe sous le seuil : c'est le blé qui prend
+     le relais, plus clair et de la même famille chaude. */
+  .bo-section-nuit .bo-kicker {
+    color: var(--bo-ble);
+  }
+
+  .bo-lede {
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    line-height: 1.65;
+    color: var(--bo-ink-soft);
+    margin-top: 1rem;
+    max-width: 46ch;
+  }
+
+  .bo-texte {
+    margin-top: 1rem;
+    color: var(--bo-muted);
+    max-width: 46ch;
+  }
+
+  .bo-section-nuit .bo-lede,
+  .bo-section-nuit .bo-texte {
+    color: #ddcdb6;
+  }
+
+  .bo-note {
+    margin-top: 1.4rem;
+    font-size: 0.85rem;
+    color: #c3b09a;
+  }
+
+  /* ------------------------------- Boutons ------------------------------- */
+
+  .bo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.6rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      transform 0.25s var(--bo-ease),
+      background-color 0.25s var(--bo-ease);
+  }
+
+  .bo-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .bo-btn-cuivre {
+    background: var(--bo-cuivre-deep);
+    color: #fff;
+  }
+
+  .bo-btn-cuivre:hover {
+    background: #82401f;
+  }
+
+  .bo-btn-fantome {
+    color: #fff;
+    border-color: rgb(255 255 255 / 0.5);
+    backdrop-filter: blur(6px);
+  }
+
+  .bo-btn-fantome:hover {
+    background: rgb(255 255 255 / 0.15);
+  }
+
+  /* ------------------------------- En-tête ------------------------------- */
+
+  .bo-header {
+    position: sticky;
+    top: 2.35rem;
+    z-index: 40;
+    background: rgb(42 29 18 / 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #fdf6ea;
+  }
+
+  .bo-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.8rem;
+  }
+
+  .bo-logo {
+    text-decoration: none;
+    color: inherit;
+    margin-right: auto;
+    line-height: 1.15;
+  }
+
+  .bo-logo-nom {
+    display: block;
+    font-size: 1.3rem;
+  }
+
+  .bo-logo-sous {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bo-cuivre-clair);
+  }
+
+  .bo-nav {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+
+  .bo-nav a {
+    position: relative;
+    text-decoration: none;
+    color: #e8dbc9;
+    padding-block: 0.35rem;
+    transition: color 0.2s;
+  }
+
+  .bo-nav a::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--bo-cuivre-clair);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s var(--bo-ease);
+  }
+
+  .bo-nav a:hover,
+  .bo-nav a[aria-current] {
+    color: #fff;
+  }
+
+  .bo-nav a[aria-current] {
+    font-weight: 600;
+  }
+
+  .bo-nav a:hover::after,
+  .bo-nav a[aria-current]::after {
+    transform: scaleX(1);
+  }
+
+  @media (max-width: 980px) {
+    .bo-nav,
+    .bo-header .bo-btn-cuivre {
+      display: none;
+    }
+  }
+
+  /* --------------------------------- Hero -------------------------------- */
+
+  .bo-hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: min(44rem, 100svh);
+    isolation: isolate;
+    margin-top: calc(-1 * var(--bo-hauteur-entete, 4.5rem));
+  }
+
+  .bo-hero-photo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* La devanture est cadrée sous l'enseigne : le nom peint appartient à la
+       photographie, pas à la maison inventée pour la démonstration. */
+    object-position: center 62%;
+    background: var(--bo-nuit);
+  }
+
+  .bo-hero-voile {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(28 18 10 / 0.72) 0%, rgb(28 18 10 / 0.42) 32%, rgb(28 18 10 / 0.92) 100%),
+      linear-gradient(90deg, rgb(28 18 10 / 0.86) 0%, rgb(28 18 10 / 0.55) 46%, transparent 78%);
+  }
+
+  .bo-hero-contenu {
+    padding-block: clamp(8rem, 16vw, 11rem) clamp(3rem, 7vw, 5rem);
+    color: #fff;
+  }
+
+  .bo-hero-lieu {
+    color: var(--bo-cuivre-clair);
+  }
+
+  .bo-hero-titre {
+    margin-top: 0.7rem;
+    display: grid;
+    justify-items: start;
+    line-height: 0.98;
+  }
+
+  .bo-hero-titre-1 {
+    font-size: clamp(2.6rem, 7.5vw, 5rem);
+  }
+
+  .bo-hero-titre-2 {
+    font-size: clamp(1.8rem, 5vw, 3.4rem);
+    font-style: italic;
+    color: var(--bo-cuivre-clair);
+    padding-left: 0.1em;
+  }
+
+  .bo-hero-accroche {
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.82);
+  }
+
+  .bo-hero-chapo {
+    margin-top: 1.2rem;
+    max-width: 46ch;
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .bo-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .bo-hero-reperes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  .bo-hero-reperes li + li::before {
+    content: '·';
+    margin-right: 1.5rem;
+    color: var(--bo-cuivre-clair);
+  }
+
+  /* ------------------------------- Chiffres ------------------------------ */
+
+  .bo-chiffres {
+    background: var(--bo-nuit-soft);
+    color: #f3e7d6;
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .bo-chiffres-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .bo-chiffre-valeur {
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    line-height: 1;
+    color: var(--bo-ble);
+  }
+
+  .bo-chiffre-libelle {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: #cdbba3;
+  }
+
+  /* -------------------------- Blocs photo + texte ------------------------ */
+
+  .bo-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .bo-duo {
+      grid-template-columns: 1fr;
+    }
+
+    /* Sur une colonne, la photo repasse toujours avant le texte : alterner
+       l'ordre n'a de sens que côte à côte. */
+    .bo-duo-inverse .bo-duo-texte {
+      order: 2;
+    }
+  }
+
+  .bo-photo {
+    margin: 0;
+  }
+
+  .bo-photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--bo-radius);
+    box-shadow: 0 2px 6px rgb(42 29 18 / 0.1), 0 18px 40px rgb(42 29 18 / 0.16);
+  }
+
+  .bo-photo figcaption {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--bo-muted);
+  }
+
+  /* -------------------------------- Ardoise ------------------------------ */
+
+  .bo-tete {
+    max-width: 44rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .bo-ardoise {
+    list-style: none;
+    margin: 0;
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+    background: var(--bo-paper-raised);
+    border-radius: var(--bo-radius);
+    box-shadow: 0 1px 2px rgb(42 29 18 / 0.06), 0 4px 14px rgb(42 29 18 / 0.08);
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .bo-ardoise li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 0 0.6rem;
+  }
+
+  .bo-ardoise-nom {
+    font-family: var(--font-serif, Georgia, serif);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  /* Les pointillés relient le nom au prix, comme sur une vraie ardoise. */
+  .bo-ardoise-pointilles {
+    border-bottom: 2px dotted var(--bo-paper-sunk);
+    transform: translateY(-0.25em);
+  }
+
+  .bo-ardoise-prix {
+    font-family: var(--font-serif, Georgia, serif);
+    font-weight: 600;
+    color: var(--bo-cuivre-deep);
+  }
+
+  .bo-ardoise-detail {
+    grid-column: 1 / -1;
+    font-size: 0.9rem;
+    color: var(--bo-muted);
+  }
+
+  /* --------------------------- Listes de prix ---------------------------- */
+
+  .bo-liste-prix {
+    list-style: none;
+    margin: 1.6rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .bo-liste-prix li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid rgb(42 29 18 / 0.1);
+  }
+
+  .bo-section-nuit .bo-liste-prix li {
+    border-bottom-color: rgb(255 255 255 / 0.14);
+  }
+
+  .bo-liste-nom {
+    font-family: var(--font-serif, Georgia, serif);
+    font-weight: 600;
+  }
+
+  .bo-liste-prix-valeur {
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--bo-cuivre-deep);
+  }
+
+  .bo-section-nuit .bo-liste-prix-valeur {
+    color: var(--bo-ble);
+  }
+
+  .bo-liste-detail {
+    grid-column: 1 / -1;
+    margin-top: 0.2rem;
+    font-size: 0.88rem;
+    color: var(--bo-muted);
+  }
+
+  .bo-section-nuit .bo-liste-detail {
+    color: #c3b09a;
+  }
+
+  /* -------------------------------- Horaires ----------------------------- */
+
+  .bo-venir-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: clamp(2rem, 5vw, 3.5rem);
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .bo-horaires {
+    width: 100%;
+    margin-top: 0.9rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .bo-horaires th,
+  .bo-horaires td {
+    text-align: left;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgb(42 29 18 / 0.12);
+    vertical-align: top;
+  }
+
+  .bo-horaires th {
+    font-weight: 600;
+    white-space: nowrap;
+    padding-right: 1.5rem;
+  }
+
+  .bo-horaires-note {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--bo-muted);
+  }
+
+  .bo-venir-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.4rem;
+    margin-top: 1.6rem;
+  }
+
+  .bo-lien-mail {
+    color: var(--bo-cuivre-deep);
+    font-weight: 600;
+  }
+
+  /* ------------------------------ Pied de page --------------------------- */
+
+  .bo-footer {
+    background: var(--bo-nuit);
+    color: #cdbba3;
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .bo-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+  }
+
+  .bo-footer-nom {
+    color: #fff;
+    font-size: 1.35rem;
+  }
+
+  .bo-footer-baseline {
+    margin-top: 0.3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .bo-footer-coord {
+    font-size: 0.92rem;
+    text-align: right;
+  }
+
+  .bo-footer-coord a {
+    color: var(--bo-cuivre-clair);
+  }
+
+  @media (max-width: 640px) {
+    .bo-footer-coord {
+      text-align: left;
+    }
+  }
+
+  .bo-footer-fictif {
+    margin-top: 2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.8rem;
+    color: #a08d76;
+  }
+</style>

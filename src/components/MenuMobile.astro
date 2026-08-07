@@ -22,7 +22,16 @@ export interface Props {
   /** Liens du menu, dans l'ordre de la navigation du site. */
   liens: { href: string; label: string }[];
   /** Habillage : détermine à la fois les couleurs et l'animation d'ouverture. */
-  variante: 'principal' | 'association' | 'batiment' | 'esthetique' | 'artiste' | 'yoga' | 'restaurant';
+  variante:
+    | 'principal'
+    | 'association'
+    | 'batiment'
+    | 'esthetique'
+    | 'artiste'
+    | 'yoga'
+    | 'restaurant'
+    | 'salon-de-the'
+    | 'boulangerie';
   /** Appel à l'action repris en bas du panneau, s'il y en a un dans l'en-tête. */
   cta?: { href: string; label: string };
   /** Langue de la page : les deux intitulés accessibles en découlent. */
@@ -557,4 +566,83 @@ const id = `menu-${variante}`;
       animation: none;
     }
   }
+
+  /* ============== 8. Salon de thé — nuit, cerise et formica ============== */
+
+  /* Le panneau reprend la nuit du diner ; le trait formica sous chaque entrée
+     rappelle les tables, et l'appel à l'action garde le cerise de l'enseigne. */
+  .mm-panneau[data-variante='salon-de-the'] {
+    background: #14100e;
+    color: #f4ece0;
+    --mm-depart: translateY(-1rem);
+  }
+
+  [data-variante='salon-de-the'] .mm-liste {
+    gap: 0;
+  }
+
+  [data-variante='salon-de-the'] .mm-liste a {
+    padding: 1.15rem 0;
+    border-bottom: 1px solid rgb(56 178 168 / 0.3);
+    font-family: 'Oswald Variable', 'Arial Narrow', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  [data-variante='salon-de-the'] .mm-liste li:first-child a {
+    border-top: 1px solid rgb(56 178 168 / 0.3);
+  }
+
+  [data-variante='salon-de-the'] .mm-cta {
+    display: block;
+    margin-top: 1.8rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: 999px;
+    background: #c0202e;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+  }
+
+
+  /* ============= 9. Boulangerie — crème, bois et cuivre ================= */
+
+  /* À rebours des huit autres, ce panneau est CLAIR : la boulangerie se joue
+     sur la crème et le bois, et un panneau sombre l'aurait démentie. Le filet
+     cuivre sous chaque entrée reprend les casseroles du mur. */
+  .mm-panneau[data-variante='boulangerie'] {
+    background: #faf4e9;
+    color: #2a1d12;
+    --mm-depart: translateY(-1rem);
+  }
+
+  [data-variante='boulangerie'] .mm-liste {
+    gap: 0;
+  }
+
+  [data-variante='boulangerie'] .mm-liste a {
+    padding: 1.15rem 0;
+    border-bottom: 1px solid rgb(193 104 58 / 0.28);
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  [data-variante='boulangerie'] .mm-liste li:first-child a {
+    border-top: 1px solid rgb(193 104 58 / 0.28);
+  }
+
+  [data-variante='boulangerie'] .mm-cta {
+    display: block;
+    margin-top: 1.8rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: 999px;
+    background: #9c4f28;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+  }
+
 </style>

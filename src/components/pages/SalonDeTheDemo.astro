@@ -1,0 +1,953 @@
+---
+/**
+ * Démonstration « The Sugar & Steam Diner » — salon de thé.
+ *
+ * Portée depuis le dépôt `modele-salon-de-the`, où le site occupait cinq pages.
+ * Ramenée à une seule comme les six autres vitrines, elle garde ce qui fait son
+ * identité : la page d'accueil et sa vidéo, la palette cerise et formica, les
+ * titres condensés et l'enseigne au néon.
+ *
+ * Les polices sont importées ici et non dans le gabarit de base : Oswald et
+ * Pacifico ne servent qu'à ce modèle, et n'ont aucune raison de peser sur les
+ * dix-huit autres pages du site.
+ *
+ * Préfixe `.sd-` : les styles Astro sont scopés, mais les sept démos partagent
+ * MenuMobile, dont les habillages vivent dans un seul fichier — deux préfixes
+ * identiques s'y heurteraient.
+ */
+import '@fontsource-variable/oswald';
+import '@fontsource/pacifico';
+import Base from '../../layouts/Base.astro';
+import DemoBar from '../DemoBar.astro';
+import MenuMobile from '../MenuMobile.astro';
+import { splitPath } from '../../lib/i18n';
+import { withBase } from '../../lib/paths';
+import { salonDeThe } from '../../i18n/salonDeThe';
+
+const { lang } = splitPath(Astro.url.pathname);
+const t = salonDeThe[lang];
+
+const media = (nom: string) => withBase(`modeles/salon-de-the/${nom}`);
+
+const liensMenu = [
+  { href: '#salon', label: t.nav.salon },
+  { href: '#comptoir', label: t.nav.comptoir },
+  { href: '#formules', label: t.nav.formules },
+  { href: '#venir', label: t.nav.venir },
+];
+---
+
+<Base title={t.title} description={t.description}>
+  <DemoBar label={t.demoLabel} />
+  <div class="sd">
+    <!-- ============================= EN-TÊTE =============================== -->
+    <header class="sd-header">
+      <div class="sd-wrap sd-header-inner">
+        <a class="sd-logo" href="#haut" aria-label="The Sugar &amp; Steam Diner">
+          <span class="sd-logo-nom">Sugar <span class="sd-logo-amp">&amp;</span> Steam</span>
+          <span class="sd-logo-sous" aria-hidden="true">{t.footer.baseline}</span>
+        </a>
+        <nav aria-label={lang === 'fr' ? 'Navigation du salon' : 'Tea room navigation'}>
+          <ul class="sd-nav">
+            {liensMenu.map((l) => (
+              <li><a href={l.href}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <a class="sd-btn sd-btn-cerise" href="#venir">{t.nav.cta}</a>
+        <MenuMobile
+          variante="salon-de-the"
+          lang={lang}
+          liens={liensMenu}
+          cta={{ href: '#venir', label: t.nav.cta }}
+        />
+      </div>
+    </header>
+
+    <main id="haut">
+      <!-- ============================== HERO ============================== -->
+      <section class="sd-hero" aria-label={t.hero.ariaLabel}>
+        {/*
+          Décor, et rien d'autre : la vidéo est muette, sans commande, et masquée
+          aux technologies d'assistance. Tout ce qu'elle montre est écrit ailleurs
+          dans la page. Sans JavaScript ou en mouvement réduit, il reste l'affiche
+          — la devanture, première image du plan.
+        */}
+        <video
+          class="sd-hero-video"
+          poster={media('visite-guidee.webp')}
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+          tabindex="-1"
+          data-boucle
+        >
+          <source src={media('visite-guidee.mp4')} type="video/mp4" />
+        </video>
+        <span class="sd-hero-voile" aria-hidden="true"></span>
+
+        <div class="sd-wrap sd-hero-contenu">
+          <p class="sd-kicker sd-hero-lieu">{t.hero.lieu}</p>
+          <h1 class="sd-display sd-hero-titre">
+            <span>{t.hero.titre.ligne}</span>
+            <span class="sd-script">{t.hero.titre.script}</span>
+            <span class="sd-neon">{t.hero.titre.lieu}</span>
+          </h1>
+          <p class="sd-lede sd-hero-chapo">{t.hero.chapo}</p>
+          <p class="sd-hero-actions">
+            <a class="sd-btn sd-btn-cerise" href="#comptoir">{t.hero.ctaCarte}</a>
+            <a class="sd-btn sd-btn-fantome" href="#venir">{t.hero.ctaReserver}</a>
+          </p>
+          <ul class="sd-hero-reperes">
+            {t.hero.reperes.map((r) => <li>{r}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================ CHIFFRES ============================ -->
+      <section class="sd-chiffres" aria-label={t.salon.sur}>
+        <div class="sd-wrap sd-chiffres-grille">
+          {t.chiffres.map((c, i) => (
+            <div class="sd-chiffre reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+              <p class="sd-chiffre-valeur">{c.valeur}</p>
+              <p class="sd-chiffre-libelle">{c.libelle}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ============================= LE SALON =========================== -->
+      <section id="salon" class="sd-section">
+        <div class="sd-wrap sd-duo">
+          <figure class="sd-photo reveal">
+            <img
+              src={media('salon.webp')}
+              alt={t.salon.photoAlt}
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>{t.salon.legende}</figcaption>
+          </figure>
+          <div class="sd-duo-texte reveal">
+            <p class="sd-kicker">{t.salon.sur}</p>
+            <h2 class="sd-titre">{t.salon.titre}</h2>
+            <p class="sd-lede">{t.salon.texte}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ LE COMPTOIR ========================= -->
+      <section id="comptoir" class="sd-section sd-section-sunk">
+        <div class="sd-wrap sd-duo sd-duo-inverse">
+          <div class="sd-duo-texte reveal">
+            <p class="sd-kicker">{t.comptoir.sur}</p>
+            <h2 class="sd-titre">{t.comptoir.titre}</h2>
+            <p class="sd-lede">{t.comptoir.lede}</p>
+          </div>
+          <figure class="sd-photo reveal">
+            <img
+              src={media('comptoir.webp')}
+              alt={t.comptoir.photoAlt}
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </div>
+
+        <div class="sd-wrap">
+          <ul class="sd-ardoise reveal">
+            {t.comptoir.articles.map((a) => (
+              <li>
+                <span class="sd-ardoise-nom">{a.nom}</span>
+                <span class="sd-ardoise-pointilles" aria-hidden="true"></span>
+                <span class="sd-ardoise-prix">{a.prix}</span>
+                <span class="sd-ardoise-detail">{a.detail}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================ LES FORMULES ======================== -->
+      <section id="formules" class="sd-section sd-section-nuit">
+        <div class="sd-wrap">
+          <div class="sd-tete reveal">
+            <p class="sd-kicker">{t.formules.sur}</p>
+            <h2 class="sd-titre">{t.formules.titre}</h2>
+            <p class="sd-lede">{t.formules.lede}</p>
+          </div>
+
+          <div class="sd-formules">
+            {t.formules.items.map((f, i) => (
+              <article
+                class:list={['sd-formule', 'reveal', { 'sd-formule-vedette': 'vedette' in f && f.vedette }]}
+                style={`--reveal-delay: ${i * 0.1}s`}
+              >
+                {'vedette' in f && f.vedette && (
+                  <p class="sd-formule-ruban">{t.formules.vedetteLabel}</p>
+                )}
+                <h3 class="sd-formule-nom">{f.nom}</h3>
+                <p class="sd-formule-prix">{f.prix}</p>
+                <p class="sd-formule-chapo">{f.chapo}</p>
+                <ul class="sd-formule-inclus">
+                  {f.inclus.map((x) => <li>{x}</li>)}
+                </ul>
+                {'note' in f && f.note && <p class="sd-formule-note">{f.note}</p>}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================= NOUS TROUVER ======================= -->
+      <section id="venir" class="sd-section">
+        <div class="sd-wrap sd-duo">
+          <figure class="sd-photo reveal">
+            <img
+              src={media('devanture.webp')}
+              alt={t.venir.photoAlt}
+              width="1600"
+              height="873"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="sd-duo-texte reveal">
+            <p class="sd-kicker">{t.venir.sur}</p>
+            <h2 class="sd-titre">{t.venir.titre}</h2>
+            <p class="sd-lede">{t.venir.lede}</p>
+
+            <h3 class="sd-sous-titre">{t.venir.horairesTitre}</h3>
+            <table class="sd-horaires">
+              <tbody>
+                {t.venir.horaires.map((h) => (
+                  <tr>
+                    <th scope="row">{h.jours}</th>
+                    <td>
+                      {h.heures}
+                      {'note' in h && h.note && <span class="sd-horaires-note">{h.note}</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <p class="sd-venir-actions">
+              <a class="sd-btn sd-btn-cerise" href={`tel:${t.venir.telephoneLien}`}>
+                {t.venir.ctaAppeler}
+              </a>
+              <a class="sd-lien-mail" href={`mailto:${t.venir.email}`}>{t.venir.email}</a>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================== PIED DE PAGE ======================== -->
+    <footer class="sd-footer">
+      <div class="sd-wrap sd-footer-inner">
+        <div>
+          <p class="sd-logo-nom sd-footer-nom">Sugar <span class="sd-logo-amp">&amp;</span> Steam</p>
+          <p class="sd-footer-baseline">{t.footer.baseline}</p>
+        </div>
+        <div class="sd-footer-coord">
+          <p>{t.footer.adresse}</p>
+          <p>
+            <a href={`tel:${t.venir.telephoneLien}`}>{t.venir.telephone}</a>
+            {' · '}
+            <a href={`mailto:${t.venir.email}`}>{t.venir.email}</a>
+          </p>
+        </div>
+      </div>
+      <p class="sd-wrap sd-footer-fictif">{t.footer.mentionFictif}</p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  /* ======================= Jetons propres au modèle ====================== */
+
+  .sd {
+    --sd-ink: #22160f;
+    --sd-ink-soft: #4a382c;
+    --sd-muted: #6d5a4a;
+    --sd-paper: #f8f1e3;
+    --sd-paper-raised: #fffbf3;
+    --sd-paper-sunk: #eee3ce;
+
+    --sd-cerise: #c0202e;
+    --sd-cerise-deep: #8e1520;
+    --sd-cerise-soft: #fbe3e2;
+    --sd-formica: #38b2a8;
+    --sd-formica-deep: #1c7d76;
+    --sd-caramel: #c98a3c;
+    --sd-nuit: #14100e;
+    --sd-nuit-soft: #241b16;
+
+    --sd-titre: 'Oswald Variable', 'Arial Narrow', sans-serif;
+    --sd-script: 'Pacifico', 'Brush Script MT', cursive;
+
+    --sd-radius: 16px;
+    --sd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    background: var(--sd-paper);
+    color: var(--sd-ink);
+  }
+
+  .sd-wrap {
+    width: min(74rem, 100% - 2.5rem);
+    margin-inline: auto;
+  }
+
+  @media (max-width: 420px) {
+    .sd-wrap {
+      width: min(74rem, 100% - 2rem);
+    }
+  }
+
+  .sd-section {
+    padding-block: clamp(4rem, 9vw, 7rem);
+  }
+
+  .sd-section-sunk {
+    background: var(--sd-paper-sunk);
+  }
+
+  .sd-section-nuit {
+    background: var(--sd-nuit);
+    color: #f4ece0;
+  }
+
+  /* --------------------------- Typographie ------------------------------ */
+
+  .sd-display,
+  .sd-titre,
+  .sd-logo-nom,
+  .sd-chiffre-valeur,
+  .sd-formule-nom {
+    font-family: var(--sd-titre);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+
+  .sd-display {
+    font-size: clamp(2.5rem, 7.5vw, 5.25rem);
+    line-height: 0.96;
+  }
+
+  .sd-titre {
+    font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  .sd-sous-titre {
+    font-family: var(--sd-titre);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1rem;
+    margin-top: 2rem;
+  }
+
+  /* La cursive n'est jamais en capitales : Pacifico n'en dessine pas de
+     lisibles, et le contraste avec les titres condensés vient justement de là. */
+  .sd-script {
+    font-family: var(--sd-script);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.3;
+    color: var(--sd-formica);
+  }
+
+  /* L'enseigne au néon : quatre halos de rayons croissants autour d'un texte
+     presque blanc. C'est la signature visuelle du modèle. */
+  .sd-neon {
+    color: #fff8f3;
+    text-shadow:
+      0 0 0.05em #fff,
+      0 0 0.22em rgb(192 32 46 / 0.9),
+      0 0 0.55em rgb(192 32 46 / 0.7),
+      0 0 1.4em rgb(192 32 46 / 0.45);
+  }
+
+  .sd-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sd-cerise);
+  }
+
+  .sd-kicker::before {
+    content: '';
+    width: 1.6rem;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .sd-section-nuit .sd-kicker {
+    /* Le cerise ne tient pas 4,5:1 sur la nuit ; le formica, si. */
+    color: var(--sd-formica);
+  }
+
+  .sd-lede {
+    font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+    line-height: 1.65;
+    color: var(--sd-ink-soft);
+    margin-top: 1rem;
+    max-width: 46ch;
+  }
+
+  .sd-section-nuit .sd-lede {
+    color: #e2d6c6;
+  }
+
+  /* ------------------------------ Boutons -------------------------------- */
+
+  .sd-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.6rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      transform 0.25s var(--sd-ease),
+      background-color 0.25s var(--sd-ease);
+  }
+
+  .sd-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .sd-btn-cerise {
+    background: var(--sd-cerise);
+    color: #fff;
+  }
+
+  .sd-btn-cerise:hover {
+    background: var(--sd-cerise-deep);
+  }
+
+  .sd-btn-fantome {
+    color: #fff;
+    border-color: rgb(255 255 255 / 0.45);
+    backdrop-filter: blur(6px);
+  }
+
+  .sd-btn-fantome:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  /* ------------------------------ En-tête -------------------------------- */
+
+  .sd-header {
+    position: sticky;
+    top: 2.35rem;
+    z-index: 40;
+    background: rgb(20 16 14 / 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #fff;
+  }
+
+  .sd-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.85rem;
+  }
+
+  .sd-logo {
+    text-decoration: none;
+    color: inherit;
+    margin-right: auto;
+  }
+
+  .sd-logo-nom {
+    display: block;
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+  }
+
+  .sd-logo-amp {
+    font-family: var(--sd-script);
+    text-transform: none;
+    color: var(--sd-formica);
+    font-size: 0.85em;
+  }
+
+  .sd-logo-sous {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c8b8a6;
+  }
+
+  .sd-nav {
+    display: flex;
+    gap: 1.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+
+  .sd-nav a {
+    position: relative;
+    text-decoration: none;
+    color: #e6dbcd;
+    padding-block: 0.35rem;
+    transition: color 0.2s;
+  }
+
+  .sd-nav a::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--sd-formica);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s var(--sd-ease);
+  }
+
+  .sd-nav a:hover,
+  .sd-nav a[aria-current] {
+    color: #fff;
+  }
+
+  .sd-nav a[aria-current] {
+    font-weight: 600;
+  }
+
+  .sd-nav a:hover::after,
+  .sd-nav a[aria-current]::after {
+    transform: scaleX(1);
+  }
+
+  @media (max-width: 900px) {
+    .sd-nav,
+    .sd-header .sd-btn-cerise {
+      display: none;
+    }
+  }
+
+  /* -------------------------------- Hero --------------------------------- */
+
+  .sd-hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: min(46rem, 100svh);
+    isolation: isolate;
+    /* L'en-tête est collant et transparent : le hero remonte sous lui. */
+    margin-top: calc(-1 * var(--sd-hauteur-entete, 4.5rem));
+  }
+
+  .sd-hero-video {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    /* Même règle que les photos : on remplit, on recadre. La vidéo est en
+       1280 × 720, donc étirée sur les grands écrans — le voile et le grain du
+       mouvement le rendent invisible. */
+    object-fit: cover;
+    object-position: center 45%;
+    background: var(--sd-nuit);
+  }
+
+  /**
+   * Le voile n'est pas une coquetterie : c'est lui qui rend l'en-tête
+   * transparent et le titre lisibles sans dépendre du JavaScript.
+   *
+   * Une seule valeur s'écarte de la source : le palier intermédiaire du dégradé
+   * vertical passe de 0,2 à 0,45. C'est mesuré, pas décidé — en masquant le
+   * texte et en relevant les pixels du fond nu derrière chaque ligne, le
+   * sur-titre en formica de 12 px tombait à 3,45:1 sur les éclats les plus
+   * clairs de la vidéo, pour un seuil de 4,5. Il se trouve exactement à 34 % de
+   * hauteur, c'est-à-dire au point le plus mince du voile.
+   *
+   * Les trois autres lignes passaient déjà (7,00 · 6,59 · 8,91:1 au pire pixel)
+   * et le reste du dégradé est intact : la salle continue de se voir à droite.
+   */
+  .sd-hero-voile {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgb(20 16 14 / 0.72) 0%, rgb(20 16 14 / 0.45) 34%, rgb(20 16 14 / 0.9) 100%),
+      linear-gradient(90deg, rgb(20 16 14 / 0.78) 0%, rgb(20 16 14 / 0.4) 42%, transparent 72%);
+  }
+
+  .sd-hero-contenu {
+    padding-block: clamp(9rem, 18vw, 12rem) clamp(3rem, 7vw, 5rem);
+    color: #fff;
+  }
+
+  .sd-hero-lieu {
+    color: var(--sd-formica);
+  }
+
+  .sd-hero-titre {
+    margin-top: 0.75rem;
+    display: grid;
+    gap: 0.08em;
+    justify-items: start;
+  }
+
+  .sd-hero-titre .sd-script {
+    font-size: 0.5em;
+    padding-left: 0.15em;
+  }
+
+  /* La troisième ligne redescend d'un cran : elle tient alors sur une ligne et
+     laisse l'enseigne du plan respirer derrière elle. */
+  .sd-hero-titre .sd-neon {
+    font-size: 0.5em;
+  }
+
+  .sd-hero-chapo {
+    margin-top: 1.5rem;
+    max-width: 46ch;
+    color: rgb(255 255 255 / 0.88);
+  }
+
+  .sd-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .sd-hero-reperes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 2.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  .sd-hero-reperes li + li::before {
+    content: '·';
+    margin-right: 1.5rem;
+    color: var(--sd-formica);
+  }
+
+  /* ------------------------------ Chiffres -------------------------------- */
+
+  .sd-chiffres {
+    background: var(--sd-nuit-soft);
+    color: #f4ece0;
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .sd-chiffres-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .sd-chiffre-valeur {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1;
+    color: var(--sd-formica);
+  }
+
+  .sd-chiffre-libelle {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: #cbbaa8;
+  }
+
+  /* ------------------------- Blocs photo + texte -------------------------- */
+
+  .sd-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  @media (max-width: 860px) {
+    .sd-duo {
+      grid-template-columns: 1fr;
+    }
+
+    /* Sur une colonne, la photo repasse toujours avant le texte : alterner
+       l'ordre n'a de sens que côte à côte. */
+    .sd-duo-inverse .sd-duo-texte {
+      order: 2;
+    }
+  }
+
+  .sd-photo {
+    margin: 0;
+  }
+
+  .sd-photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--sd-radius);
+    box-shadow: 0 2px 6px rgb(34 22 15 / 0.08), 0 16px 38px rgb(34 22 15 / 0.13);
+  }
+
+  .sd-photo figcaption {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--sd-muted);
+  }
+
+  /* ------------------------------- Ardoise -------------------------------- */
+
+  .sd-ardoise {
+    list-style: none;
+    margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+    background: var(--sd-paper-raised);
+    border-radius: var(--sd-radius);
+    box-shadow: 0 1px 2px rgb(34 22 15 / 0.06), 0 4px 12px rgb(34 22 15 / 0.07);
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .sd-ardoise li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 0 0.6rem;
+  }
+
+  .sd-ardoise-nom {
+    font-family: var(--sd-titre);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 1.05rem;
+  }
+
+  /* Les pointillés relient le nom au prix, comme sur une vraie carte. */
+  .sd-ardoise-pointilles {
+    border-bottom: 2px dotted var(--sd-paper-sunk);
+    transform: translateY(-0.25em);
+  }
+
+  .sd-ardoise-prix {
+    font-family: var(--sd-titre);
+    font-weight: 600;
+    color: var(--sd-cerise);
+  }
+
+  .sd-ardoise-detail {
+    grid-column: 1 / -1;
+    font-size: 0.9rem;
+    color: var(--sd-muted);
+  }
+
+  /* ------------------------------ Formules -------------------------------- */
+
+  .sd-tete {
+    max-width: 44rem;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .sd-formules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .sd-formule {
+    position: relative;
+    padding: 2rem 1.7rem;
+    border-radius: var(--sd-radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  .sd-formule-vedette {
+    background: rgb(56 178 168 / 0.1);
+    border-color: var(--sd-formica);
+  }
+
+  .sd-formule-ruban {
+    position: absolute;
+    top: -0.8rem;
+    right: 1.4rem;
+    padding: 0.28rem 0.85rem;
+    border-radius: 999px;
+    background: var(--sd-formica);
+    color: var(--sd-nuit);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .sd-formule-nom {
+    font-size: 1.3rem;
+    line-height: 1.15;
+  }
+
+  .sd-formule-prix {
+    margin-top: 0.5rem;
+    font-family: var(--sd-titre);
+    font-weight: 600;
+    font-size: 1.7rem;
+    color: var(--sd-formica);
+  }
+
+  .sd-formule-chapo {
+    margin-top: 0.7rem;
+    font-size: 0.95rem;
+    color: #d9cbba;
+  }
+
+  .sd-formule-inclus {
+    margin: 1.2rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.55rem;
+    font-size: 0.95rem;
+  }
+
+  .sd-formule-inclus li {
+    padding-left: 1.4rem;
+    position: relative;
+  }
+
+  .sd-formule-inclus li::before {
+    content: '·';
+    position: absolute;
+    left: 0.35rem;
+    color: var(--sd-formica);
+    font-weight: 700;
+  }
+
+  .sd-formule-note {
+    margin-top: 1.1rem;
+    font-size: 0.82rem;
+    color: #b9a897;
+  }
+
+  /* ------------------------------- Horaires ------------------------------- */
+
+  .sd-horaires {
+    width: 100%;
+    margin-top: 0.9rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .sd-horaires th,
+  .sd-horaires td {
+    text-align: left;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--sd-paper-sunk);
+    vertical-align: top;
+  }
+
+  .sd-horaires th {
+    font-weight: 600;
+    white-space: nowrap;
+    padding-right: 1.5rem;
+  }
+
+  .sd-horaires-note {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--sd-muted);
+  }
+
+  .sd-venir-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.4rem;
+    margin-top: 1.8rem;
+  }
+
+  .sd-lien-mail {
+    color: var(--sd-cerise-deep);
+    font-weight: 600;
+  }
+
+  /* ----------------------------- Pied de page ----------------------------- */
+
+  .sd-footer {
+    background: var(--sd-nuit);
+    color: #cbbaa8;
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .sd-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+  }
+
+  .sd-footer-nom {
+    color: #fff;
+    font-size: 1.35rem;
+  }
+
+  .sd-footer-baseline {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .sd-footer-coord {
+    font-size: 0.92rem;
+    text-align: right;
+  }
+
+  .sd-footer-coord a {
+    color: var(--sd-formica);
+  }
+
+  @media (max-width: 640px) {
+    .sd-footer-coord {
+      text-align: left;
+    }
+  }
+
+  .sd-footer-fictif {
+    margin-top: 2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    font-size: 0.8rem;
+    color: #9a8877;
+  }
+</style>

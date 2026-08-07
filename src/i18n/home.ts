@@ -75,6 +75,12 @@ export const home = {
       title: 'Une page, et tout l’essentiel',
       items: [
         {
+          tag: 'Salon de thé',
+          name: 'Salon de thé & pâtisserie',
+          desc: 'Un diner américain de 1954 : la carte, les formules et le décor, dans un rouge cerise qui se retient.',
+          points: ['Carte', 'Formules', 'Horaires'],
+        },
+        {
           tag: 'Associations',
           name: 'Sport & culture',
           desc: 'Actualités, horaires des entraînements, adhésions : tout ce qu’un club doit montrer.',
@@ -110,12 +116,18 @@ export const home = {
           desc: 'Nuit, braise et or : une carte qui se lit comme au restaurant, et le service en vedette.',
           points: ['Carte', 'Cave', 'Réservation'],
         },
+        {
+          tag: 'Boulangerie',
+          name: 'Boulangerie & pâtisserie',
+          desc: 'Pain au feu de bois, pâtisseries fines et chocolats : trois vitrines dans une seule page.',
+          points: ['Les pains', 'La pâtisserie', 'Les chocolats'],
+        },
       ],
       viewDemo: 'Voir la démonstration',
       packBadge: 'Pack Essentiel',
       eyebrow2: 'Pour démarrer',
       packNote:
-        'Les six modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
+        'Les {n} modèles ci-dessous illustrent le pack Essentiel : un site d’une page, complet et soigné.',
       note: {
         before: "Votre activité n'apparaît pas ici ? C'est justement le principe : chaque site est unique.",
         link: 'Décrivez-moi votre métier',
@@ -136,11 +148,6 @@ export const home = {
         'Fiche d’établissement, carte et questions fréquentes lisibles par Google',
       ],
       modeles: [
-        {
-          tag: 'Salon de thé',
-          name: 'The Sugar & Steam Diner',
-          desc: 'Un diner américain de 1954, à Cherbourg-en-Cotentin.',
-        },
         {
           tag: 'Hôtellerie',
           name: 'Le Grand Hôtel de Bretagne',
@@ -335,6 +342,12 @@ export const home = {
       title: 'One page, and all the essentials',
       items: [
         {
+          tag: 'Tea room',
+          name: 'Tea room & patisserie',
+          desc: 'A 1954 American diner: the menu, the set offers and the fittings, in a cherry red that knows when to stop.',
+          points: ['Menu', 'Set menus', 'Opening hours'],
+        },
+        {
           tag: 'Clubs',
           name: 'Sports & culture',
           desc: 'News, practice schedules, memberships: everything a club needs to show.',
@@ -370,12 +383,18 @@ export const home = {
           desc: 'Night, embers and gold: a menu that reads like the real thing, with service in the spotlight.',
           points: ['Menu', 'Cellar', 'Booking'],
         },
+        {
+          tag: 'Bakery',
+          name: 'Bakery & patisserie',
+          desc: 'Wood-fired bread, fine pastries, and chocolates: three counters on a single page.',
+          points: ['The bread', 'The patisserie', 'The chocolates'],
+        },
       ],
       viewDemo: 'View the demo',
       packBadge: 'Essential pack',
       eyebrow2: 'To get started',
       packNote:
-        'The six templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
+        'The {n} templates below illustrate the Essential pack: a one-page website, complete and carefully crafted.',
       note: {
         before: 'Don’t see your line of work here? That’s exactly the point: every website is one of a kind.',
         link: 'Tell me about your trade',
@@ -396,11 +415,6 @@ export const home = {
         'Business details, menu and FAQ readable by Google',
       ],
       modeles: [
-        {
-          tag: 'Tea room',
-          name: 'The Sugar & Steam Diner',
-          desc: 'A 1954 American diner, in Cherbourg-en-Cotentin.',
-        },
         {
           tag: 'Hospitality',
           name: 'Le Grand Hôtel de Bretagne',

@@ -22,11 +22,13 @@ const PASTILLE = {
 } as const;
 
 /**
- * Les six vitrines, dans l'ordre de la page d'accueil, du plus récent au plus
+ * Les huit vitrines, dans l'ordre de la page d'accueil, du plus récent au plus
  * ancien — le pied de page les listait à l'envers. Toutes illustrent le pack
  * Essentiel, elles portent donc la même pastille.
  */
 const vitrines = [
+  { chemin: 'boulangerie', label: t.models.boulangerie },
+  { chemin: 'salon-de-the', label: t.models.salonDeThe },
   { chemin: 'restaurant', label: t.models.restaurant },
   { chemin: 'yoga', label: t.models.yoga },
   { chemin: 'artiste', label: t.models.artiste },
@@ -38,7 +40,6 @@ const vitrines = [
 const depot = (nom: string) => `https://jozinho22.github.io/${nom}/`;
 
 const surMesure = [
-  { url: depot('modele-salon-de-the'), label: t.packs.salonDeThe },
   { url: depot('modele-hotel-de-luxe'), label: t.packs.hotel },
 ];
 

@@ -21,6 +21,8 @@ export const common = {
       signatureHeading: 'Pack Signature',
       contactHeading: 'Contact',
       models: {
+        boulangerie: 'Boulangerie & pâtisserie',
+        salonDeThe: 'Salon de thé & pâtisserie',
         restaurant: 'Restaurant italien',
         yoga: 'Cours de yoga',
         artiste: 'Dessinatrice au fusain',
@@ -29,7 +31,6 @@ export const common = {
         association: 'Association sportive & culturelle',
       },
       packs: {
-        salonDeThe: 'The Sugar & Steam Diner',
         hotel: 'Le Grand Hôtel de Bretagne',
         golf: 'Golf de Roc’h Avel',
         equestre: 'Haras du Clos-Ferrand',
@@ -70,6 +71,8 @@ export const common = {
       signatureHeading: 'Signature pack',
       contactHeading: 'Contact',
       models: {
+        boulangerie: 'Bakery & patisserie',
+        salonDeThe: 'Tea room & patisserie',
         restaurant: 'Italian restaurant',
         yoga: 'Yoga classes',
         artiste: 'Charcoal artist',
@@ -78,7 +81,6 @@ export const common = {
         association: 'Sports & cultural club',
       },
       packs: {
-        salonDeThe: 'The Sugar & Steam Diner',
         hotel: 'Le Grand Hôtel de Bretagne',
         golf: 'Roc’h Avel Golf Club',
         equestre: 'Haras du Clos-Ferrand',

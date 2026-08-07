@@ -1,7 +1,7 @@
 # Atelier Web — Site vitrine de création de sites web
 
 Site vitrine (nom placeholder : **Atelier Web**) pour une activité de création de
-sites web à destination des professionnels et associations, avec quatre modèles
+sites web à destination des professionnels et associations, avec huit modèles
 de démonstration par métier.
 
 Construit avec [Astro](https://astro.build) en **export 100 % statique** :
@@ -20,9 +20,48 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 | `/modeles/artiste` · `/en/…` | Démo « Claire Aubry » — blog/portfolio d'artiste peintre |
 | `/modeles/yoga` · `/en/…` | Démo « Studio Anahata » — studio de yoga |
 | `/modeles/restaurant` · `/en/…` | Démo « La Table d'Argile » — restaurant |
+| `/modeles/salon-de-the` · `/en/…` | Démo « The Sugar & Steam Diner » — salon de thé |
+| `/modeles/boulangerie` · `/en/…` | Démo « Le Fournil de Kerlann » — boulangerie-pâtisserie |
 | `/mentions-legales` · `/en/…` | Mentions légales (minimalistes, à compléter) |
 | `/cgv` · `/en/…` | Conditions générales de vente (à compléter et à faire relire) |
 | `/qui-sommes-nous` · `/en/…` | Présentation de l'atelier (biographies fictives) |
+
+## Le modèle « Boulangerie »
+
+Huitième vitrine, construite sur quatre photographies (`public/modeles/boulangerie/` :
+`devanture`, `interieur`, `patisseries`, `chocolats`). Elle n'ajoute **aucune
+police** : Fraunces et Outfit, déjà chargées par le gabarit de base, suffisent.
+
+Son panneau de menu mobile est le seul des huit à être **clair** — crème et bois,
+filet cuivre. Un panneau sombre aurait démenti la boulangerie.
+
+**⚠️ La devanture photographiée porte l'enseigne d'une chaîne réelle.** Le modèle
+emploie donc un nom inventé (« Le Fournil de Kerlann ») et le hero cadre sous
+l'enseigne (`object-position: center 62%`). À régénérer avant toute mise en ligne
+publique : un nom déposé sur la vitrine d'une démonstration n'est pas tenable.
+
+## Le modèle « Salon de thé »
+
+Venu du dépôt `modele-salon-de-the`, où il occupait **cinq pages** en tant que
+modèle du pack Sur mesure. Ramené ici à une page comme les six autres vitrines,
+il conserve sa page d'accueil — vidéo comprise —, sa palette cerise et formica,
+ses titres condensés et son enseigne au néon. Les liens qui menaient aux autres
+pages sont devenus des ancres.
+
+C'est le seul modèle à charger ses propres polices : Oswald et Pacifico sont
+importées depuis [SalonDeTheDemo.astro](src/components/pages/SalonDeTheDemo.astro)
+et non depuis le gabarit de base, pour ne pas peser sur les vingt autres pages.
+
+Une seule valeur s'écarte de la source, et elle est mesurée : le palier
+intermédiaire du voile du hero passe de 0,2 à 0,45. En masquant le texte et en
+relevant les pixels du fond nu derrière chaque ligne, le sur-titre de 12 px
+tombait à 3,45:1 sur les éclats les plus clairs de la vidéo — il se trouve
+exactement au point le plus mince du dégradé. Il tient maintenant 5,03:1.
+
+La vidéo (980 Ko) est copiée **sans réencodage** : la source est déjà
+efficacement compressée, et tout réencodage à qualité comparable l'alourdissait
+(1 016 Ko à CRF 29). Un passage en 960 × 540 ne gagnait que 15 % pour un SSIM
+de 0,971.
 
 ## Pages juridiques
 

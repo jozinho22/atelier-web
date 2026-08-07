@@ -63,6 +63,13 @@ const ICONES_ETAPES = [
 ];
 
 const modeleMeta = [
+  // Arrivé depuis le pack Sur mesure, ramené à une seule page. Placé en TÊTE du
+  // tableau pour arriver en QUEUE de l'affichage, que le `.reverse()` inverse.
+  {
+    path: 'modeles/salon-de-the',
+    image: 'salon-de-the/devanture.webp',
+    accent: ACCENTS.salonDeThe,
+  },
   { path: 'modeles/association', image: 'association.webp', accent: ACCENTS.association },
   { path: 'modeles/batiment', image: 'batiment.webp', accent: ACCENTS.batiment },
   { path: 'modeles/esthetique', image: 'esthetique.webp', accent: ACCENTS.esthetique },
@@ -74,6 +81,12 @@ const modeleMeta = [
   // pris du site qu'elle annonce.
   { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: ACCENTS.yoga, monochrome: true },
   { path: 'modeles/restaurant', image: 'restaurant/four.webp', accent: ACCENTS.restaurant },
+  // La plus récente : en queue du tableau, donc en tête de l'affichage inversé.
+  {
+    path: 'modeles/boulangerie',
+    image: 'boulangerie/devanture.webp',
+    accent: ACCENTS.boulangerie,
+  },
 ];
 // L'inversion se fait APRÈS l'appariement : modeleMeta[i] et items[i] restent
 // alignés, seul l'ordre d'affichage change (et avec lui l'échelonnement des
@@ -109,7 +122,6 @@ const modeles = modeleMeta
  * activé dessus (Settings → Pages → Source = « GitHub Actions »).
  */
 const surMesureModeles = [
-  { depot: 'modele-salon-de-the', image: 'salon-de-the.webp', accent: ACCENTS.salonDeThe },
   { depot: 'modele-hotel-de-luxe', image: 'hotel-de-luxe.webp', accent: ACCENTS.hotel },
 ];
 
@@ -290,7 +302,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
           </p>
           <p class="eyebrow signature-eyebrow">{t.modeles.eyebrow2}</p>
           <h2 class="signature-title">{t.modeles.title}</h2>
-          <p class="pack-note">{t.modeles.packNote}</p>
+          <p class="pack-note">{t.modeles.packNote.replace('{n}', String(modeles.length))}</p>
           <div class="modele-grid">
           {modeles.map((m, i) => (
             <a
