@@ -196,6 +196,7 @@ export const home = {
       items: [
         { name: 'Api Jawa', desc: 'Dépôt-vente d’artisans à petits prix.' },
         { name: 'Expert Maths Lycée', desc: 'Plate-forme de cours de mathématiques en ligne.' },
+        { name: 'French Overseas', desc: 'Préparation au français pour les concours d’outre-mer.' },
         { name: 'Monmétré', desc: 'Plate-forme de métrés CVC sur mesure.' },
       ],
     },
@@ -464,6 +465,7 @@ export const home = {
       items: [
         { name: 'Api Jawa', desc: 'Consignment shop for affordable artisan goods.' },
         { name: 'Expert Maths Lycée', desc: 'Online maths tutoring platform.' },
+        { name: 'French Overseas', desc: 'French coaching for overseas entrance exams.' },
         { name: 'Monmétré', desc: 'Custom HVAC quantity-surveying platform.' },
       ],
     },

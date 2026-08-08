@@ -9,6 +9,7 @@ import { splitPath, localePath } from '../../lib/i18n';
 import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
 import { ACCENTS, ACCENTS_TEXTE } from '../../data/modeles';
+import { REALISATIONS, resoudreRealisation } from '../../data/realisations';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = home[lang];
@@ -155,24 +156,17 @@ const libelleDemo = (l: { un: string; plusieurs: string }, n: number) =>
   n === 1 ? l.un : l.plusieurs.replace('{n}', String(n));
 
 /**
- * Portfolio : sites réellement livrés. Les favicons sont copiés dans
- * public/portfolio/ plutôt que chargés depuis les domaines distants — le site
- * ne fait aucune requête externe, et une icône ne peut pas disparaître si le
- * site du client change. `icon` absent ⇒ monogramme dessiné en CSS.
+ * Portfolio : sites réellement livrés.
+ *
+ * Les entrées, leurs icônes et leurs replis vivent dans
+ * [src/data/realisations.ts](../../data/realisations.ts) — c'est là que se
+ * déclare l'état de chaque site, et là seulement. La page se contente de
+ * demander où mène chaque lien.
  */
-const portfolioMeta = [
-  // `accent` colore le liseré et le monogramme ; `accentText` est sa variante
-  // assombrie, seule autorisée à porter le domaine en toutes lettres.
-  { url: 'https://api-jawa.fr', icon: 'api-jawa.png', accent: '#c98a3f', accentText: '#9b682c' },
-  { url: 'https://expert-maths-lycee.fr', accent: '#2f6fdb', accentText: '#2f6fdb' },
-  { url: 'https://xn--monmtr-evac.com', icon: 'monmetre.svg', accent: '#1f8a70', accentText: '#1d8169' },
-];
-const portfolio = portfolioMeta.map((p, i) => ({
-  ...p,
-  ...t.portfolio.items[i],
-  // Domaine lisible : on retire le protocole et on décode le punycode.
-  domaine: p.url.replace(/^https?:\/\//, '').replace('xn--monmtr-evac.com', 'monmétré.com'),
-}));
+const portfolio = REALISATIONS.map((r, i) => {
+  const { href, domaine, enRepli } = resoudreRealisation(r);
+  return { ...r, ...t.portfolio.items[i], href, domaine, enRepli };
+});
 
 /**
  * Les quatre étapes forment un circuit fermé : la mise en ligne d'un site
@@ -454,12 +448,12 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 
           <ul class="carrousel-piste" data-carrousel-piste>
             {portfolio.map((p) => (
-              <li class="carrousel-item" style={`--accent-card: ${p.accent}; --accent-card-text: ${p.accentText}`}>
-                <a class="projet" href={p.url} target="_blank" rel="noopener noreferrer">
-                  {p.icon ? (
+              <li class="carrousel-item" style={`--accent-card: ${p.accent}; --accent-card-text: ${p.accentTexte}`}>
+                <a class="projet" href={p.href} target="_blank" rel="noopener noreferrer">
+                  {p.icone ? (
                     <img
                       class="projet-icone"
-                      src={withBase(`portfolio/${p.icon}`)}
+                      src={withBase(`portfolio/${p.icone}`)}
                       alt=""
                       width="48"
                       height="48"
@@ -1904,6 +1898,15 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     gap: 0.75rem;
   }
 
+  /* Sur grand écran, la piste se resserre à 80 % : centrée, elle laisse voir
+     ses voisines de part et d'autre sans courir toute la largeur de la page. */
+  @media (min-width: 62rem) {
+    .carrousel {
+      width: 80%;
+      margin-inline: auto;
+    }
+  }
+
   .carrousel-piste {
     display: flex;
     gap: 1.2rem;
@@ -1911,10 +1914,16 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     margin: 0;
     padding: 0.4rem;
     overflow-x: auto;
-    /* `proximity` et non `mandatory` : quand la course restante est plus
-       courte qu'une fiche, l'accroche stricte ramènerait systématiquement au
-       début et le carrousel paraîtrait bloqué. */
+    /* `proximity` et non `mandatory` : l'accroche stricte se bat avec le
+       défilement programmé du minuteur, qui vise le centre au pixel près. */
     scroll-snap-type: x proximity;
+    /* Aucune marge de centrage : la piste commence et finit sur une fiche, sans
+       blanc d'aucun côté. La contrepartie est assumée — aux deux bouts, la fiche
+       courante se cale contre le bord au lieu d'atteindre le milieu.
+       Cette marge avait de surcroît un effet de bord sévère : elle rognait la
+       boîte de contenu contre laquelle se calcule un `flex-basis` en
+       pourcentage, et les fiches tombaient à 111 px sur mobile. */
+    padding-inline: 0.4rem;
     scroll-behavior: smooth;
     scrollbar-width: none;
   }
@@ -1925,7 +1934,21 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 
   .carrousel-item {
     flex: 0 0 clamp(15rem, 30%, 18rem);
-    scroll-snap-align: start;
+    /* `center` et non `start` : c'est la fiche courante qu'on amène au milieu. */
+    scroll-snap-align: center;
+    transition: opacity 0.4s var(--ease-out);
+  }
+
+  /* Les voisines s'effacent légèrement : le regard sait où il doit être sans
+     qu'on ait besoin d'un point ou d'un cadre en plus. */
+  .carrousel[data-defilable='oui'] .carrousel-item:not([data-courante]) {
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carrousel-item {
+      transition: none;
+    }
   }
 
   .carrousel-fleche {
@@ -2040,6 +2063,9 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     flex-grow: 1;
   }
 
+  /* Le lien porte le thème de sa fiche, comme le domaine juste au-dessus —
+     c'était le dernier lien sortant de la page resté sur l'indigo de l'atelier.
+     Les quatre `accentText` sont taillés pour le texte : 4,75 à 4,82:1. */
   .projet-lien {
     display: inline-flex;
     align-items: center;
@@ -2047,7 +2073,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     margin-top: 1rem;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--accent);
+    color: var(--accent-card-text, var(--accent));
   }
 
   .projet:hover .projet-lien .arrow {
@@ -2067,8 +2093,10 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
       display: none;
     }
 
+    /* `clamp` et non `80 %` seul : sur les écrans les plus étroits, 80 % passe
+       sous la largeur lisible. Le plancher de 15 rem est celui du grand écran. */
     .carrousel-item {
-      flex-basis: 80%;
+      flex-basis: clamp(15rem, 80%, 22rem);
     }
   }
 
@@ -2112,61 +2140,396 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
 </style>
 
 <script>
-  // Carrousel du portfolio : les flèches font défiler la piste d'une fiche.
-  // Le défilement natif reste la source de vérité — on se contente de le
-  // piloter et de refléter son état sur les boutons.
+  /**
+   * Carrousel du portfolio.
+   *
+   * Il avance seul toutes les 2,5 s en amenant la fiche courante au CENTRE de la
+   * piste, et il boucle : sans bouclage, la lecture automatique s'arrêterait au
+   * bout de trois pas et resterait figée sur la dernière fiche.
+   *
+   * Les flèches ne font pas qu'avancer d'un cran, elles IMPOSENT LE SENS :
+   * cliquer sur « précédent » fait repartir le défilement automatique vers la
+   * gauche, et il y reste. Le minuteur redémarre à chaque clic, pour ne pas
+   * enchaîner un pas manuel et un pas automatique coup sur coup.
+   *
+   * Le défilement natif reste la source de vérité : on le pilote, on ne le
+   * remplace pas. Un glissement à la main est donc respecté, et l'index se
+   * réaligne ensuite sur la fiche la plus proche du centre.
+   */
   document.querySelectorAll<HTMLElement>('[data-carrousel]').forEach((carrousel) => {
     const piste = carrousel.querySelector<HTMLElement>('[data-carrousel-piste]');
     const prec = carrousel.querySelector<HTMLButtonElement>('[data-carrousel-prec]');
     const suiv = carrousel.querySelector<HTMLButtonElement>('[data-carrousel-suiv]');
     if (!piste || !prec || !suiv) return;
 
-    const ecart = (): number => parseFloat(getComputedStyle(piste).columnGap) || 0;
+    const INTERVALLE = 2500;
+    const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const fiches = (): HTMLElement[] => Array.from(piste.children) as HTMLElement[];
+
+    /** Les fiches d'origine, avant tout clonage. */
+    const originales = fiches();
+    const N = originales.length;
+
+    let index = 0;
+    let sens = 1;
+    let minuteur: number | undefined;
+    /** Fin présumée du dernier défilement programmé (horodatage). */
+    let finDuProgramme = 0;
+    /** Distance parcourue par le geste en cours, cumulée sur ses `scroll`. */
+    let cumulGeste = 0;
+    let dernierX = 0;
+    /** Vrai dès qu'un doigt, un stylet ou une molette manœuvre la piste. */
+    let gesteEnCours = false;
+    /** Abscisse du pointeur au début du geste, pour la voie `pointermove`. */
+    let departPointeur: number | null = null;
 
     /**
-     * Largeur cumulée des fiches. On ne se fie pas à scrollWidth : quand la
-     * piste est centrée, le navigateur rend une partie du débordement
-     * inatteignable et scrollWidth sous-estime le contenu réel.
+     * Scrutabilité mesurée sur les fiches D'ORIGINE : une fois la série clonée,
+     * la piste déborde toujours, et la question « y a-t-il de quoi défiler ? »
+     * n'aurait plus de réponse honnête.
      */
-    const largeurContenu = (): number => {
-      const fiches = Array.from(piste.children) as HTMLElement[];
-      if (fiches.length === 0) return 0;
-      const somme = fiches.reduce((total, f) => total + f.getBoundingClientRect().width, 0);
-      return somme + ecart() * (fiches.length - 1);
+    const defilable = (): boolean => {
+      if (N < 2) return false;
+      const ecart = parseFloat(getComputedStyle(piste).columnGap) || 0;
+      const contenu =
+        originales.reduce((t, x) => t + x.getBoundingClientRect().width, 0) + ecart * (N - 1);
+      return contenu - piste.clientWidth > 2;
     };
 
-    const majBoutons = (): void => {
-      // Tant que les fiches tiennent dans la largeur, les flèches n'ont rien
-      // à piloter : on les retire plutôt que de les laisser inertes.
-      carrousel.dataset.defilable = largeurContenu() - piste.clientWidth > 2 ? 'oui' : 'non';
-      // 2 px de tolérance : les navigateurs arrondissent scrollLeft.
-      const reste = piste.scrollWidth - piste.clientWidth;
-      prec.disabled = piste.scrollLeft <= 2;
-      suiv.disabled = piste.scrollLeft >= reste - 2;
+    /**
+     * Chaîne continue : la série est clonée AVANT et APRÈS l'originale, et l'on
+     * se tient toujours dans le jeu du milieu. Quand un pas en fait sortir, on
+     * rembobine d'une série d'un saut sec — invisible, puisqu'il retombe sur une
+     * fiche identique entourée des mêmes voisines. La dernière et la première se
+     * suivent donc sans rupture, dans les deux sens.
+     *
+     * Les copies sont créées ici et non dans le balisage : la page servie ne
+     * contient que les quatre vraies fiches, et sans JavaScript le carrousel
+     * reste une liste honnête de quatre projets.
+     *
+     * Elles sont retirées de l'arbre d'accessibilité et du parcours au clavier :
+     * un lecteur d'écran annoncerait sinon douze réalisations, et la tabulation
+     * traverserait trois fois les mêmes liens.
+     */
+    const cloner = (): void => {
+      if (N < 2 || piste.dataset.clone === 'oui') return;
+      const copie = (source: HTMLElement): HTMLElement => {
+        const c = source.cloneNode(true) as HTMLElement;
+        c.setAttribute('aria-hidden', 'true');
+        c.setAttribute('data-clone', '');
+        c.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
+        return c;
+      };
+      const avantSerie = originales.map(copie);
+      const apresSerie = originales.map(copie);
+      apresSerie.forEach((c) => piste.append(c));
+      avantSerie.reverse().forEach((c) => piste.prepend(c));
+      piste.dataset.clone = 'oui';
     };
 
-    const pas = (): number => {
-      const fiche = piste.querySelector<HTMLElement>('li');
-      return fiche ? fiche.offsetWidth + ecart() : piste.clientWidth;
+    const marquer = (i: number): void => {
+      fiches().forEach((f, j) => {
+        if (j === i) f.setAttribute('data-courante', '');
+        else f.removeAttribute('data-courante');
+      });
     };
 
-    // Comportement explicite plutôt qu'hérité du CSS : on veut un saut sec
-    // pour qui demande moins d'animation, un défilement fluide sinon.
-    const douceur = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
-    const defiler = (sens: number): void => {
-      piste.scrollBy({ left: sens * pas(), behavior: douceur });
+    /**
+     * Le décalage est calculé en RELATIF, à partir des rectangles rendus, et
+     * non depuis `offsetLeft` : celui-ci se mesure par rapport à l'`offsetParent`
+     * — ici le conteneur du carrousel, pas la piste —, alors que `scrollLeft`
+     * se compte dans le repère de la piste. Mélanger les deux visait à côté et
+     * le défilement restait bloqué à 0.
+     */
+    const centrer = (i: number, doux = true): void => {
+      const f = fiches()[i];
+      if (!f) return;
+      const rp = piste.getBoundingClientRect();
+      const rf = f.getBoundingClientRect();
+      const ecart = rf.left + rf.width / 2 - (rp.left + rp.width / 2);
+      // On note jusqu'à quand ce défilement est le nôtre : les `scroll` émis
+      // pendant ce laps ne doivent pas être lus comme un geste de l'utilisateur.
+      finDuProgramme = performance.now() + (doux && !mouvementReduit.matches ? 700 : 80);
+      piste.scrollTo({
+        left: piste.scrollLeft + ecart,
+        // `instant` et non `auto` : `auto` signifie « suis la feuille de style »,
+        // et la piste y déclare `scroll-behavior: smooth`. Le repli destiné au
+        // mouvement réduit animait donc quand même — exactement ce qu'il devait
+        // éviter. Même remarque pour le recentrage après redimensionnement.
+        behavior: doux && !mouvementReduit.matches ? 'smooth' : 'instant',
+      });
+      marquer(i);
     };
 
-    prec.addEventListener('click', () => defiler(-1));
-    suiv.addEventListener('click', () => defiler(1));
-    piste.addEventListener('scroll', majBoutons, { passive: true });
+    /**
+     * Ramène la position dans le jeu du milieu, d'un saut sec. Appelé AVANT
+     * chaque pas : la correction se fait donc à l'instant précis où l'on
+     * s'apprête à animer, et l'œil ne voit qu'un seul mouvement.
+     */
+    const rembobiner = (): void => {
+      if (piste.dataset.clone !== 'oui') return;
+      let corrige = false;
+      while (index >= 2 * N) {
+        index -= N;
+        corrige = true;
+      }
+      while (index < N) {
+        index += N;
+        corrige = true;
+      }
+      if (corrige) centrer(index, false);
+    };
 
-    // L'observateur est conservé dans une variable : sans référence retenue,
-    // il peut être ramassé par le GC et cesser silencieusement de notifier.
-    const observateur = new ResizeObserver(majBoutons);
-    observateur.observe(piste);
-    window.addEventListener('resize', majBoutons, { passive: true });
+    /** Avance de `pas` fiches. Sans clones, on boucle par modulo. */
+    const aller = (pas: number): void => {
+      const total = fiches().length;
+      if (total === 0) return;
+      if (piste.dataset.clone === 'oui') {
+        rembobiner();
+        index += pas;
+      } else {
+        index = (index + pas + total) % total;
+      }
+      centrer(index);
+    };
 
-    majBoutons();
+    const arreter = (): void => {
+      if (minuteur !== undefined) {
+        window.clearInterval(minuteur);
+        minuteur = undefined;
+      }
+    };
+
+    /**
+     * La lecture automatique ne démarre que si elle a un sens : jamais en
+     * mouvement réduit — du contenu qui bouge tout seul y est précisément ce
+     * qu'on demande d'éviter — et jamais si tout tient déjà à l'écran.
+     */
+    const lancer = (): void => {
+      arreter();
+      if (mouvementReduit.matches || !defilable()) return;
+      minuteur = window.setInterval(() => aller(sens), INTERVALLE);
+    };
+
+    // Une flèche impose le sens, avance d'un cran, et remet le compteur à zéro.
+    prec.addEventListener('click', () => {
+      sens = -1;
+      aller(-1);
+      lancer();
+    });
+    suiv.addEventListener('click', () => {
+      sens = 1;
+      aller(1);
+      lancer();
+    });
+
+    /**
+     * Distance minimale pour qu'un mouvement compte comme un balayage. En
+     * dessous, c'est une tape, un tremblement, ou l'accroche qui replace la
+     * piste — rien qui doive changer le sens de lecture.
+     */
+    const SEUIL_BALAYAGE = 12;
+
+    /**
+     * Le doigt posé suspend le minuteur. Sur écran tactile il n'y a pas de
+     * survol pour le faire, et un pas automatique en plein geste arracherait la
+     * piste des doigts. C'est le seul rôle qui reste aux événements de pointeur
+     * ici — la DIRECTION, elle, se lit sur le défilement, plus bas.
+     */
+    /**
+     * Ces deux écouteurs ne mesurent rien : ils DÉCLARENT que l'utilisateur
+     * manœuvre. Le garde-temps ci-dessous ne suffisait pas — il ignore les
+     * défilements pendant 700 ms après chaque pas automatique, or un pas tombe
+     * toutes les 2,5 s : un balayage sur quatre atterrissait dans cette fenêtre
+     * et restait sans effet. C'est ce qui donnait un carrousel qui « ne change
+     * pas de sens », par intermittence.
+     *
+     * `wheel` couvre le pavé tactile, qui n'émet aucun événement de pointeur.
+     */
+    const debutDuGeste = (): void => {
+      gesteEnCours = true;
+      cumulGeste = 0;
+      arreter();
+    };
+
+    /**
+     * Clôture du geste : on arrête le sens et on RELANCE le minuteur.
+     *
+     * Appelée par deux chemins, et il faut les deux. Le défilement s'arrête de
+     * lui-même après l'inertie — mais une simple TAPE ne défile pas du tout :
+     * sans la seconde voie, `pointerdown` aurait éteint le minuteur pour de
+     * bon. C'est le défaut qu'avait introduit la version précédente.
+     *
+     * L'opération est idempotente : le premier des deux chemins qui arrive fait
+     * le travail, le second ne trouve plus de geste ouvert.
+     */
+    const cloreLeGeste = (): void => {
+      if (!gesteEnCours) return;
+      if (Math.abs(cumulGeste) >= SEUIL_BALAYAGE) sens = cumulGeste > 0 ? 1 : -1;
+      gesteEnCours = false;
+      cumulGeste = 0;
+      departPointeur = null;
+      lancer();
+    };
+
+    let finGeste: number | undefined;
+    const armerLaCloture = (delai: number): void => {
+      window.clearTimeout(finGeste);
+      finGeste = window.setTimeout(cloreLeGeste, delai);
+    };
+
+    piste.addEventListener(
+      'pointerdown',
+      (e) => {
+        debutDuGeste();
+        departPointeur = e.clientX;
+      },
+      { passive: true }
+    );
+    piste.addEventListener('wheel', debutDuGeste, { passive: true });
+
+    /**
+     * Seconde voie, indépendante de la première : le déplacement du DOIGT.
+     *
+     * La voie principale cumule les `scroll` du geste. Elle est juste, mais elle
+     * suppose que le navigateur les émette avant que le geste ne se termine — ce
+     * que je n'ai pas pu vérifier ici, aucun de mes harnais ne sachant produire
+     * un vrai défilement tactile. Celle-ci ne dépend que de `pointermove`, qui
+     * arrive dès les premiers pixels, avant même que la piste ait bougé.
+     *
+     * Le signe est inversé : un doigt qui va vers la GAUCHE tire le contenu dans
+     * le même sens et fait défiler vers l'AVANT.
+     *
+     * La première des deux qui atteint le seuil décide ; l'autre confirmera.
+     */
+    piste.addEventListener(
+      'pointermove',
+      (e) => {
+        if (!gesteEnCours || departPointeur === null) return;
+        const parcouru = departPointeur - e.clientX;
+        if (Math.abs(parcouru) >= SEUIL_BALAYAGE) sens = parcouru > 0 ? 1 : -1;
+      },
+      { passive: true }
+    );
+    // 350 ms après le relâchement : le temps que l'inertie retombe et que
+    // l'accroche ait joué. Un défilement en cours réarmera ce délai.
+    window.addEventListener('pointerup', () => armerLaCloture(350), { passive: true });
+    window.addEventListener('pointercancel', () => armerLaCloture(350), { passive: true });
+
+    // Le survol et le focus suspendent : sans cela, la fiche qu'on s'apprête à
+    // cliquer se dérobe. C'est aussi la porte de sortie qu'on doit à tout
+    // contenu qui bouge de lui-même.
+    carrousel.addEventListener('mouseenter', arreter);
+    carrousel.addEventListener('mouseleave', lancer);
+    carrousel.addEventListener('focusin', arreter);
+    carrousel.addEventListener('focusout', (e) => {
+      if (!carrousel.contains(e.relatedTarget as Node)) lancer();
+    });
+
+    /**
+     * Un glissement à la main déplace la piste sans passer par `aller` :
+     * l'index se réaligne sur la fiche la plus proche du centre, sinon le pas
+     * suivant repartirait d'ailleurs. Et le geste IMPOSE LE SENS, comme une
+     * flèche.
+     *
+     * La direction se lit sur le défilement lui-même, et non sur les événements
+     * de pointeur — c'était l'erreur de la première version. Sur écran tactile,
+     * le navigateur émet `pointercancel` dès qu'il prend la main sur le
+     * défilement, c'est-à-dire au tout début du balayage : la distance mesurée à
+     * ce moment-là vaut zéro et n'atteignait jamais le seuil. Au trackpad, il
+     * n'y a même pas d'événement de pointeur.
+     *
+     * Reste à ne pas confondre le geste avec mes propres recentrages : d'où
+     * `finDuProgramme`, qui marque le laps pendant lequel le mouvement m'
+     * appartient.
+     */
+    let ralenti: number | undefined;
+    piste.addEventListener(
+      'scroll',
+      () => {
+        const x = piste.scrollLeft;
+        const delta = x - dernierX;
+        dernierX = x;
+        // Pendant un geste on compte tout ; hors geste, on écarte ce que le
+        // minuteur vient de provoquer.
+        if (gesteEnCours || performance.now() >= finDuProgramme) cumulGeste += delta;
+
+        window.clearTimeout(ralenti);
+        ralenti = window.setTimeout(() => {
+          // Le défilement s'est tu : c'est l'autre voie de clôture.
+          if (gesteEnCours) cloreLeGeste();
+          else cumulGeste = 0;
+          const rp = piste.getBoundingClientRect();
+          const milieu = rp.left + rp.width / 2;
+          let plusProche = 0;
+          let ecartMin = Infinity;
+          fiches().forEach((f, i) => {
+            const rf = f.getBoundingClientRect();
+            const centre = rf.left + rf.width / 2;
+            const d = Math.abs(centre - milieu);
+            if (d < ecartMin) {
+              ecartMin = d;
+              plusProche = i;
+            }
+          });
+          if (plusProche !== index) {
+            index = plusProche;
+            marquer(index);
+            // Un glissement à la main peut emmener loin dans un jeu cloné : on
+            // y revient, faute de quoi la course finirait par s'épuiser d'un
+            // côté et la chaîne se romprait.
+            rembobiner();
+          }
+        }, 120);
+      },
+      { passive: true }
+    );
+
+    const remesurer = (): void => {
+      const peutDefiler = defilable();
+      carrousel.dataset.defilable = peutDefiler ? 'oui' : 'non';
+      // Les clones n'ont d'objet que si la série déborde : à quatre fiches
+      // tenant dans la largeur, il n'y a rien à enchaîner.
+      if (peutDefiler && piste.dataset.clone !== 'oui') {
+        cloner();
+        index = N; // on se place d'emblée dans le jeu du milieu
+      }
+      centrer(index, false);
+      dernierX = piste.scrollLeft;
+      // Le minuteur n'est PAS relancé ici : un redimensionnement ne doit pas
+      // repousser l'échéance. Il est démarré une fois, à l'entrée à l'écran.
+    };
+
+    /**
+     * L'observateur surveille le CONTENEUR, pas la piste — et c'est la
+     * différence entre un carrousel qui tourne et un qui reste sur place.
+     *
+     * Une version antérieure écrivait un `padding` de centrage sur la piste :
+     * observer la piste revenait alors à se notifier soi-même, et le minuteur
+     * repartait de zéro à chaque tour. Le padding a disparu, mais la règle
+     * demeure — on n'observe pas ce que l'on modifie.
+     *
+     * Référence retenue par ailleurs : sans elle, l'observateur peut être
+     * ramassé par le GC et cesser silencieusement de notifier.
+     */
+    const observateur = new ResizeObserver(remesurer);
+    observateur.observe(carrousel);
+    window.addEventListener('resize', remesurer, { passive: true });
+    mouvementReduit.addEventListener('change', remesurer);
+
+    // Rien ne tourne tant que la section n'est pas à l'écran.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        (entrees) => {
+          for (const e of entrees) {
+            if (e.isIntersecting) lancer();
+            else arreter();
+          }
+        },
+        { threshold: 0.2 }
+      ).observe(carrousel);
+    }
+
+    remesurer();
   });
 </script>

@@ -63,6 +63,45 @@ efficacement compressée, et tout réencodage à qualité comparable l'alourdiss
 (1 016 Ko à CRF 29). Un passage en 960 × 540 ne gagnait que 15 % pour un SSIM
 de 0,971.
 
+## Réalisations — replis d'URL et d'icône
+
+Chaque réalisation est décrite dans
+[src/data/realisations.ts](src/data/realisations.ts) : son adresse de
+production, son icône, ses couleurs, et **ce qu'il faut faire si le site ne
+répond plus**.
+
+| champ | rôle |
+| --- | --- |
+| `enLigne` | la production répond-elle ? |
+| `depotRepli` | dépôt GitHub Pages montré à sa place quand elle ne répond pas |
+| `iconeVerifiee` | l'icône a-t-elle pu être confrontée à la production ? |
+
+Quand `enLigne` vaut `false` et qu'un `depotRepli` est déclaré, le lien bascule
+sur `https://jozinho22.github.io/<depotRepli>/` — le visiteur voit le travail au
+lieu d'une erreur de résolution. **Le domaine affiché suit le lien** : annoncer
+« api-jawa.fr » sous un lien qui mène ailleurs tromperait le lecteur.
+
+Les icônes, elles, sont de toute façon **locales** dans `public/portfolio/` : la
+page ne fait aucune requête externe, et une icône ne peut pas disparaître si un
+client change d'hébergeur.
+
+```bash
+npm run verifier-realisations
+```
+
+La sonde confronte l'état déclaré à la réalité et **ne modifie rien**. C'est
+délibéré : le site doit se construire à l'identique depuis un même commit. Si
+une sonde réseau décidait des liens au moment du build, un incident DNS passager
+suffirait à publier une page différente sans que personne l'ait voulu.
+
+Elle compare les icônes **perceptuellement**, après aplatissement sur blanc et
+remise à la même taille — une comparaison octet à octet serait sans valeur, le
+fichier local étant un dérivé encodé autrement.
+
+**État au dernier passage** : `api-jawa.fr` ne résout pas ; son lien montre
+`jozinho22.github.io/api-jawa` et son icône vient du dépôt. Les trois autres
+sont en ligne et à jour.
+
 ## Pages juridiques
 
 Les mentions légales et les CGV partagent un gabarit unique,
