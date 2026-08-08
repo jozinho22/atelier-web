@@ -40,6 +40,7 @@ const vitrines = [
 const depot = (nom: string) => `https://jozinho22.github.io/${nom}/`;
 
 const surMesure = [
+  { url: depot('modele-casino'), label: t.packs.casino },
   { url: depot('modele-hotel-de-luxe'), label: t.packs.hotel },
 ];
 
@@ -56,7 +57,7 @@ const signature = [
       <p class="footer-tagline">{t.tagline}</p>
     </div>
     <nav class="footer-nav" aria-label={lang === 'fr' ? 'Pied de page' : 'Footer'}>
-      <p class="footer-heading">{t.modelsHeading}</p>
+      <p class="footer-heading" style={`--teinte: ${PASTILLE.essentiel}`}>{t.modelsHeading}</p>
       <ul>
         {vitrines.map((v) => (
           <li>
@@ -72,7 +73,7 @@ const signature = [
          sites complets, chacun sur son domaine. D'où l'ouverture dans un
          nouvel onglet, comme dans la section Modèles. -->
     <div class="footer-nav">
-      <p class="footer-heading">{t.surMesureHeading}</p>
+      <p class="footer-heading" style={`--teinte: ${PASTILLE.surmesure}`}>{t.surMesureHeading}</p>
       <ul>
         {surMesure.map((m) => (
           <li>
@@ -83,7 +84,7 @@ const signature = [
           </li>
         ))}
       </ul>
-      <p class="footer-heading footer-heading-2">{t.signatureHeading}</p>
+      <p class="footer-heading footer-heading-2" style={`--teinte: ${PASTILLE.signature}`}>{t.signatureHeading}</p>
       <ul>
         {signature.map((m) => (
           <li>
@@ -155,12 +156,15 @@ const signature = [
     font-size: 0.82em;
   }
 
+  /* Le titre porte la couleur de son offre, comme les pastilles de sa liste :
+     la colonne se lit alors d'un bloc. Le repli gris reste celui de « Contact »,
+     qui n'est pas un pack. */
   .footer-heading {
     font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #8f90ab;
+    color: var(--teinte, #8f90ab);
     margin-bottom: 0.9rem;
   }
 

@@ -8,7 +8,7 @@ import { withBase } from '../../lib/paths';
 import { splitPath, localePath } from '../../lib/i18n';
 import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
-import { ACCENTS } from '../../data/modeles';
+import { ACCENTS, ACCENTS_TEXTE } from '../../data/modeles';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = home[lang];
@@ -68,24 +68,24 @@ const modeleMeta = [
   {
     path: 'modeles/salon-de-the',
     image: 'salon-de-the/devanture.webp',
-    accent: ACCENTS.salonDeThe,
+    accent: ACCENTS.salonDeThe, lien: ACCENTS_TEXTE.salonDeThe,
   },
-  { path: 'modeles/association', image: 'association.webp', accent: ACCENTS.association },
-  { path: 'modeles/batiment', image: 'batiment.webp', accent: ACCENTS.batiment },
-  { path: 'modeles/esthetique', image: 'esthetique.webp', accent: ACCENTS.esthetique },
+  { path: 'modeles/association', image: 'association.webp', accent: ACCENTS.association, lien: ACCENTS_TEXTE.association },
+  { path: 'modeles/batiment', image: 'batiment.webp', accent: ACCENTS.batiment, lien: ACCENTS_TEXTE.batiment },
+  { path: 'modeles/esthetique', image: 'esthetique.webp', accent: ACCENTS.esthetique, lien: ACCENTS_TEXTE.esthetique },
   // La vignette reprend la photographie de la galerie visible sur le modèle :
   // le visiteur retrouve exactement l'image qui l'attend derrière le lien.
-  { path: 'modeles/artiste', image: 'artiste/photographie-de-la-galerie.webp', accent: ACCENTS.artiste },
+  { path: 'modeles/artiste', image: 'artiste/photographie-de-la-galerie.webp', accent: ACCENTS.artiste, lien: ACCENTS_TEXTE.artiste },
   // Le modèle yoga est en noir et blanc : son accent est un gris, pas une
   // couleur, et sa vignette est désaturée — sans quoi elle trahirait le parti
   // pris du site qu'elle annonce.
-  { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: ACCENTS.yoga, monochrome: true },
-  { path: 'modeles/restaurant', image: 'restaurant/four.webp', accent: ACCENTS.restaurant },
+  { path: 'modeles/yoga', image: 'yoga/prof-4.webp', accent: ACCENTS.yoga, lien: ACCENTS_TEXTE.yoga, monochrome: true },
+  { path: 'modeles/restaurant', image: 'restaurant/four.webp', accent: ACCENTS.restaurant, lien: ACCENTS_TEXTE.restaurant },
   // La plus récente : en queue du tableau, donc en tête de l'affichage inversé.
   {
     path: 'modeles/boulangerie',
     image: 'boulangerie/devanture.webp',
-    accent: ACCENTS.boulangerie,
+    accent: ACCENTS.boulangerie, lien: ACCENTS_TEXTE.boulangerie,
   },
 ];
 // L'inversion se fait APRÈS l'appariement : modeleMeta[i] et items[i] restent
@@ -122,6 +122,7 @@ const modeles = modeleMeta
  * activé dessus (Settings → Pages → Source = « GitHub Actions »).
  */
 const surMesureModeles = [
+  { depot: 'modele-casino', image: 'casino.webp', accent: ACCENTS.casino },
   { depot: 'modele-hotel-de-luxe', image: 'hotel-de-luxe.webp', accent: ACCENTS.hotel },
 ];
 
@@ -247,7 +248,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
             <article class="service-card reveal" style={`--reveal-delay: ${i * 0.1}s`}>
               <svg class="service-icone" viewBox="0 0 64 64" aria-hidden="true" set:html={ICONES_SERVICES[i]} />
               <h3>{s.title}</h3>
-              <p>{s.desc}</p>
               <ul class="service-points">
                 {s.points.map((point) => <li>{point}</li>)}
               </ul>
@@ -308,7 +308,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
             <a
               class="modele-card reveal"
               href={m.href}
-              style={`--reveal-delay: ${i * 0.08}s; --accent-card: ${m.accent}`}
+              style={`--reveal-delay: ${i * 0.08}s; --accent-card: ${m.accent}; --accent-lien: ${m.lien}`}
             >
               <img
                 class:list={['modele-photo', { 'modele-photo-nb': m.monochrome }]}
@@ -911,11 +911,6 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     margin-bottom: 0.55rem;
   }
 
-  .service-card p {
-    font-size: 0.95rem;
-    color: var(--muted);
-  }
-
   /* ------------------------------ Modèles ------------------------------- */
 
   .modeles-section {
@@ -1048,7 +1043,10 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     padding-top: 0.7rem;
     font-weight: 600;
     font-size: 0.85rem;
-    color: var(--accent);
+    /* La couleur de marque du site vers lequel le lien mène, relevée dans sa
+       démonstration (voir ACCENTS_TEXTE). Et non l'accent de la carte : celui-ci
+       est un pastel, fond de pastille, qui donnerait 1,4 à 2,4:1 en texte. */
+    color: var(--accent-lien, var(--accent));
   }
 
   .modele-link .arrow {
@@ -1406,6 +1404,14 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     color: var(--muted);
   }
 
+  /* Le lien porte la couleur du site vers lequel il mène, et non celle de
+     l'atelier : c'est le seul endroit de la page où l'on quitte le domaine, et
+     la teinte annonce où l'on va. Les trois accents des packs sont sombres —
+     ils ont été choisis pour tenir en texte — et se posent ici sur la carte
+     blanche : 4,82:1 pour l'hôtel, le plus juste des trois.
+
+     Le repli sur `--accent-strong` couvre le cas où un modèle serait ajouté
+     sans accent. */
   .vitrine-lien {
     display: inline-flex;
     align-items: center;
@@ -1413,7 +1419,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     margin-top: 0.6rem;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--accent-strong);
+    color: var(--accent-card, var(--accent-strong));
     text-decoration: none;
   }
 

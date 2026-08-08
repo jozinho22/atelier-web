@@ -31,6 +31,7 @@ export const common = {
         association: 'Association sportive & culturelle',
       },
       packs: {
+        casino: 'Le Casino du Soleil',
         hotel: 'Le Grand Hôtel de Bretagne',
         golf: 'Golf de Roc’h Avel',
         equestre: 'Haras du Clos-Ferrand',
@@ -81,6 +82,7 @@ export const common = {
         association: 'Sports & cultural club',
       },
       packs: {
+        casino: 'Le Casino du Soleil',
         hotel: 'Le Grand Hôtel de Bretagne',
         golf: 'Roc’h Avel Golf Club',
         equestre: 'Haras du Clos-Ferrand',

@@ -42,7 +42,7 @@ const DRAPEAUX = {
       ))}
       <rect width="24" height="16" rx="2" class="drapeau-cadre" />
     </svg>
-    <span>FR</span>
+    <span class="lang-code">FR</span>
   </a>
   <span class="lang-sep" aria-hidden="true"></span>
   <a
@@ -60,7 +60,7 @@ const DRAPEAUX = {
       <path d="M12 0v16M0 8h24" stroke="#c8102e" stroke-width="3.2" />
       <rect width="24" height="16" rx="2" class="drapeau-cadre" />
     </svg>
-    <span>EN</span>
+    <span class="lang-code">EN</span>
   </a>
 </nav>
 
@@ -140,16 +140,44 @@ const DRAPEAUX = {
     opacity: 0.22;
   }
 
-  /* Drapeaux compris, la bascule mesure 124 px. Sur un écran de 320 px,
-     l'en-tête doit y loger en plus le logo (137) et le bouton du menu (44) :
-     la ligne réclame 305 px pour 288 disponibles, et le bandeau de démo est
-     plus serré encore. Quelque chose doit céder — le drapeau, pas le code
-     langue : le commentaire en tête de ce fichier dit pourquoi un drapeau
-     désigne un pays et non une langue. On garde donc ce qui porte le sens et
-     on laisse partir l'ornement, ce qui rend 53 px aux deux barres. */
-  @media (max-width: 420px) {
+  
+  /**
+   * Sous 760 px — là où la navigation cède la place au bouton de menu —, seul
+   * le drapeau reste visible : la ligne d'en-tête y est disputée entre le logo,
+   * la bascule et le burger, et les deux codes langue y coûtent une quarantaine
+   * de pixels pour une information que le drapeau porte déjà.
+   *
+   * Le texte est masqué VISUELLEMENT, pas retiré. Un drapeau seul désigne un
+   * pays et non une langue : en `display: none`, le lien n'aurait plus aucun
+   * nom accessible et un lecteur d'écran annoncerait deux liens vides.
+   *
+   * La cible tactile est reprise en même temps : sans son texte, le lien
+   * tomberait à une vingtaine de pixels de large.
+   *
+   * Ce bloc remplace une règle inverse, qui masquait le DRAPEAU sous 420 px et
+   * gardait le code. Les deux ne pouvaient pas coexister : sous 420 px elles se
+   * cumulaient et la bascule devenait vide. Le drapeau l'emporte désormais sur
+   * toute la plage mobile.
+   */
+  @media (max-width: 760px) {
+    .lang-code {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .lang-link {
+      gap: 0;
+      padding: 0.55rem 0.5rem;
+    }
+
     .drapeau {
-      display: none;
+      width: 1.55rem;
     }
   }
 

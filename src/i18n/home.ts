@@ -34,7 +34,6 @@ export const home = {
       items: [
         {
           title: 'Être trouvé sur Google',
-          desc: 'Référencement soigné dès la conception : votre activité, votre ville, vos services. Vos futurs clients vous cherchent — ils vous trouvent.',
           points: [
             'Fiche Google Business configurée',
             'Mots-clés de votre ville et de votre métier',
@@ -43,7 +42,6 @@ export const home = {
         },
         {
           title: 'Être joint en un clic',
-          desc: 'Téléphone, e-mail, itinéraire : chaque page guide le visiteur vers le contact. Sur mobile, un clic suffit pour vous appeler.',
           points: [
             'Numéro cliquable sur mobile',
             'Formulaire sans serveur ni abonnement',
@@ -52,7 +50,6 @@ export const home = {
         },
         {
           title: 'Faire bonne impression',
-          desc: "Un design sur mesure, à votre image. Parce qu'avant de pousser votre porte, vos clients visitent votre site.",
           points: [
             'Vos couleurs, vos photos, vos mots',
             'Typographies choisies, pas prises au hasard',
@@ -61,7 +58,6 @@ export const home = {
         },
         {
           title: 'Rapide et sans entretien',
-          desc: 'Sites statiques ultra-rapides, sécurisés par conception : pas de mises à jour, pas de pannes, pas de mauvaises surprises.',
           points: [
             'Pages servies en fichiers statiques',
             'Aucune base de données à maintenir',
@@ -148,6 +144,11 @@ export const home = {
         'Fiche d’établissement, carte et questions fréquentes lisibles par Google',
       ],
       modeles: [
+        {
+          tag: 'Casino',
+          name: 'Le Casino du Soleil',
+          desc: 'Une villa d’hiver de 1902 devenue casino municipal, à Menton.',
+        },
         {
           tag: 'Hôtellerie',
           name: 'Le Grand Hôtel de Bretagne',
@@ -301,7 +302,6 @@ export const home = {
       items: [
         {
           title: 'Get found on Google',
-          desc: 'SEO baked in from day one: your trade, your city, your services. Your future customers are searching — and they find you.',
           points: [
             'Google Business profile configured',
             'Keywords for your town and trade',
@@ -310,7 +310,6 @@ export const home = {
         },
         {
           title: 'Get reached in one click',
-          desc: 'Phone, email, directions: every page guides visitors toward getting in touch. On mobile, one tap is all it takes to call you.',
           points: [
             'Tap-to-call number on mobile',
             'Form with no server, no subscription',
@@ -319,7 +318,6 @@ export const home = {
         },
         {
           title: 'Make a great impression',
-          desc: 'A custom design that looks like you. Because before walking through your door, your customers visit your website.',
           points: [
             'Your colours, your photos, your words',
             'Typefaces chosen, not picked at random',
@@ -328,7 +326,6 @@ export const home = {
         },
         {
           title: 'Fast and maintenance-free',
-          desc: 'Ultra-fast static websites, secure by design: no updates, no outages, no unpleasant surprises.',
           points: [
             'Pages served as static files',
             'No database to maintain',
@@ -415,6 +412,11 @@ export const home = {
         'Business details, menu and FAQ readable by Google',
       ],
       modeles: [
+        {
+          tag: 'Casino',
+          name: 'Le Casino du Soleil',
+          desc: 'A 1902 winter villa turned municipal casino, in Menton.',
+        },
         {
           tag: 'Hospitality',
           name: 'Le Grand Hôtel de Bretagne',

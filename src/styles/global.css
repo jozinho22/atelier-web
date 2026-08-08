@@ -26,14 +26,20 @@
      fond clair et doivent y tenir 4,5:1. Sur le fond d'encre du pied de page
      elles ne tiennent plus : Signature tombait à 2,93:1, sous le seuil de 3:1
      exigé d'un élément graphique. D'où les variantes « sur encre », éclaircies
-     à teinte et saturation constantes jusqu'à 4,5:1 — les trois ensemble, pour
-     que la famille reste lisible comme une famille. */
+     à teinte et saturation constantes — les trois ensemble, pour que la famille
+     reste lisible comme une famille.
+
+     Elles visaient 4,5:1, ce qui suffisait quand elles ne coloraient que des
+     pastilles (seuil 3:1). Depuis qu'elles portent aussi les TITRES de colonne,
+     du texte de 13 px, elles se retrouvaient pile sur le seuil, sans marge :
+     4,50 à 4,54:1. Relevées à 5,5:1, elles gardent le même ton et redonnent de
+     l'air au texte comme aux pastilles. */
   --pack-essentiel: #5352d1;
   --pack-surmesure: #b83a24;
   --pack-signature: #7d5a06;
-  --pack-essentiel-sur-encre: #7372da;
-  --pack-surmesure-sur-encre: #d85038;
-  --pack-signature-sur-encre: #a47608;
+  --pack-essentiel-sur-encre: #8483de;
+  --pack-surmesure-sur-encre: #de6a55;
+  --pack-signature-sur-encre: #b78409;
   --paper-raised: #ffffff;
   --accent: #5352d1;
   --accent-strong: #403fb8;
