@@ -25,49 +25,49 @@ import type { Lang } from '../lib/i18n';
 export const equipe = {
   fr: {
     meta: {
-      title: 'Qui sommes-nous ? — Studio Caducée',
+      title: "Qui sommes-nous ? — Studio Caducée",
       // À deux : 'Les deux associés de Studio Caducée : qui écrit vos sites, qui les dessine, et pourquoi ils sont faits à la main.',
       description:
-        'Qui est derrière Studio Caducée : qui écrit vos sites, et pourquoi ils sont faits à la main.',
+        "Qui est derrière Studio Caducée : qui écrit vos sites, et pourquoi ils sont faits à la main.",
     },
-    eyebrow: 'Le studio',
-    title: 'Qui sommes-nous ?',
+    eyebrow: "Le studio",
+    title: "Qui sommes-nous ?",
     // À deux : 'Deux associés, un seul métier : écrire des sites qui durent plus longtemps que la mode qui les a vus naître.',
-    lede: 'Un seul métier : écrire des sites qui durent plus longtemps que la mode qui les a vus naître.',
+    lede: "Un seul métier : écrire des sites qui durent plus longtemps que la mode qui les a vus naître.",
     membres: [
       {
-        prenom: 'Josselin',
-        role: 'Développeur, fondateur du studio',
-        alt: 'Portrait de Josselin, fondateur du studio',
-        bio: 'Josselin code des sites depuis douze ans, dont les six dernières à son compte. Il a commencé par des applications métier — de la gestion de stock, des plates-formes de cours — avant de constater que les artisans autour de lui payaient cher des sites qu’ils ne pouvaient pas modifier. Il écrit tout à la main, sans constructeur ni greffon : c’est plus long à faire, et beaucoup plus rapide à charger. Quand il ne code pas, il court, mal mais régulièrement.',
+        prenom: "Josselin",
+        role: "Développeur, fondateur du studio",
+        alt: "Portrait de Josselin, fondateur du studio",
+        bio: "Développeur et aussi professeur de mathématiques, le souci du détail fait partie de mon quotidien. De même, la satisfaction du client est ma priorité.",
       },
       // Second membre en sommeil — décommenter pour le rétablir.
       // {
-      //   prenom: 'Georges',
-      //   role: 'Design et relation client',
-      //   alt: 'Portrait de Georges, en charge du design et de la relation client',
-      //   bio: 'Georges a passé quinze ans en agence à traduire ce que les clients voulaient dire plutôt que ce qu’ils disaient. C’est lui qui mène le premier entretien, dessine les maquettes et veille à ce qu’un site ressemble à l’entreprise qu’il représente — pas au dernier modèle à la mode. Il défend une idée simple : un beau site que personne ne comprend est un site raté. Il collectionne les vieilles enseignes peintes.',
+      //   prenom: "Georges",
+      //   role: "Design et relation client",
+      //   alt: "Portrait de Georges, en charge du design et de la relation client",
+      //   bio: "Georges a passé quinze ans en agence à traduire ce que les clients voulaient dire plutôt que ce qu’ils disaient. C’est lui qui mène le premier entretien, dessine les maquettes et veille à ce qu’un site ressemble à l’entreprise qu’il représente — pas au dernier modèle à la mode. Il défend une idée simple : un beau site que personne ne comprend est un site raté. Il collectionne les vieilles enseignes peintes.",
       // },
     ],
   },
   /** ⚠️ Biographies fictives — voir l'avertissement sur la version française. */
   en: {
     meta: {
-      title: 'Who are we? — Studio Caducée',
+      title: "Who are we? — Studio Caducée",
       // À deux : 'The two partners behind Studio Caducée: who writes your website, who designs it, and why it is built by hand.',
       description:
-        'Who is behind Studio Caducée: who writes your website, and why it is built by hand.',
+        "Who is behind Studio Caducée: who writes your website, and why it is built by hand.",
     },
-    eyebrow: 'The studio',
-    title: 'Who are we?',
+    eyebrow: "The studio",
+    title: "Who are we?",
     // À deux : 'Two partners, one trade: writing websites that outlast the fashion they were born into.',
-    lede: 'One trade: writing websites that outlast the fashion they were born into.',
+    lede: "One trade: writing websites that outlast the fashion they were born into.",
     membres: [
       {
-        prenom: 'Josselin',
-        role: 'Developer, founder of the studio',
-        alt: 'Portrait of Josselin, founder of the studio',
-        bio: 'Josselin has been building websites for twelve years, the last six of them freelance. He started with business software — stock management, tutoring platforms — before noticing that the tradespeople around him were paying a lot for websites they could not change. He writes everything by hand, with no page builder and no plugins: slower to make, far faster to load. When he is not coding, he runs — badly, but regularly.',
+        prenom: "Josselin",
+        role: "Developer, founder of the studio",
+        alt: "Portrait of Josselin, founder of the studio",
+        bio: "Josselin has been building websites for twelve years, the last six of them freelance. He started with business software — stock management, tutoring platforms — before noticing that the tradespeople around him were paying a lot for websites they could not change. He writes everything by hand, with no page builder and no plugins: slower to make, far faster to load. When he is not coding, he runs — badly, but regularly.",
       },
       // Second membre en sommeil — décommenter pour le rétablir.
       // {

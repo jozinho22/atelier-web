@@ -1,8 +1,8 @@
 # Studio Caducée — Site vitrine de création de sites web
 
-Site vitrine (nom placeholder : **Studio Caducée**) pour une activité de création de
-sites web à destination des professionnels et associations, avec huit modèles
-de démonstration par métier.
+Site vitrine de **Studio Caducée**, activité de création de sites web à
+destination des professionnels et associations, avec huit modèles de
+démonstration par métier.
 
 Construit avec [Astro](https://astro.build) en **export 100 % statique** :
 aucun serveur nécessaire, hébergeable partout (Netlify, Cloudflare Pages, OVH, nginx…).
@@ -22,8 +22,8 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 | `/modeles/restaurant` · `/en/…` | Démo « La Table d'Argile » — restaurant |
 | `/modeles/salon-de-the` · `/en/…` | Démo « The Sugar & Steam Diner » — salon de thé |
 | `/modeles/boulangerie` · `/en/…` | Démo « Le Fournil de Kerlann » — boulangerie-pâtisserie |
-| `/mentions-legales` · `/en/…` | Mentions légales (minimalistes, à compléter) |
-| `/cgv` · `/en/…` | Conditions générales de vente (à compléter et à faire relire) |
+| `/mentions-legales` · `/en/…` | Mentions légales |
+| `/cgv` · `/en/…` | Conditions générales de vente (à faire relire) |
 | `/qui-sommes-nous` · `/en/…` | Présentation de l'atelier (biographies fictives) |
 
 ## Le modèle « Boulangerie »
@@ -144,12 +144,22 @@ mesuré : l'espace inter-mots médian rapporté à sa largeur naturelle vaut 1,6
 à 375 px contre 1,17× à 640 px. En dessous, la colonne est trop étroite (40
 caractères par ligne) et la justification creuse des rivières de blanc.
 
-**À compléter avant la mise en ligne** — identité du prestataire et SIRET (les
-deux pages), et coordonnées du médiateur de la consommation, obligatoires dès
-lors qu'on vend à un particulier. Le texte des CGV est une rédaction de départ,
-pas un avis juridique : il suppose la franchise en base de TVA, une clientèle
-incluant des consommateurs et un abonnement sans engagement, et mérite une
-relecture professionnelle.
+Identité, SIRET, TVA et médiateur de la consommation (CM2C) sont **renseignés**,
+repris des documents d'`expert-maths-lycee.fr` — même entité juridique. Deux
+articles ne s'y transposaient pas et ont été adaptés : la TVA, dont l'exonération
+citée là-bas ne vaut que pour les cours particuliers, et surtout le **droit de
+rétractation**, que l'autre site écarte au titre d'une exception réservée aux
+prestations à date déterminée. Créer un site n'en relève pas : le délai de
+quatorze jours s'applique, et le recopier aurait retiré au consommateur un droit
+qu'il détient.
+
+⚠️ **Reste à vérifier** : le SIRET est celui de l'établissement de l'autre
+activité. Le SIREN est bien le même, mais une seconde activité déclarée peut
+porter un NIC distinct — l'avis de situation INSEE tranche.
+
+Le texte des CGV est une rédaction de départ, pas un avis juridique : il suppose
+la franchise en base de TVA, une clientèle incluant des consommateurs et un
+abonnement sans engagement, et mérite une relecture professionnelle.
 
 ## Qui sommes-nous
 
@@ -326,10 +336,15 @@ d'office et, marqué `prerender = false`, ferait échouer le build sans adaptate
 
 ### Ce qu'il faut configurer
 
-Trois variables, décrites dans [.env.example](.env.example) : `RESEND_API_KEY`,
-`EMAIL_FROM`, `NOTIFY_EMAIL`. En production elles se déclarent dans Vercel,
-jamais dans un fichier. Absentes, la route répond « indisponible » : elle ne
-prétend jamais avoir envoyé.
+Cinq variables, décrites dans [.env.example](.env.example) : `RESEND_API_KEY`,
+`EMAIL_FROM`, `NOTIFY_EMAIL` pour l'envoi, `PUBLIC_TURNSTILE_SITE_KEY` et
+`TURNSTILE_SECRET_KEY` pour la protection anti-robots. En production elles se
+déclarent dans Vercel, jamais dans un fichier. Absentes, la route répond
+« indisponible » : elle ne prétend jamais avoir envoyé.
+
+⚠️ **Ne jamais écrire dans `.env.local`** — il porte les vraies clés et n'a
+aucun historique qui permette de les récupérer. Pour essayer une valeur, la
+passer en préfixe de commande : `PUBLIC_TURNSTILE_SITE_KEY=… npm run build`.
 
 Mêmes noms et même convention que `expert-maths-lycee.fr` et
 `french-overseas.com` — **la même adresse des deux côtés**, `EMAIL_FROM` portant
@@ -350,20 +365,69 @@ L'adresse du visiteur ne va **jamais** dans `EMAIL_FROM` : ce serait une
 usurpation, SPF et DKIM échoueraient et le message partirait en indésirables.
 Elle part en `Reply-To`, si bien qu'un simple « Répondre » lui écrit.
 
-### Anti-spam sans sous-traitant
+### Anti-spam — trois couches
 
-Un champ leurre invisible et un horodatage — un humain met plus de trois secondes
-à écrire. Les deux répondent **200 comme si tout allait bien** : un robot à qui
-l'on répond « rejeté » recommence en ajustant. Pas de CAPTCHA, donc aucune donnée
-envoyée à un tiers et rien de plus à déclarer au RGPD.
+Un champ leurre invisible et un horodatage d'abord : un humain met plus de trois
+secondes à écrire. Les deux répondent **200 comme si tout allait bien** — un
+robot à qui l'on répond « rejeté » recommence en ajustant, à qui l'on répond
+« merci », non.
+
+Cloudflare Turnstile ensuite, même dispositif que sur `expert-maths-lycee.fr` et
+`french-overseas.com`.
+
+⚠️ **`PUBLIC_TURNSTILE_SITE_KEY`, et non `NEXT_PUBLIC_`.** Ces deux sites sont en
+Next.js ; Astro n'expose au navigateur que le préfixe `PUBLIC_`. Mesuré dans le
+bundle construit : `NEXT_PUBLIC_SONDE` vaut `undefined`, `PUBLIC_SONDE` porte sa
+valeur. Avec le nom de Next, le widget ne se dessine pas, aucun jeton ne part, et
+le formulaire rejette **tout** — sans le moindre message.
+
+#### Ce que la route refuse, et pourquoi
+
+| état des deux clés | comportement |
+| --- | --- |
+| aucune | Turnstile éteint — leurre et horodatage suffisent (cas du développement) |
+| les deux | widget affiché, jeton vérifié auprès de Cloudflare |
+| **une seule** | **503 « indisponible »**, avec la clé manquante au journal |
+
+Le dernier cas est un garde délibéré. Clé publique seule : le widget s'affiche,
+le serveur ne peut rien vérifier, et l'on croit être protégé — une protection de
+façade est pire que pas de protection. Clé secrète seule : aucun jeton n'est
+produit et tous les visiteurs légitimes sont refusés. Les deux arrivent pour une
+faute de frappe, ou une variable posée en *Preview* et oubliée en *Production*.
+
+Deux autres décisions, dans [src/server/contact.ts](src/server/contact.ts) :
+
+- **Cloudflare injoignable vaut refus.** Laisser passer « pour ne pas bloquer »
+  serait la porte que cherche un attaquant : il lui suffirait de rendre le
+  service inaccessible depuis le serveur.
+- **Le jeton est renouvelé à chaque refus.** Il ne sert qu'une fois ; le renvoyer
+  après un champ mal rempli se ferait rejeter pour réutilisation, et le visiteur
+  resterait bloqué sans comprendre.
+
+#### Le prix à payer
+
+Turnstile exige JavaScript — aucune vérification anti-robots ne peut s'en passer.
+Le formulaire **perd donc son fonctionnement sans script**, que la route
+préservait jusqu'ici. Un `<noscript>` oriente vers l'adresse e-mail plutôt que de
+laisser buter sur un envoi qui échoue.
 
 ### Conséquence juridique
 
 Les mentions légales affirmaient « aucune donnée personnelle, pas de formulaire ».
 La section « Données personnelles » a été réécrite : finalité, base légale
-(article 6.1.b), sous-traitant nommé, durée de conservation, droits. **Un
-formulaire ajouté sans toucher à ce texte en ferait un mensonge sur une page
-légale.**
+(article 6.1.b), durée de conservation, droits, et **deux sous-traitants nommés**
+— Resend pour l'acheminement, Cloudflare pour la protection anti-robots, qui
+reçoit à ce titre l'adresse IP du visiteur. Formulation reprise de la politique
+de confidentialité d'`expert-maths-lycee.fr`, pour que les trois sites disent la
+même chose.
+
+S'y ajoute la clause de transfert hors UE : ces prestataires et l'hébergeur sont
+établis aux États-Unis.
+
+**Un formulaire — ou un anti-robots — ajouté sans toucher à ce texte en ferait un
+mensonge sur une page légale.** Les deux paragraphes ne s'affichent d'ailleurs que
+sur la cible qui a un formulaire ; le build GitHub Pages continue de dire qu'il
+n'en a pas.
 
 ## Déploiement — trois cibles, un seul code
 
@@ -420,15 +484,21 @@ besoins serveur. Tout autre hébergeur statique reste possible via
    [deploy.yml](.github/workflows/deploy.yml) et le domaine par défaut dans
    [astro.config.mjs](astro.config.mjs) — canonical, sitemap et robots.txt
    suivent au build suivant (voir la section Déploiement ci-dessus).
-2. **Identité** : nom « Studio Caducée », e-mail `contact@studio-caducee.example`,
-   téléphone `06 00 00 00 00` — présents dans
-   [Footer.astro](src/components/Footer.astro),
-   [Home.astro](src/components/pages/Home.astro),
-   [src/i18n/home.ts](src/i18n/home.ts) et [src/i18n/legal.ts](src/i18n/legal.ts).
-3. **Mentions légales** : compléter les champs `[à compléter]` / `[to be
-   completed]` dans [src/i18n/legal.ts](src/i18n/legal.ts) — les deux langues.
-4. **Tarifs** : ajuster les montants dans [src/i18n/home.ts](src/i18n/home.ts)
-   (section `tarifs`, les deux langues).
+2. **Boîte de réception** : `josselin.douineau@studio-caducee.com` doit exister
+   côté Google Workspace — elle est affichée publiquement, sert d'adresse de
+   réclamation dans les CGV, et reçoit le formulaire.
+3. **Resend et Turnstile** : domaine d'envoi vérifié chez Resend, widget créé
+   chez Cloudflare, et les cinq variables déclarées dans Vercel.
+4. **Tarifs** : ajuster les montants dans
+   [src/data/tarifs.ts](src/data/tarifs.ts) — source unique, la page d'accueil
+   comme les CGV s'y alimentent.
+5. **Relecture juridique** des CGV, et vérification du SIRET (voir « Pages
+   juridiques »).
+
+Identité, coordonnées et mentions obligatoires sont **faites** : elles vivent
+dans [src/data/contact.ts](src/data/contact.ts) pour l'affichage public, et dans
+[legal.ts](src/i18n/legal.ts) / [cgv.ts](src/i18n/cgv.ts) pour les pages
+légales.
 
 ## Licence
 
