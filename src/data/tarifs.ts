@@ -38,6 +38,28 @@ export const PACKS = Object.keys(TARIFS) as ClePack[];
 export const estUnPack = (valeur: string): valeur is ClePack =>
   Object.prototype.hasOwnProperty.call(TARIFS, valeur);
 
+/**
+ * Nom et couleur de chaque pack, pour l'e-mail de notification.
+ *
+ * ⚠️ Ces deux valeurs existent déjà ailleurs, et c'est assumé faute de mieux :
+ *
+ * • la COULEUR est déclarée dans `src/styles/global.css` (`--pack-essentiel`
+ *   et ses sœurs). Un e-mail ne peut pas lire de variable CSS — la plupart des
+ *   messageries ne gardent même pas la feuille de style —, il lui faut la
+ *   valeur littérale ;
+ *
+ * • le NOM vit dans `src/i18n/home.ts`, en deux langues. L'e-mail, lui, part
+ *   toujours en français : il s'adresse au studio, pas au visiteur.
+ *
+ * En changer une ici sans changer l'autre là-bas ferait diverger la couleur du
+ * message de celle du site.
+ */
+export const PACK_COURRIEL: Record<ClePack, { nom: string; couleur: string }> = {
+  essentiel: { nom: 'Essentiel', couleur: '#5352d1' },
+  surMesure: { nom: 'Sur mesure', couleur: '#b83a24' },
+  signature: { nom: 'Signature', couleur: '#7d5a06' },
+};
+
 /** Abonnement mensuel : hébergement, nom de domaine et maintenance. */
 export const HEBERGEMENT = { montant: 59, periode: 'mois' } as const;
 

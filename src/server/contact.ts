@@ -26,6 +26,7 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { estUnPack } from '../data/tarifs';
+import { construireCourriel } from './courriel';
 
 /** Délai minimal entre l'affichage du formulaire et son envoi. */
 const DELAI_MINIMAL_MS = 3000;
@@ -122,6 +123,9 @@ export const POST: APIRoute = async ({ request }) => {
 
   // ---- 4. envoi ----------------------------------------------------------
   try {
+    // Gabarit à part : voir ./courriel.ts. Les deux versions, HTML et texte,
+    // sortent des mêmes données — elles ne peuvent pas se contredire.
+    const { sujet, texte, html } = construireCourriel({ nom, email, message, pack });
     const { error } = await new Resend(cle).emails.send({
       from: expediteur,
       to: [destinataire],
@@ -129,15 +133,11 @@ export const POST: APIRoute = async ({ request }) => {
       // ferait échouer SPF et DKIM, et le message partirait en indésirables.
       // Répondre au message écrit alors bien au visiteur.
       replyTo: email,
-      // Le pack figure dans l'objet : il permet de trier la boîte sans ouvrir.
-      subject: `Site — demande de ${nom}${pack ? ` (pack ${pack})` : ''}`,
-      text: [
-        `Nom : ${nom}`,
-        `E-mail : ${email}`,
-        `Pack : ${pack ?? 'non précisé'}`,
-        '',
-        message,
-      ].join('\n'),
+      subject: sujet,
+      html,
+      // Envoyée AVEC le HTML, jamais à la place : elle sert aux clients en
+      // texte seul et abaisse la note anti-spam d'un message tout-HTML.
+      text: texte,
     });
     if (error) {
       console.error('[contact] refus de Resend —', error);
