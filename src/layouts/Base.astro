@@ -39,11 +39,38 @@ const ogImage = new URL(
     <link rel="alternate" hreflang="fr" href={frUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="x-default" href={frUrl} />
-    <!-- Le .ico embarque les tailles 16, 32 et 48 ; les PNG servent aux
-         navigateurs qui les préfèrent. Plus de SVG : celui d'origine portait
-         l'ancien monogramme et primait sur les nouvelles icônes. -->
+    {/*
+      `favicon.svg` porte la marque des PETITES tailles, volontairement plus
+      simple que l'icône d'application : à 16 px, le dessin complet donne un
+      trait de 0,5 px, c'est-à-dire un gris. Il est déclaré en premier et les
+      navigateurs modernes le préfèrent — net à toute taille, moins d'un Ko.
+
+      Un SVG de favicon PRIME sur les PNG : c'est pour cela que le précédent
+      avait été retiré, il portait encore l'ancien monogramme. Celui-ci est
+      tenu à jour par `npm run generer-minis`, qui en tire aussi le PNG 32 et
+      le .ico — les trois ne peuvent pas diverger.
+
+      Le .ico embarque 16, 32 et 48. Ses 16 et 32 viennent du SVG ; son 48 du
+      dessin COMPLET, lisible dès cette taille.
+
+      Le 16×16 n'est PLUS déclaré, volontairement. L'onglet mesure 16 px CSS,
+      mais 32 px réels sur un écran à densité double — la majorité des
+      portables aujourd'hui. Tant qu'une icône 16 est proposée, le navigateur
+      la juge parfaitement adaptée et la prend, puis l'étire : on affiche alors
+      16 pixels d'information dans 32, et l'icône paraît crénelée. Sans elle,
+      le meilleur candidat devient le 32, servi à sa résolution native. Sur un
+      écran à densité simple, le navigateur réduit lui-même le 32 — mesuré
+      équivalent au 16 livré, donc aucune perte.
+
+      `public/favicon-16x16.png` reste sur le disque mais n'est plus référencé ;
+      le .ico en embarque de toute façon un.
+
+      Commentaire `{...}` et non `<!-- -->` : celui-ci est retiré à la
+      compilation. En HTML, ces quinze lignes partiraient chez le visiteur, sur
+      chacune des vingt-quatre pages.
+    */}
+    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
     <link rel="icon" href={withBase('favicon-32x32.png')} sizes="32x32" type="image/png" />
-    <link rel="icon" href={withBase('favicon-16x16.png')} sizes="16x16" type="image/png" />
     <link rel="alternate icon" href={withBase('favicon.ico')} sizes="16x16 32x32 48x48" />
     <!-- iOS ignore et le SVG et le manifeste : sans cette ligne, un raccourci
          sur l'écran d'accueil affiche une capture de la page. -->

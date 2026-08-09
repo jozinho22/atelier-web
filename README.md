@@ -233,8 +233,74 @@ l'ORIGINE, et que `jozinho22.github.io` héberge tous les dépôts — un `id` r
 à `/` y serait partagé avec chaque autre projet du compte.
 
 Icônes déclarées (toutes présentes dans `public/`) : 32, 192 et 512 en `any`,
-plus `icon-512-maskable.png` en `purpose: "maskable"` — celle-là seulement,
-parce qu'elle a été dessinée avec la marge que le masque Android exige.
+plus `icon-512-maskable.png` en `purpose: "maskable"` — celle-là seulement.
+
+### Deux dessins, pas un
+
+L'icône d'application et l'icône d'onglet ne portent **pas le même dessin**, et
+c'est délibéré.
+
+Le dessin complet — cadre, onglet, trois pastilles, trois barres — a une bordure
+de 16 px sur 512. Réduite à 16 px, elle tombe à **0,5 px** : un demi-pixel ne se
+trace pas, il devient un gris. Le glyphe n'occupe par ailleurs que 59 % du
+canevas, soit neuf pixels utiles sur seize. Vérifié sur six rééchantillonnages
+différents (Lanczos depuis la 512, moyenne d'aire, via le 32, l'ICO) : tous
+donnent la même bouillie. **Ce n'est pas un problème de redimensionnement.**
+
+| taille | dessin | d'où |
+| --- | --- | --- |
+| 16, 32 | marque simplifiée | `favicon.svg` |
+| 48 | dessin complet | `android-chrome-512x512.png` |
+| 180, 192, 512 | dessin complet | le jeu de favicons |
+
+```bash
+npm run generer-minis
+```
+
+`public/favicon.svg` est la **source** : traits épais, deux détails, marque à
+fond perdu, couleurs relevées dans le dégradé du dessin complet. Le script en
+tire `favicon-32x32.png` et `favicon.ico` (16 et 32 du SVG, 48 du dessin
+complet — c'est à cela que sert un `.ico` multi-tailles). Modifier le SVG sans
+relancer la commande désaccorderait les trois.
+
+Netteté mesurée à 16 px : **13,3 → 53,0**.
+
+⚠️ **Un SVG de favicon prime sur les PNG déclarés.** C'est pour cela que le
+précédent avait été retiré : il portait encore l'ancien monogramme et masquait
+les nouvelles icônes.
+
+Le `16x16` n'est **plus déclaré**. Un onglet fait 16 px CSS mais 32 px réels sur
+un écran à densité double : tant qu'une icône 16 est offerte, le navigateur la
+juge idéale, la prend, puis l'étire. Sans elle il tombe sur le SVG, ou sur le 32
+à sa résolution native. Le fichier reste dans `public/` mais n'est référencé
+nulle part.
+
+### Régénérer l'icône maskable
+
+`icon-512-maskable.png` est **dérivée** de `android-chrome-512x512.png`, pas
+dessinée à part. Elle est donc à refaire **à chaque changement du jeu de
+favicons** :
+
+```bash
+npm run generer-maskable
+```
+
+Android ne montre pas l'icône telle quelle : il la découpe dans une forme qu'il
+choisit — cercle, carré arrondi, goutte selon le lanceur — et cette forme peut
+mordre jusqu'à 20 % du bord. Une icône `maskable` doit donc **remplir tout le
+carré** d'une matière opaque, et ne rien mettre d'important hors du cercle
+central de 80 %.
+
+Le jeu de favicons est une **pastille** : disque blanc, coins transparents.
+Déclarée `maskable` telle quelle, elle laisserait les coins vides dès que la
+forme retenue n'est pas le cercle — un disque flottant dans un carré noir. Le
+script l'aplatit sur la couleur de son propre disque, **relevée et non écrite en
+dur** : aplatir sur le papier du site (`#f7f6f2`) laisserait un liseré visible
+autour de la pastille, 1,072:1 de contraste sur une arête franche.
+
+Il refuse d'écrire plutôt que de produire une icône fausse — si le glyphe déborde
+de la zone sûre, ou si le pourtour du disque n'est pas uni. Le jeu actuel passe à
+195,4 px de rayon pour 204,8 de zone sûre.
 
 ## Déploiement — trois cibles, un seul code
 

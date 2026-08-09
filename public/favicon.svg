@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Atelier Web">
+  <!--
+    Marque des petites tailles — onglet, favori, raccourci.
+
+    Volontairement plus simple que l'icône d'application : à 16 px, le dessin
+    complet (cadre fin, onglet, trois pastilles, trois barres) donne un trait de
+    0,5 px, c'est-à-dire un gris. Ici deux détails seulement, des traits d'au
+    moins 2 px une fois réduits, et la marque remplit le carré au lieu d'occuper
+    59 % du canevas.
+
+    Les couleurs ne sont pas choisies : elles sont relevées dans le dégradé de
+    android-chrome-512x512.png.
+
+    Ce fichier est la SOURCE — `npm run generer-minis` en tire le PNG 32 et le
+    .ico. Le modifier sans relancer la commande désaccorderait les trois.
+  -->
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#41449f" />
+      <stop offset="1" stop-color="#a0a0d8" />
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="432" height="432" rx="95" fill="url(#a)" />
+  <rect x="87" y="169" width="338" height="256" rx="30" fill="#ffffff" />
+  <rect x="134" y="218" width="244" height="49" rx="17" fill="#41449f" />
+  <rect x="134" y="303" width="244" height="49" rx="17" fill="#41449f" />
+</svg>

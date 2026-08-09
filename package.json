@@ -8,7 +8,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "verifier-realisations": "node --experimental-strip-types scripts/verifier-realisations.mjs"
+    "verifier-realisations": "node --experimental-strip-types scripts/verifier-realisations.mjs",
+    "generer-maskable": "node scripts/generer-maskable.mjs",
+    "generer-minis": "node scripts/generer-minis.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",
