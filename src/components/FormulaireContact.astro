@@ -25,11 +25,19 @@ import { withBase } from '../lib/paths';
 interface Props {
   t: {
     legende: string; nom: string; email: string; message: string; leurre: string;
+    pack: string; packDefaut: string;
     envoyer: string; envoiEnCours: string; succes: string; erreurEnvoi: string;
     erreurNom: string; erreurEmail: string; erreurMessage: string;
   };
+  /**
+   * Les packs proposés, dans l'ordre de la grille tarifaire. Passés par la page
+   * plutôt que lus ici : les libellés traduits vivent dans le dictionnaire de
+   * l'accueil, aux côtés des cartes qu'ils nomment. Les retaper ici les ferait
+   * diverger au premier changement de nom.
+   */
+  packs: readonly { cle: string; nom: string; couleur: string }[];
 }
-const { t } = Astro.props;
+const { t, packs } = Astro.props;
 ---
 
 <form class="contact-form" method="post" action={withBase('api/contact')} data-contact novalidate>
@@ -48,6 +56,41 @@ const { t } = Astro.props;
       <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required
         aria-describedby="err-email" />
       <span class="erreur" id="err-email" data-erreur="email" hidden>{t.erreurEmail}</span>
+    </p>
+
+    {/*
+      Facultatif, et sans `required` : le premier choix vaut « je ne sais pas
+      encore », ce qui est une réponse honnête et non un champ vide. Beaucoup
+      écrivent justement pour savoir quel pack leur convient.
+    */}
+    <p class="champ">
+      <label id="contact-pack-libelle" for="contact-pack">{t.pack}</label>
+      {/*
+        Le code couleur des offres, repris ici. Il double le libellé, il ne le
+        remplace jamais : le nom du pack reste écrit, et rien ne dépend de la
+        seule couleur — règle déjà tenue par les pastilles et les cartes.
+
+        Deux mécanismes, parce qu'un seul ne suffit pas. La couleur posée sur
+        les <option> est honorée par Chrome et Firefox sous Windows et Linux,
+        mais IGNORÉE par les sélecteurs natifs de macOS, d'iOS et d'Android,
+        qui dessinent la liste eux-mêmes. Le liseré et la flèche, eux, restent
+        visibles partout, liste fermée comprise.
+
+        L'enveloppe n'est pas décorative : un `<select>` n'accepte pas de
+        pseudo-élément, et animer son fond s'est révélé sans effet — mesuré, la
+        valeur saute à l'arrivée sans jamais s'interpoler. Le liseré est donc un
+        élément à part entière, porté par l'enveloppe et animé en `transform`.
+      */}
+      <span class="select-enveloppe" data-enveloppe>
+        <select id="contact-pack" name="pack" data-pack>
+          <option value="">{t.packDefaut}</option>
+          {packs.map((p) => (
+            <option value={p.cle} data-couleur={`var(${p.couleur})`} style={`color: var(${p.couleur})`}>
+              {p.nom}
+            </option>
+          ))}
+        </select>
+      </span>
     </p>
 
     <p class="champ">
@@ -70,9 +113,16 @@ const { t } = Astro.props;
     <input type="hidden" name="t" data-horodatage value="" />
 
     {/*
-      Les libellés du script passent par des attributs `data-` : un <script>
-      Astro est un module client, compilé à part, qui ne voit pas `t`. Les
-      écrire en dur dedans les figerait en une seule langue.
+      Les libellés du script passent par des attributs `data-` : un bloc de
+      script Astro est un module client, compilé à part, qui ne voit pas `t`.
+      Les écrire en dur dedans les figerait en une seule langue.
+
+      ⚠️ Ne PAS écrire le nom de cette balise entre chevrons dans un
+      commentaire : le compilateur extrait les blocs de script avant de traiter
+      les commentaires, ouvre un vrai bloc sur cette occurrence, et envoie la
+      prose qui suit à esbuild. Le script du composant cesse alors de compiler,
+      donc de se charger — sans que le rendu de la page en souffre, ce qui rend
+      la panne muette.
     */}
     <button class="btn btn-primary" type="submit" data-envoyer data-encours={t.envoiEnCours}>
       {t.envoyer}
@@ -108,7 +158,8 @@ const { t } = Astro.props;
   }
 
   .champ input,
-  .champ textarea {
+  .champ textarea,
+  .champ select {
     font: inherit;
     padding: 0.7rem 0.85rem;
     border: 2px solid rgb(18 19 31 / 0.18);
@@ -117,12 +168,219 @@ const { t } = Astro.props;
     color: var(--ink);
   }
 
+  /**
+   * La flèche, redessinée en deux triangles de dégradé : celle du système varie
+   * d'un OS à l'autre et ne s'accorde pas au reste des champs. `appearance:
+   * none` supprime au passage la hauteur imposée, d'où le padding commun aux
+   * trois champs.
+   *
+   * Elle prend la couleur du pack. C'est le seul canal qui la laisse passer sur
+   * un `<select>` : ce moteur ignore `color` sur ce contrôle, même en style en
+   * ligne, là où un `<input>` voisin l'applique. Le texte n'est donc pas
+   * coloré — le liseré et cette flèche portent le code couleur.
+   */
+  .champ select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--pack-choisi, var(--ink-soft)) 50%),
+      linear-gradient(135deg, var(--pack-choisi, var(--ink-soft)) 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.15rem) 55%,
+      calc(100% - 0.75rem) 55%;
+    background-size: 0.4rem 0.4rem;
+    background-repeat: no-repeat;
+    padding-right: 2.2rem;
+    /* La place du liseré est réservée en permanence : le texte ne bouge pas
+       d'un pixel entre « je ne sais pas encore » et un pack choisi. */
+    padding-left: 1.15rem;
+    font-weight: 600;
+  }
+
+  .select-enveloppe {
+    position: relative;
+    display: block;
+  }
+
+  .select-enveloppe > select {
+    width: 100%;
+  }
+
+  /* ---- Liste maison ---------------------------------------------------- */
+
+  /**
+   * Elle ne remplace le `<select>` QUE si le script s'exécute : c'est lui qui
+   * pose `data-remplace`, jamais le balisage. Sans JavaScript, le menu natif
+   * reste en place et fonctionne — l'inverse laisserait un champ mort.
+   */
+  .select-enveloppe[data-remplace] > select {
+    display: none;
+  }
+
+  .select-enveloppe :global(.select-declencheur) {
+    width: 100%;
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.7rem 2.2rem 0.7rem 1.15rem;
+    border: 2px solid rgb(18 19 31 / 0.18);
+    border-radius: var(--radius-s);
+    background: var(--paper-raised);
+    /* Un `<button>`, lui, accepte `color` — ce que le `<select>` refusait, et
+       qui obligeait à faire porter le code couleur par le seul liseré. */
+    color: var(--pack-choisi, var(--ink));
+    transition: color 0.22s var(--ease-out);
+    cursor: pointer;
+    /* La flèche, reprise du champ natif pour que rien ne change à l'œil. */
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--pack-choisi, var(--ink-soft)) 50%),
+      linear-gradient(135deg, var(--pack-choisi, var(--ink-soft)) 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.15rem) 55%,
+      calc(100% - 0.75rem) 55%;
+    background-size: 0.4rem 0.4rem;
+    background-repeat: no-repeat;
+  }
+
+  .select-enveloppe :global(.select-declencheur):focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /**
+   * LE REPLI, et lui seul.
+   *
+   * La transition qui joue est celle de l'état d'ARRIVÉE : cette déclaration
+   * est donc celle de la fermeture — 110 ms. L'ouverture, plus ample, est
+   * déclarée sur `[data-ouvert]` juste après.
+   *
+   * `visibility` est retardée de la durée du repli, faute de quoi la liste
+   * disparaîtrait d'un coup au lieu de s'effacer. Elle ne peut pas être en
+   * `display: none`, qui ne s'anime pas.
+   */
+  .select-enveloppe :global(.select-liste) {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+    background: var(--paper-raised);
+    border: 2px solid rgb(18 19 31 / 0.14);
+    border-radius: var(--radius-s);
+    box-shadow: var(--shadow-m);
+    opacity: 0;
+    visibility: hidden;
+    transform: scaleY(0.88) translateY(-0.4rem);
+    transform-origin: top center;
+    transition:
+      opacity 0.11s ease-in,
+      transform 0.11s ease-in,
+      visibility 0s linear 0.11s;
+  }
+
+  /* L'ouverture : deux fois plus longue, avec le léger dépassement. */
+  .select-enveloppe[data-ouvert] :global(.select-liste) {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.22s var(--ease-out),
+      transform 0.22s var(--ease-out),
+      visibility 0s;
+  }
+
+  .select-enveloppe :global(.select-option) {
+    padding: 0.55rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  /* Le survol et le parcours clavier partagent le même repère visuel. */
+  .select-enveloppe :global(.select-option):hover,
+  .select-enveloppe :global(.select-option):focus-visible {
+    background: rgb(18 19 31 / 0.06);
+    outline: none;
+  }
+
+  .select-enveloppe :global(.select-option)[aria-selected='true']::after {
+    content: ' ✓';
+    color: var(--pack-choisi, var(--ink-soft));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .select-enveloppe :global(.select-liste),
+    .select-enveloppe[data-ouvert] :global(.select-liste) {
+      transition: none;
+    }
+  }
+
+  /**
+   * Le liseré du pack.
+   *
+   * Un vrai élément, et non plus une couche de fond : sur un `<select>`, ni
+   * `color`, ni la couleur d'un `box-shadow`, ni la taille d'un fond ne
+   * s'animent — mesuré, la valeur saute à l'arrivée sans interpoler.
+   *
+   * `transform: scaleY()` ne souffre pas de ces réserves, ne déclenche aucun
+   * recalcul de mise en page, et se compose sur le GPU.
+   */
+  .select-enveloppe::before {
+    content: '';
+    position: absolute;
+    left: 0.35rem;
+    top: 0.55rem;
+    bottom: 0.55rem;
+    width: 0.3rem;
+    border-radius: 999px;
+    background: var(--pack-choisi, transparent);
+    /* Depuis le centre : le trait se déroule vers le haut et le bas à la fois. */
+    transform: scaleY(0);
+    /**
+     * LE REPLI, et lui seul.
+     *
+     * La transition qui joue est celle de l'état d'ARRIVÉE. Cette déclaration
+     * est donc celle du retour au défaut : 130 ms. Le déploiement, plus lent,
+     * est déclaré sur l'état choisi juste après.
+     *
+     * L'asymétrie est volontaire : on regarde une chose apparaître, on ne
+     * regarde pas une chose disparaître — une sortie aussi longue que l'entrée
+     * donne l'impression que l'interface traîne.
+     */
+    transition: transform 0.13s ease-in;
+  }
+
+  /* Le déploiement : plus ample, avec le léger dépassement de `--ease-out`. */
+  .select-enveloppe[data-choisi]::before {
+    transform: scaleY(1);
+    transition: transform 0.32s var(--ease-out);
+  }
+
+  /* Le repli neutre du champ vide n'a pas à peser : c'est une invite, pas un
+     choix. */
+  .champ select:not([data-choisi]) {
+    font-weight: 400;
+  }
+
+  /* Le liseré apparaît alors d'un coup, à sa taille finale : l'information est
+     la même, seul le mouvement disparaît. Les deux états sont visés — sans le
+     second, celui de `[data-choisi]` continuerait d'animer le déploiement. */
+  @media (prefers-reduced-motion: reduce) {
+    .select-enveloppe::before,
+    .select-enveloppe[data-choisi]::before {
+      transition: none;
+    }
+  }
+
   .champ textarea {
     resize: vertical;
   }
 
   .champ input:focus-visible,
-  .champ textarea:focus-visible {
+  .champ textarea:focus-visible,
+  .champ select:focus-visible {
     outline: 3px solid var(--accent);
     outline-offset: 2px;
   }
@@ -185,6 +443,146 @@ const { t } = Astro.props;
    * Il évite le rechargement, annonce le résultat, et pose l'horodatage qui
    * sert de second garde anti-robot côté serveur.
    */
+  /**
+   * Remplace un `<select>` par une liste déroulante maison.
+   *
+   * Pourquoi la reconstruire : le menu d'un `<select>` est dessiné par le
+   * système d'exploitation, pas par la page. Aucune CSS ne l'atteint, donc
+   * aucune animation d'ouverture n'est possible dessus — quel que soit le
+   * framework. Il faut un vrai élément pour pouvoir l'animer.
+   *
+   * Le `<select>` d'origine RESTE dans le document : masqué, il continue de
+   * porter la valeur envoyée avec le formulaire, et il reprend sa place
+   * entière si ce script ne s'exécute pas.
+   *
+   * Clavier : Entrée, Espace et les flèches ouvrent ; les flèches parcourent ;
+   * Origine et Fin vont aux extrémités ; Échap referme et rend le focus au
+   * bouton ; une lettre saute à l'option correspondante. C'est le contrat
+   * qu'un menu natif remplit sans qu'on y pense, et qu'il faut réécrire dès
+   * qu'on s'en passe.
+   */
+  function construireListe(choix: HTMLSelectElement, enveloppe: HTMLElement): void {
+    const options = Array.from(choix.options);
+    const libelle = document.getElementById('contact-pack-libelle');
+
+    const bouton = document.createElement('button');
+    bouton.type = 'button'; // sans quoi il soumettrait le formulaire
+    bouton.className = 'select-declencheur';
+    bouton.setAttribute('aria-haspopup', 'listbox');
+    bouton.setAttribute('aria-expanded', 'false');
+    if (libelle) bouton.setAttribute('aria-labelledby', `${libelle.id} ${(bouton.id = 'contact-pack-bouton')}`);
+
+    const liste = document.createElement('ul');
+    liste.className = 'select-liste';
+    liste.id = 'contact-pack-liste';
+    liste.setAttribute('role', 'listbox');
+    if (libelle) liste.setAttribute('aria-labelledby', libelle.id);
+    bouton.setAttribute('aria-controls', liste.id);
+
+    const items = options.map((o, i) => {
+      const li = document.createElement('li');
+      li.className = 'select-option';
+      li.id = `contact-pack-opt-${i}`;
+      li.setAttribute('role', 'option');
+      li.tabIndex = -1;
+      li.textContent = o.textContent;
+      li.dataset.valeur = o.value;
+      if (o.dataset.couleur) {
+        li.dataset.couleur = o.dataset.couleur;
+        // La couleur du pack, portée par l'option elle-même. Le `<select>` la
+        // posait via un attribut `style` sur ses `<option>` ; en reconstruisant
+        // la liste, il faut la reporter, sinon le code couleur disparaît.
+        li.style.color = o.dataset.couleur;
+      }
+      liste.append(li);
+      return li;
+    });
+
+    enveloppe.append(bouton, liste);
+    enveloppe.setAttribute('data-remplace', '');
+
+    let ouvert = false;
+
+    const refleter = (): void => {
+      const i = choix.selectedIndex;
+      bouton.textContent = options[i]?.textContent ?? '';
+      items.forEach((li, j) => li.setAttribute('aria-selected', String(j === i)));
+      const couleur = options[i]?.dataset.couleur;
+      if (couleur) {
+        enveloppe.style.setProperty('--pack-choisi', couleur);
+        enveloppe.setAttribute('data-choisi', '');
+      } else {
+        enveloppe.style.removeProperty('--pack-choisi');
+        enveloppe.removeAttribute('data-choisi');
+      }
+    };
+
+    const ouvrir = (indexVise = choix.selectedIndex): void => {
+      ouvert = true;
+      enveloppe.setAttribute('data-ouvert', '');
+      bouton.setAttribute('aria-expanded', 'true');
+      items[Math.max(0, indexVise)]?.focus();
+    };
+
+    const fermer = (rendreLeFocus = true): void => {
+      if (!ouvert) return;
+      ouvert = false;
+      enveloppe.removeAttribute('data-ouvert');
+      bouton.setAttribute('aria-expanded', 'false');
+      if (rendreLeFocus) bouton.focus();
+    };
+
+    const retenir = (i: number): void => {
+      choix.selectedIndex = i;
+      // Le `<select>` reste la source de vérité : on émet l'événement qu'il
+      // aurait émis, pour que tout ce qui l'écoute continue de fonctionner.
+      choix.dispatchEvent(new Event('change', { bubbles: true }));
+      refleter();
+      fermer();
+    };
+
+    bouton.addEventListener('click', () => (ouvert ? fermer() : ouvrir()));
+    bouton.addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+        e.preventDefault();
+        ouvrir();
+      }
+    });
+
+    items.forEach((li, i) => {
+      li.addEventListener('click', () => retenir(i));
+      li.addEventListener('keydown', (e) => {
+        const bouger = (n: number) => {
+          e.preventDefault();
+          items[Math.min(items.length - 1, Math.max(0, n))]?.focus();
+        };
+        if (e.key === 'ArrowDown') return bouger(i + 1);
+        if (e.key === 'ArrowUp') return bouger(i - 1);
+        if (e.key === 'Home') return bouger(0);
+        if (e.key === 'End') return bouger(items.length - 1);
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); return retenir(i); }
+        if (e.key === 'Escape' || e.key === 'Tab') { e.preventDefault(); return fermer(); }
+        // Recherche à la frappe, comme sur un menu natif.
+        if (e.key.length === 1) {
+          const depuis = items.slice(i + 1).concat(items.slice(0, i + 1));
+          const cible = depuis.find((x) =>
+            x.textContent?.trim().toLowerCase().startsWith(e.key.toLowerCase())
+          );
+          cible?.focus();
+        }
+      });
+    });
+
+    // Un clic ailleurs referme. `pointerdown` et non `click` : la liste doit
+    // disparaître dès l'appui, pas au relâchement.
+    document.addEventListener('pointerdown', (e) => {
+      if (ouvert && !enveloppe.contains(e.target as Node)) fermer(false);
+    });
+
+    refleter();
+    choix.addEventListener('change', refleter);
+  }
+
   document.querySelectorAll<HTMLFormElement>('[data-contact]').forEach((form) => {
     const horodatage = form.querySelector<HTMLInputElement>('[data-horodatage]');
     const retour = form.querySelector<HTMLElement>('[data-retour]');
@@ -193,6 +591,19 @@ const { t } = Astro.props;
 
     // Posé par le script, donc à l'affichage réel de la page.
     horodatage.value = String(Date.now());
+
+    /**
+     * Reporte la couleur du pack choisi sur le champ.
+     *
+     * Les sélecteurs natifs de macOS, d'iOS et d'Android ignorent la couleur
+     * posée sur les `<option>` : sans ce report, le code couleur n'existerait
+     * que sur une partie des navigateurs. Le liseré du champ, lui, s'affiche
+     * partout. La couleur est lue sur l'option elle-même — le script n'a donc
+     * aucune table à tenir à jour quand un pack change de teinte.
+     */
+    const choix = form.querySelector<HTMLSelectElement>('[data-pack]');
+    const enveloppe = form.querySelector<HTMLElement>('[data-enveloppe]');
+    if (choix && enveloppe) construireListe(choix, enveloppe);
 
     const messages = {
       succes: retour.dataset.succes ?? '',

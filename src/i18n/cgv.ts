@@ -39,8 +39,17 @@ import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '..
  * abonnement d'hébergement sans engagement de durée.
  */
 
-const CONTACT = 'josselin.douineau.1987@gmail.com';
-const TELEPHONE = { texte: '06 25 45 01 76', href: 'tel:+33625450176' };
+const CONTACT = 'josselin.douineau@studio-caducee.com';
+/**
+ * Le numéro s'écrit autrement selon la langue : un lecteur français lit
+ * « 06 25 45 01 76 », un lecteur étranger a besoin de l'indicatif pour appeler.
+ * Le lien, lui, ne connaît qu'une forme — la seule qui compose partout.
+ */
+const TELEPHONE = {
+  fr: '06 25 45 01 76',
+  en: '+33 6 25 45 01 76',
+  href: 'tel:+33625450176',
+} as const;
 
 /** Date de la version en vigueur, affichée sous le titre. */
 const MISE_A_JOUR = { fr: '9 août 2026', en: '9 August 2026' } as const;
@@ -102,7 +111,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
               { text: 'Contact : ' },
               lien,
               { text: ' — ' },
-              { link: TELEPHONE.texte, href: TELEPHONE.href },
+              { link: TELEPHONE[lang], href: TELEPHONE.href },
             ],
           ],
         },
@@ -485,7 +494,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
               { text: 'Contact: ' },
               lien,
               { text: ' — ' },
-              { link: TELEPHONE.texte, href: TELEPHONE.href },
+              { link: TELEPHONE[lang], href: TELEPHONE.href },
             ],
           ],
         },

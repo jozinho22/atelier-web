@@ -25,6 +25,7 @@
  */
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
+import { estUnPack } from '../data/tarifs';
 
 /** Délai minimal entre l'affichage du formulaire et son envoi. */
 const DELAI_MINIMAL_MS = 3000;
@@ -78,13 +79,38 @@ export const POST: APIRoute = async ({ request }) => {
   // Champ leurre : invisible à l'écran, donc vide chez un humain.
   if (champ('site')) return json({ ok: true }, 200);
 
-  const ouvertureA = Number(champ('t'));
-  const ecoule = Date.now() - ouvertureA;
-  if (!Number.isFinite(ouvertureA) || ecoule < DELAI_MINIMAL_MS || ecoule > DELAI_MAXIMAL_MS) {
-    return json({ ok: true }, 200);
+  /**
+   * L'horodatage est posé par le script à l'affichage. Il peut donc manquer
+   * pour une raison parfaitement légitime : JavaScript désactivé, bloqué, ou
+   * en échec. Le formulaire poste alors nativement — c'est prévu.
+   *
+   * Un champ ABSENT ne vaut donc pas rejet, sans quoi ces visiteurs verraient
+   * « message envoyé » sans que rien ne parte. C'était le cas, et la panne
+   * était muette des deux côtés : eux croyaient avoir écrit, personne ne
+   * recevait rien. Le champ leurre continue de garder cette porte.
+   *
+   * Présent mais invraisemblable — trop rapide, ou vieux de douze heures —
+   * reste un rejet silencieux.
+   */
+  const horodatage = champ('t');
+  if (horodatage) {
+    const ecoule = Date.now() - Number(horodatage);
+    if (!Number.isFinite(ecoule) || ecoule < DELAI_MINIMAL_MS || ecoule > DELAI_MAXIMAL_MS) {
+      return json({ ok: true }, 200);
+    }
   }
 
   // ---- 3. validation -----------------------------------------------------
+  /**
+   * Le pack est FACULTATIF, mais jamais recopié tel quel : ce champ vient du
+   * navigateur, où une liste déroulante ne contraint personne — il suffit
+   * d'éditer la page ou de poster à la main. On ne garde donc qu'une clé
+   * reconnue par la grille tarifaire, et tout le reste devient « non précisé ».
+   * Sans ce filtre, un tiers écrirait ce qu'il veut dans l'objet de tes mails.
+   */
+  const packRecu = champ('pack');
+  const pack = estUnPack(packRecu) ? packRecu : null;
+
   const erreurs: Record<string, string> = {};
   if (!nom) erreurs.nom = 'requis';
   else if (nom.length > LIMITES.nom) erreurs.nom = 'trop long';
@@ -103,8 +129,15 @@ export const POST: APIRoute = async ({ request }) => {
       // ferait échouer SPF et DKIM, et le message partirait en indésirables.
       // Répondre au message écrit alors bien au visiteur.
       replyTo: email,
-      subject: `Site — demande de ${nom}`,
-      text: [`Nom : ${nom}`, `E-mail : ${email}`, '', message].join('\n'),
+      // Le pack figure dans l'objet : il permet de trier la boîte sans ouvrir.
+      subject: `Site — demande de ${nom}${pack ? ` (pack ${pack})` : ''}`,
+      text: [
+        `Nom : ${nom}`,
+        `E-mail : ${email}`,
+        `Pack : ${pack ?? 'non précisé'}`,
+        '',
+        message,
+      ].join('\n'),
     });
     if (error) {
       console.error('[contact] refus de Resend —', error);

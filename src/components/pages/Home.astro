@@ -10,8 +10,9 @@ import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
 import { ACCENTS, ACCENTS_TEXTE } from '../../data/modeles';
 import { REALISATIONS, estVisible, resoudreRealisation } from '../../data/realisations';
-import { CONTACT_PUBLIC, telHref, mailtoHref } from '../../data/contact';
+import { CONTACT_PUBLIC, telHref, telephoneAffiche, mailtoHref } from '../../data/contact';
 import { SERVEUR_DISPONIBLE } from '../../lib/cible';
+import { PACKS } from '../../data/tarifs';
 import FormulaireContact from '../FormulaireContact.astro';
 
 const { lang } = splitPath(Astro.url.pathname);
@@ -25,8 +26,8 @@ const jsonLd = {
   description: t.description,
   url: new URL(localePath(lang, ''), Astro.site).href,
   email: CONTACT_PUBLIC.email,
-  // Le JSON-LD attend le format international, sans le préfixe `tel:`.
-  telephone: telHref(CONTACT_PUBLIC.telephone).replace('tel:', ''),
+  // Le JSON-LD attend le format international : c'est déjà la forme canonique.
+  telephone: CONTACT_PUBLIC.telephone,
   priceRange: '€€',
   areaServed: 'France',
   serviceType: t.hero.kicker,
@@ -183,6 +184,22 @@ const portfolio = REALISATIONS.map((r, i) => {
  * les pictogrammes n'ajoutaient rien que le titre ne dise déjà.
  */
 const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStart(2, '0') }));
+
+/**
+ * Options de la liste déroulante du formulaire.
+ *
+ * Les clés viennent de la grille tarifaire, les libellés du dictionnaire qui
+ * nomme déjà les cartes : ajouter un pack à `TARIFS` le fait apparaître ici
+ * sans y toucher, et un pack retiré disparaît des deux.
+ */
+const packsFormulaire = PACKS.map((cle) => ({
+  cle,
+  nom: t.tarifs[cle].name,
+  // Le code couleur des offres est déjà posé par les classes `.pack-<slug>`
+  // (pastilles, badges, cartes tarifaires). On désigne la même variable plutôt
+  // que d'ouvrir une seconde table de correspondance qui dériverait.
+  couleur: `--pack-${cle.toLowerCase()}`,
+}));
 ---
 
 <Base title={t.title} description={t.description} jsonLd={jsonLd}>
@@ -583,7 +600,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
         */}
         {SERVEUR_DISPONIBLE && (
           <div class="contact-formulaire">
-            <FormulaireContact t={t.contact.formulaire} />
+            <FormulaireContact t={t.contact.formulaire} packs={packsFormulaire} />
             <p class="contact-ou">{t.contact.formulaire.ou}</p>
           </div>
         )}
@@ -603,9 +620,9 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
           </a>
           <a
             class="btn btn-ghost contact-btn contact-tel"
-            href={telHref(CONTACT_PUBLIC.telephone)}
+            href={telHref()}
           >
-            📞 {CONTACT_PUBLIC.telephone}
+            📞 {telephoneAffiche(lang)}
           </a>
         </div>
       </div>

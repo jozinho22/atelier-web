@@ -57,8 +57,8 @@ export const legal = {
             { br: true },
             { text: 'Contact : ' },
             {
-              link: 'josselin.douineau.1987@gmail.com',
-              href: 'mailto:josselin.douineau.1987@gmail.com',
+              link: 'josselin.douineau@studio-caducee.com',
+              href: 'mailto:josselin.douineau@studio-caducee.com',
             },
             { text: ' — ' },
             { link: '06 25 45 01 76', href: 'tel:+33625450176' },
@@ -135,8 +135,8 @@ export const legal = {
               text: 'Conformément au RGPD, vous pouvez exercer vos droits (accès, rectification, suppression, opposition) en écrivant à ',
             },
             {
-              link: 'josselin.douineau.1987@gmail.com',
-              href: 'mailto:josselin.douineau.1987@gmail.com',
+              link: 'josselin.douineau@studio-caducee.com',
+              href: 'mailto:josselin.douineau@studio-caducee.com',
             },
             { text: '.' },
           ],
@@ -187,8 +187,8 @@ export const legal = {
             { br: true },
             { text: 'Contact: ' },
             {
-              link: 'josselin.douineau.1987@gmail.com',
-              href: 'mailto:josselin.douineau.1987@gmail.com',
+              link: 'josselin.douineau@studio-caducee.com',
+              href: 'mailto:josselin.douineau@studio-caducee.com',
             },
             { text: ' — ' },
             { link: '+33 6 25 45 01 76', href: 'tel:+33625450176' },
@@ -263,8 +263,8 @@ export const legal = {
               text: 'In accordance with the GDPR, you may exercise your rights (access, rectification, erasure, objection) by writing to ',
             },
             {
-              link: 'josselin.douineau.1987@gmail.com',
-              href: 'mailto:josselin.douineau.1987@gmail.com',
+              link: 'josselin.douineau@studio-caducee.com',
+              href: 'mailto:josselin.douineau@studio-caducee.com',
             },
             { text: '.' },
           ],

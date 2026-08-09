@@ -2,7 +2,7 @@
 // Pied de page du site principal.
 import { splitPath, localePath } from '../lib/i18n';
 import { common } from '../i18n/common';
-import { CONTACT_PUBLIC, telHref, mailtoHref } from '../data/contact';
+import { CONTACT_PUBLIC, telHref, telephoneAffiche, mailtoHref } from '../data/contact';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = common[lang].footer;
@@ -101,7 +101,7 @@ const signature = [
       <p class="footer-heading">{t.contactHeading}</p>
       <ul>
         <li><a href={mailtoHref(CONTACT_PUBLIC.email)}>{CONTACT_PUBLIC.email}</a></li>
-        <li><a href={telHref(CONTACT_PUBLIC.telephone)}>{CONTACT_PUBLIC.telephone}</a></li>
+        <li><a href={telHref()}>{telephoneAffiche(lang)}</a></li>
       </ul>
     </div>
   </div>

@@ -278,6 +278,10 @@ export const home = {
         legende: 'Décrivez votre projet',
         nom: 'Votre nom',
         email: 'Votre e-mail',
+        pack: 'Le pack qui vous intéresse',
+        // Facultatif : beaucoup de visiteurs écrivent justement pour savoir
+        // lequel leur convient. Obliger à choisir ferait fuir ceux-là.
+        packDefaut: 'Je ne sais pas encore',
         message: 'Votre projet en quelques lignes',
         // Le champ leurre a un libellé réel : masqué à l'écran, il reste lu par
         // les lecteurs d'écran, et « Laissez ce champ vide » leur évite de
@@ -564,6 +568,8 @@ export const home = {
         legende: 'Tell me about your project',
         nom: 'Your name',
         email: 'Your email',
+        pack: 'The package you have in mind',
+        packDefaut: 'Not sure yet',
         message: 'Your project in a few lines',
         leurre: 'Leave this field empty',
         envoyer: 'Send',

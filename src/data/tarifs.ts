@@ -22,6 +22,22 @@ export const TARIFS = {
   signature: { montant: 3900, aPartirDe: true },
 } as const;
 
+export type ClePack = keyof typeof TARIFS;
+
+/**
+ * Les clés des packs, dans l'ordre de la grille.
+ *
+ * Dérivées de `TARIFS` et non réécrites : elles servent à la fois à construire
+ * la liste déroulante du formulaire de contact et à valider ce que le serveur
+ * reçoit. Une liste tapée à part finirait par accepter un pack disparu de la
+ * grille, ou par en oublier un nouveau.
+ */
+export const PACKS = Object.keys(TARIFS) as ClePack[];
+
+/** Une valeur reçue du navigateur désigne-t-elle un pack réel ? */
+export const estUnPack = (valeur: string): valeur is ClePack =>
+  Object.prototype.hasOwnProperty.call(TARIFS, valeur);
+
 /** Abonnement mensuel : hébergement, nom de domaine et maintenance. */
 export const HEBERGEMENT = { montant: 59, periode: 'mois' } as const;
 
