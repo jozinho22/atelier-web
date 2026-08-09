@@ -6,6 +6,28 @@ import type { DocumentLegalTexte } from './document-legal';
  *
  * La structure (segments, blocs, sections) est partagée avec les conditions
  * générales de vente : voir [src/i18n/document-legal.ts](./document-legal.ts).
+ *
+ * ── Provenance ────────────────────────────────────────────────────────────
+ *
+ * Reprises des mentions légales d'expert-maths-lycee.fr : même entité
+ * juridique, même personne, autre activité. Deux éléments ne se transposent
+ * PAS d'une activité à l'autre, et ont été adaptés plutôt que recopiés :
+ *
+ * • LA TVA. L'autre site invoque l'article 261-4-4°-b du CGI, qui exonère les
+ *   « leçons ou cours particuliers rémunérés directement par les élèves ».
+ *   Créer un site web n'est pas donner un cours : cette exonération ne s'y
+ *   applique pas. On déclare ici la franchise en base de l'article 293 B, le
+ *   régime de droit commun d'une auto-entreprise sous les seuils.
+ *
+ * • L'HÉBERGEUR. L'autre site est sur Vercel ; celui-ci se publie sur GitHub
+ *   Pages (voir .github/workflows/deploy.yml). Recopier Vercel aurait désigné
+ *   un hébergeur qui n'héberge rien. À corriger si le plan B Vercel est un
+ *   jour activé.
+ *
+ * ⚠️ Le SIRET est celui de l'établissement déclaré sur l'autre site. Le SIREN
+ * (981083660) est bien le même — c'est la même entreprise —, mais si une
+ * seconde activité a été déclarée, elle peut porter un NIC différent, donc un
+ * SIRET différent. À vérifier sur l'avis de situation INSEE.
  */
 
 export const legal = {
@@ -22,20 +44,25 @@ export const legal = {
         heading: 'Éditeur du site',
         blocs: [
           [
-            { text: 'Studio Caducée — [Nom Prénom]' },
+            { text: 'Studio Caducée — Josselin DOUINEAU' },
             { br: true },
-            { text: 'Entrepreneur individuel' },
+            { text: 'Entrepreneur individuel (auto-entreprise)' },
             { br: true },
-            { text: '[Adresse]' },
+            { text: '9bis Kerscoul, 22540 LOUARGAT' },
             { br: true },
-            { text: 'SIRET : [à compléter]' },
+            { text: 'SIRET : 98108366000028' },
+            { br: true },
+            { text: 'TVA non applicable, article 293 B du Code général des impôts' },
             { br: true },
             { text: 'Contact : ' },
-            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
+            {
+              link: 'josselin.douineau.1987@gmail.com',
+              href: 'mailto:josselin.douineau.1987@gmail.com',
+            },
             { text: ' — ' },
-            { link: '06 00 00 00 00', href: 'tel:+33600000000' },
+            { link: '06 25 45 01 76', href: 'tel:+33625450176' },
           ],
-          [{ text: 'Directeur de la publication : [Nom Prénom]' }],
+          [{ text: 'Directeur de la publication : Josselin DOUINEAU' }],
         ],
       },
       {
@@ -44,11 +71,11 @@ export const legal = {
           [
             { text: 'Ce site est hébergé par :' },
             { br: true },
-            { text: "[Nom de l'hébergeur]" },
+            { text: 'GitHub, Inc.' },
             { br: true },
-            { text: "[Adresse de l'hébergeur]" },
+            { text: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis' },
             { br: true },
-            { text: "[Téléphone / site web de l'hébergeur]" },
+            { link: 'github.com', href: 'https://github.com' },
           ],
         ],
       },
@@ -74,8 +101,21 @@ export const legal = {
             {
               text: 'Conformément au RGPD, vous pouvez exercer vos droits (accès, rectification, suppression) sur les données échangées par e-mail en écrivant à ',
             },
-            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
+            {
+              link: 'josselin.douineau.1987@gmail.com',
+              href: 'mailto:josselin.douineau.1987@gmail.com',
+            },
             { text: '.' },
+          ],
+        ],
+      },
+      {
+        heading: 'Droit applicable',
+        blocs: [
+          [
+            {
+              text: "Le présent site est soumis au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire, selon les modalités prévues par les conditions générales de vente. À défaut d'accord, les tribunaux français sont seuls compétents.",
+            },
           ],
         ],
       },
@@ -98,20 +138,29 @@ export const legal = {
         heading: 'Site publisher',
         blocs: [
           [
-            { text: 'Studio Caducée — [Full name]' },
+            { text: 'Studio Caducée — Josselin DOUINEAU' },
             { br: true },
-            { text: 'Sole proprietor' },
+            { text: 'Sole proprietor (French auto-entrepreneur)' },
             { br: true },
-            { text: '[Address]' },
+            { text: '9bis Kerscoul, 22540 LOUARGAT, France' },
             { br: true },
-            { text: 'SIRET: [to be completed]' },
+            { text: 'SIRET: 98108366000028' },
+            { br: true },
+            // Le régime français n'a pas d'équivalent britannique ou américain :
+            // on nomme le dispositif, on ne le traduit pas en « VAT exempt ».
+            {
+              text: 'VAT not applicable under article 293 B of the French General Tax Code (small-business exemption)',
+            },
             { br: true },
             { text: 'Contact: ' },
-            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
+            {
+              link: 'josselin.douineau.1987@gmail.com',
+              href: 'mailto:josselin.douineau.1987@gmail.com',
+            },
             { text: ' — ' },
-            { link: '06 00 00 00 00', href: 'tel:+33600000000' },
+            { link: '+33 6 25 45 01 76', href: 'tel:+33625450176' },
           ],
-          [{ text: 'Publication director: [Full name]' }],
+          [{ text: 'Publication director: Josselin DOUINEAU' }],
         ],
       },
       {
@@ -120,11 +169,11 @@ export const legal = {
           [
             { text: 'This site is hosted by:' },
             { br: true },
-            { text: "[Hosting provider's name]" },
+            { text: 'GitHub, Inc.' },
             { br: true },
-            { text: "[Hosting provider's address]" },
+            { text: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, United States' },
             { br: true },
-            { text: "[Hosting provider's phone / website]" },
+            { link: 'github.com', href: 'https://github.com' },
           ],
         ],
       },
@@ -150,8 +199,21 @@ export const legal = {
             {
               text: 'In accordance with the GDPR, you may exercise your rights (access, rectification, erasure) over the data exchanged by email by writing to ',
             },
-            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
+            {
+              link: 'josselin.douineau.1987@gmail.com',
+              href: 'mailto:josselin.douineau.1987@gmail.com',
+            },
             { text: '.' },
+          ],
+        ],
+      },
+      {
+        heading: 'Governing law',
+        blocs: [
+          [
+            {
+              text: 'This site is governed by French law. In the event of a dispute, an amicable settlement will be sought before any legal action, as set out in the terms of sale. Failing agreement, the French courts alone have jurisdiction.',
+            },
           ],
         ],
       },

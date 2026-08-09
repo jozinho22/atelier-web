@@ -273,6 +273,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
           <span class="circuit-fleche fleche-1" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
           <span class="circuit-fleche fleche-2" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
           <span class="circuit-fleche fleche-3" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
+          <span class="circuit-fleche fleche-4" aria-hidden="true"><svg viewBox="0 0 72 12"><path d="M1 6h62m-7-5 7 5-7 5"/></svg></span>
         </ol>
       </div>
 
@@ -1093,8 +1094,12 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     grid-template-areas:
       'e1 f1 e2'
-      '.  .  f2'
+      'f4 .  f2'
       'e4 f3 e3';
+    /* Longueur commune aux quatre flèches. Une seule valeur les pilote : elles
+       ne peuvent plus diverger, ce qui était le cas — la verticale était réglée
+       à part et mesurait 38 px contre 72. */
+    --fleche: 4.5rem;
     align-items: stretch;
     gap: 1.1rem;
     margin: 2.4rem 0 0;
@@ -1184,7 +1189,7 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
   }
 
   .circuit-fleche svg {
-    width: 4.5rem;
+    width: var(--fleche);
     height: 0.75rem;
     fill: none;
     stroke: currentColor;
@@ -1198,15 +1203,24 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
   .fleche-1 { grid-area: f1; }
   .fleche-2 { grid-area: f2; }
   .fleche-3 { grid-area: f3; }
+  .fleche-4 { grid-area: f4; }
   .fleche-2 svg { transform: rotate(90deg); }
   .fleche-3 svg { transform: rotate(180deg); }
+  .fleche-4 svg { transform: rotate(-90deg); }
 
-  /* Une fois pivotées, les flèches verticales occupent leur largeur en
-     hauteur : à 4,5 rem elles mordaient sur les cartes du dessus et du
-     dessous, dont l'interstice ne fait que 47 px. */
-  .fleche-2 svg,
-  .fleche-4 svg {
-    width: 2.4rem;
+  /**
+   * Une rotation CSS ne fait pas tourner la BOÎTE DE MISE EN PAGE : pivotée,
+   * une flèche de 4,5 rem sur 0,75 reste haute de 0,75 rem pour la grille, et
+   * se dessine par-dessus les cartes voisines. La rangée médiane ne faisait que
+   * 12 px pour une flèche de 38.
+   *
+   * D'où cette hauteur explicite, qui réserve la place réellement occupée. Le
+   * correctif précédent raccourcissait la flèche à 2,4 rem pour qu'elle tienne
+   * dans l'interstice — ce qui réglait le chevauchement en créant l'inégalité.
+   */
+  .fleche-2,
+  .fleche-4 {
+    height: var(--fleche);
   }
 
   /* Sous 760 px, le carré se déplie en colonne : les quatre flèches pointent
@@ -1217,12 +1231,30 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'e1' 'f1' 'e2' 'f2' 'e3' 'f3' 'e4';
       gap: 0.9rem;
+      /* Plus courtes une fois en colonne : à 4,5 rem, trois flèches ajoutaient
+         216 px de défilement sans rien dire de plus. Une seule valeur, donc
+         les trois restent égales entre elles. */
+      --fleche: 2.75rem;
+    }
+
+    /* Toutes verticales ici, donc toutes à réserver en hauteur — pas seulement
+       celles du carré. */
+    .fleche-1,
+    .fleche-2,
+    .fleche-3 {
+      height: var(--fleche);
     }
 
     .fleche-1 svg,
     .fleche-2 svg,
     .fleche-3 svg {
       transform: rotate(90deg);
+    }
+
+    /* La quatrième remonte de la dernière étape vers la première : hors du
+       carré, elle n'a plus de sens et disparaît. */
+    .fleche-4 {
+      display: none;
     }
   }
 

@@ -11,24 +11,39 @@ import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '..
  * écrire en dur ici ferait du contrat une seconde source de vérité, libre de
  * contredire la grille affichée sur la page d'accueil.
  *
- * ⚠️ Deux réserves, à lever avant la mise en ligne :
- *   1. l'identité du prestataire et le médiateur de la consommation sont des
- *      mentions obligatoires, laissées entre crochets comme dans les mentions
- *      légales ;
- *   2. ce texte est une rédaction de départ, pas un avis juridique. Il suit le
- *      code de la consommation et le code de commerce dans leur état connu,
- *      mais mérite une relecture professionnelle avant d'engager.
+ * ⚠️ Une réserve demeure : ce texte est une rédaction de départ, pas un avis
+ * juridique. Il suit le code de la consommation et le code de commerce dans
+ * leur état connu, mais mérite une relecture professionnelle avant d'engager.
+ *
+ * ── Ce qui vient d'expert-maths-lycee.fr, et ce qui n'en vient pas ────────
+ *
+ * Même entité juridique, même adhésion à la médiation : l'identité, le SIRET
+ * et le médiateur (CM2C) sont repris tels quels. Deux articles, en revanche,
+ * ne se transposent PAS d'une activité à l'autre, et l'écart est de fond :
+ *
+ * • LA TVA. L'autre site invoque l'article 261-4-4°-b, réservé aux « leçons ou
+ *   cours particuliers rémunérés directement par les élèves ». L'article 4
+ *   retient ici la franchise en base (293 B), régime de droit commun.
+ *
+ * • LE DROIT DE RÉTRACTATION, et c'est le point sensible. L'autre site l'écarte
+ *   en invoquant l'article L221-28 12°, qui vise les prestations fournies à une
+ *   date ou selon une périodicité déterminée — un créneau de cours réservé.
+ *   Créer un site ne relève pas de cette exception : le délai de quatorze jours
+ *   de l'article L221-18 S'APPLIQUE. L'article 6 le maintient donc, assorti du
+ *   prorata de l'article L221-25 si le Client demande à commencer plus tôt.
+ *   Recopier l'exclusion aurait retiré au consommateur un droit qu'il détient,
+ *   ce qu'une clause ne peut pas faire.
  *
  * Paramètres retenus (choisis par l'éditeur, ils déterminent plusieurs
  * articles) : franchise en base de TVA, vente aux consommateurs incluse,
  * abonnement d'hébergement sans engagement de durée.
  */
 
-const CONTACT = 'contact@studio-caducee.example';
-const TELEPHONE = { texte: '06 00 00 00 00', href: 'tel:+33600000000' };
+const CONTACT = 'josselin.douineau.1987@gmail.com';
+const TELEPHONE = { texte: '06 25 45 01 76', href: 'tel:+33625450176' };
 
 /** Date de la version en vigueur, affichée sous le titre. */
-const MISE_A_JOUR = { fr: '7 août 2026', en: '7 August 2026' } as const;
+const MISE_A_JOUR = { fr: '9 août 2026', en: '9 August 2026' } as const;
 
 export function cgv(lang: Lang): DocumentLegalTexte {
   const lien = { link: CONTACT, href: `mailto:${CONTACT}` } as const;
@@ -76,13 +91,13 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           heading: 'Article 2 — Identité du prestataire',
           blocs: [
             [
-              { text: 'Studio Caducée — [Nom Prénom]' },
+              { text: 'Studio Caducée — Josselin DOUINEAU' },
               { br: true },
-              { text: 'Entrepreneur individuel' },
+              { text: 'Entrepreneur individuel (auto-entreprise)' },
               { br: true },
-              { text: '[Adresse]' },
+              { text: '9bis Kerscoul, 22540 LOUARGAT' },
               { br: true },
-              { text: 'SIRET : [à compléter]' },
+              { text: 'SIRET : 98108366000028' },
               { br: true },
               { text: 'Contact : ' },
               lien,
@@ -399,7 +414,13 @@ export function cgv(lang: Lang): DocumentLegalTexte {
                 text: 'Conformément aux articles L612-1 et suivants du code de la consommation, le Client consommateur peut recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable du litige, dans un délai d’un an à compter de sa réclamation écrite :',
               },
             ],
-            [{ text: '[Nom du médiateur — à compléter]' }, { br: true }, { text: '[Adresse et site web du médiateur — à compléter]' }],
+            [
+              { text: 'CM2C — Centre de la médiation de la consommation de conciliateurs de justice' },
+              { br: true },
+              { text: '49 rue de Ponthieu, 75008 Paris' },
+              { br: true },
+              { link: 'cm2c.net', href: 'https://cm2c.net' },
+            ],
           ],
         },
         {
@@ -453,13 +474,13 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           heading: 'Article 2 — Provider identity',
           blocs: [
             [
-              { text: 'Studio Caducée — [Full name]' },
+              { text: 'Studio Caducée — Josselin DOUINEAU' },
               { br: true },
-              { text: 'Sole proprietor' },
+              { text: 'Sole proprietor (French auto-entrepreneur)' },
               { br: true },
-              { text: '[Address]' },
+              { text: '9bis Kerscoul, 22540 LOUARGAT, France' },
               { br: true },
-              { text: 'SIRET: [to be completed]' },
+              { text: 'SIRET: 98108366000028' },
               { br: true },
               { text: 'Contact: ' },
               lien,
@@ -771,9 +792,13 @@ export function cgv(lang: Lang): DocumentLegalTexte {
               },
             ],
             [
-              { text: '[Mediator name — to be completed]' },
+              // Raison sociale laissée en français : c'est le nom déposé de
+              // l'organisme, le traduire empêcherait de le retrouver.
+              { text: 'CM2C — Centre de la médiation de la consommation de conciliateurs de justice' },
               { br: true },
-              { text: '[Mediator address and website — to be completed]' },
+              { text: '49 rue de Ponthieu, 75008 Paris, France' },
+              { br: true },
+              { link: 'cm2c.net', href: 'https://cm2c.net' },
             ],
           ],
         },
