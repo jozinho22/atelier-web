@@ -49,11 +49,59 @@ const json = (donnees: unknown, status: number) =>
  */
 const emailPlausible = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
+/**
+ * Confronte le jeton du widget à Cloudflare.
+ *
+ * C'est ICI que la protection existe. Le widget affiché dans la page ne prouve
+ * rien : n'importe qui peut poster directement sur la route sans jamais charger
+ * la page. Seule cette réponse de Cloudflare, obtenue avec la clé secrète,
+ * distingue une soumission vérifiée d'une autre.
+ *
+ * En cas de panne du service, on REFUSE. Laisser passer pour ne pas bloquer
+ * serait exactement la porte qu'un attaquant cherche : il lui suffirait de
+ * rendre Cloudflare injoignable depuis ton serveur.
+ */
+async function jetonValide(secret: string, jeton: string, ip: string | null): Promise<boolean> {
+  if (!jeton) return false;
+  const corps = new FormData();
+  corps.append('secret', secret);
+  corps.append('response', jeton);
+  if (ip) corps.append('remoteip', ip);
+  try {
+    const reponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: corps,
+      signal: AbortSignal.timeout(8000),
+    });
+    const resultat = (await reponse.json()) as { success?: boolean; 'error-codes'?: string[] };
+    if (!resultat.success) console.warn('[contact] Turnstile refuse —', resultat['error-codes']);
+    return resultat.success === true;
+  } catch (e) {
+    console.error('[contact] Turnstile injoignable —', e);
+    return false;
+  }
+}
+
 export const POST: APIRoute = async ({ request }) => {
   // ---- 1. configuration présente ? ---------------------------------------
   const cle = import.meta.env.RESEND_API_KEY;
   const expediteur = import.meta.env.EMAIL_FROM;
   const destinataire = import.meta.env.NOTIFY_EMAIL;
+  /**
+   * Turnstile : les deux clés, ou aucune. À moitié configuré, on refuse de
+   * servir — un widget affiché sans vérification côté serveur donne l'illusion
+   * d'une protection qui n'existe pas, et c'est pire que pas de widget du tout.
+   */
+  const cleSite = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+  const cleSecrete = import.meta.env.TURNSTILE_SECRET_KEY;
+  if (Boolean(cleSite) !== Boolean(cleSecrete)) {
+    console.error('[contact] Turnstile à moitié configuré —', {
+      site: Boolean(cleSite),
+      secrete: Boolean(cleSecrete),
+    });
+    return json({ ok: false, code: 'indisponible' }, 503);
+  }
+
   if (!cle || !expediteur || !destinataire) {
     // Le détail reste dans les journaux du serveur : dire au visiteur QUELLE
     // variable manque renseignerait un attaquant sur l'infrastructure.
@@ -120,6 +168,19 @@ export const POST: APIRoute = async ({ request }) => {
   if (!message) erreurs.message = 'requis';
   else if (message.length > LIMITES.message) erreurs.message = 'trop long';
   if (Object.keys(erreurs).length) return json({ ok: false, code: 'invalide', erreurs }, 400);
+
+  /**
+   * Placée APRÈS la validation des champs : inutile d'appeler Cloudflare pour
+   * un formulaire dont on sait déjà qu'il sera refusé. Un jeton ne servant
+   * qu'une fois, le client en redemande un neuf à chaque refus.
+   */
+  if (cleSecrete) {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null;
+    const jeton = champ('cf-turnstile-response');
+    if (!(await jetonValide(cleSecrete, jeton, ip))) {
+      return json({ ok: false, code: 'verification' }, 403);
+    }
+  }
 
   // ---- 4. envoi ----------------------------------------------------------
   try {

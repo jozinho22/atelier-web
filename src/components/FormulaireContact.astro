@@ -36,8 +36,19 @@ interface Props {
    * diverger au premier changement de nom.
    */
   packs: readonly { cle: string; nom: string; couleur: string }[];
+  lang: 'fr' | 'en';
 }
-const { t, packs } = Astro.props;
+const { t, packs, lang } = Astro.props;
+
+/**
+ * Clé publique de Turnstile, lue au BUILD : cette page est pré-rendue, la
+ * valeur est donc figée dans le HTML livré. C'est sans conséquence — une clé de
+ * site est publique par construction, elle ne prouve rien à elle seule.
+ *
+ * Vide, le widget n'est pas posé et le formulaire garde ses deux autres gardes.
+ * C'est ce qui permet de développer sans compte Cloudflare.
+ */
+const cleTurnstile = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 ---
 
 <form class="contact-form" method="post" action={withBase('api/contact')} data-contact novalidate>
@@ -112,6 +123,31 @@ const { t, packs } = Astro.props;
     </p>
     <input type="hidden" name="t" data-horodatage value="" />
 
+    {cleTurnstile && (
+      <>
+        {/*
+          Le widget dépose lui-même un champ `cf-turnstile-response` dans le
+          formulaire ; c'est ce jeton que la route vérifie auprès de Cloudflare.
+        */}
+        <div
+          class="cf-turnstile turnstile"
+          data-sitekey={cleTurnstile}
+          data-language={lang}
+          data-theme="light"
+        ></div>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+        {/*
+          Turnstile EXIGE JavaScript — aucune vérification anti-robots ne peut
+          s'en passer. Le formulaire perd donc ici son repli natif, et il vaut
+          mieux le dire que laisser le visiteur buter sur un envoi qui échoue.
+        */}
+        <noscript>
+          <p class="turnstile-sans-js">{t.sansJs}</p>
+        </noscript>
+      </>
+    )}
+
     {/*
       Les libellés du script passent par des attributs `data-` : un bloc de
       script Astro est un module client, compilé à part, qui ne voit pas `t`.
@@ -130,7 +166,7 @@ const { t, packs } = Astro.props;
   </fieldset>
 
   {/* `alert` : le résultat est annoncé sans que le visiteur ait à le chercher. */}
-  <p class="retour" role="alert" data-retour hidden data-succes={t.succes} data-echec={t.erreurEnvoi}></p>
+  <p class="retour" role="alert" data-retour hidden data-succes={t.succes} data-echec={t.erreurEnvoi} data-verification={t.erreurVerification}></p>
 </form>
 
 <style>
@@ -418,6 +454,28 @@ const { t, packs } = Astro.props;
     white-space: nowrap;
   }
 
+  /**
+   * Le widget est une iframe injectée par le script de Cloudflare : elle
+   * n'existe pas au chargement et ne porte pas l'attribut de portée d'Astro.
+   * On centre donc par le CONTENEUR, qui est dans le balisage — un sélecteur
+   * visant l'iframe elle-même ne l'atteindrait pas.
+   */
+  .turnstile {
+    margin: 0 0 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .turnstile-sans-js {
+    margin: 0 0 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-s);
+    background: #fff4e5;
+    border: 1px solid #e0b877;
+    color: var(--ink);
+    font-size: 0.92rem;
+  }
+
   .contact-form button {
     width: 100%;
   }
@@ -437,6 +495,14 @@ const { t, packs } = Astro.props;
 </style>
 
 <script>
+  // L'API du widget, injectée par le script de Cloudflare. Déclarée ici parce
+  // qu'elle n'existe qu'à l'exécution et que rien ne la type.
+  declare global {
+    interface Window {
+      turnstile?: { reset: (widget?: string) => void };
+    }
+  }
+
   /**
    * Confort seulement : sans ce script, le formulaire poste normalement.
    *
@@ -608,6 +674,7 @@ const { t, packs } = Astro.props;
     const messages = {
       succes: retour.dataset.succes ?? '',
       echec: retour.dataset.echec ?? '',
+      verification: retour.dataset.verification ?? retour.dataset.echec ?? '',
     };
 
     const marquer = (nom: string, fautif: boolean): void => {
@@ -653,9 +720,18 @@ const { t, packs } = Astro.props;
         } else if (corps?.erreurs) {
           Object.keys(corps.erreurs).forEach((n) => marquer(n, true));
           form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        } else if (corps?.code === 'verification') {
+          afficher('echec', messages.verification);
         } else {
           afficher('echec', messages.echec);
         }
+        /**
+         * Un jeton Turnstile ne sert QU'UNE FOIS. Après un refus — champ mal
+         * rempli, vérification échouée —, le renvoyer tel quel se ferait
+         * rejeter par Cloudflare pour réutilisation, et le visiteur resterait
+         * bloqué sans comprendre. On redemande donc un jeton neuf.
+         */
+        if (!corps?.ok) window.turnstile?.reset?.();
       } catch {
         afficher('echec', messages.echec);
       } finally {

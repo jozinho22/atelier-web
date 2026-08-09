@@ -600,7 +600,7 @@ const packsFormulaire = PACKS.map((cle) => ({
         */}
         {SERVEUR_DISPONIBLE && (
           <div class="contact-formulaire">
-            <FormulaireContact t={t.contact.formulaire} packs={packsFormulaire} />
+            <FormulaireContact t={t.contact.formulaire} packs={packsFormulaire} lang={lang} />
             <p class="contact-ou">{t.contact.formulaire.ou}</p>
           </div>
         )}

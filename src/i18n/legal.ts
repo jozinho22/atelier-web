@@ -119,7 +119,12 @@ export const legal = {
                 ],
                 [
                   {
-                    text: 'L’acheminement du message est confié à Resend, prestataire d’envoi d’e-mails, qui agit comme sous-traitant. Le message est ensuite conservé dans la boîte de réception du responsable de traitement pendant trois ans à compter du dernier échange, puis supprimé.',
+                    text: 'Deux sous-traitants interviennent : Resend, pour l’acheminement du message, et Cloudflare, pour la protection anti-robots du formulaire, qui reçoit à ce titre votre adresse IP. Le message est ensuite conservé dans la boîte de réception du responsable de traitement pendant trois ans à compter du dernier échange, puis supprimé.',
+                  },
+                ],
+                [
+                  {
+                    text: 'Ces prestataires, comme l’hébergeur du site, sont établis aux États-Unis : les données transitant par le site peuvent faire l’objet d’un transfert hors de l’Union européenne, encadré par les clauses contractuelles types de la Commission européenne et/ou le cadre de protection des données UE—États-Unis.',
                   },
                 ],
               ]
@@ -247,7 +252,12 @@ export const legal = {
                 ],
                 [
                   {
-                    text: 'Delivery of the message is handled by Resend, an email delivery provider acting as a processor. The message is then kept in the controller’s mailbox for three years from the last exchange, and deleted thereafter.',
+                    text: 'Two processors are involved: Resend, for delivering the message, and Cloudflare, for the form’s anti-bot protection, which receives your IP address for that purpose. The message is then kept in the controller’s mailbox for three years from the last exchange, and deleted thereafter.',
+                  },
+                ],
+                [
+                  {
+                    text: 'These providers, like the site’s host, are established in the United States: data passing through the site may be transferred outside the European Union, under the European Commission’s standard contractual clauses and/or the EU–US Data Privacy Framework.',
                   },
                 ],
               ]
