@@ -1,0 +1,256 @@
+---
+/**
+ * Formulaire de contact.
+ *
+ * Rendu UNIQUEMENT là où une route serveur existe — Vercel et `astro dev`. Sur
+ * GitHub Pages, l'accueil affiche les liens directs à la place (voir
+ * [src/lib/cible.ts](../lib/cible.ts)) : un formulaire qui poste vers une 404
+ * perdrait le message après que le visiteur l'a écrit.
+ *
+ * ── Il fonctionne sans JavaScript ─────────────────────────────────────────
+ *
+ * `method="post"` et `action` sont posés dans le balisage : sans script, le
+ * navigateur poste normalement et affiche la réponse. Le script n'ajoute que
+ * le confort — rester sur la page, annoncer le résultat. C'est l'ordre inverse
+ * de l'habitude, et le seul qui garantisse que le message parte toujours.
+ *
+ * ── Accessibilité ─────────────────────────────────────────────────────────
+ *
+ * Un `<label>` par champ, jamais un `placeholder` en guise de libellé : il
+ * disparaît à la saisie, et l'on ne sait plus ce qu'on remplit. Les erreurs
+ * sont reliées par `aria-describedby` et annoncées par une région `alert`.
+ */
+import { withBase } from '../lib/paths';
+
+interface Props {
+  t: {
+    legende: string; nom: string; email: string; message: string; leurre: string;
+    envoyer: string; envoiEnCours: string; succes: string; erreurEnvoi: string;
+    erreurNom: string; erreurEmail: string; erreurMessage: string;
+  };
+}
+const { t } = Astro.props;
+---
+
+<form class="contact-form" method="post" action={withBase('api/contact')} data-contact novalidate>
+  <fieldset>
+    <legend class="visuellement-cache">{t.legende}</legend>
+
+    <p class="champ">
+      <label for="contact-nom">{t.nom}</label>
+      <input id="contact-nom" name="nom" type="text" autocomplete="name" maxlength="100" required
+        aria-describedby="err-nom" />
+      <span class="erreur" id="err-nom" data-erreur="nom" hidden>{t.erreurNom}</span>
+    </p>
+
+    <p class="champ">
+      <label for="contact-email">{t.email}</label>
+      <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required
+        aria-describedby="err-email" />
+      <span class="erreur" id="err-email" data-erreur="email" hidden>{t.erreurEmail}</span>
+    </p>
+
+    <p class="champ">
+      <label for="contact-message">{t.message}</label>
+      <textarea id="contact-message" name="message" rows="5" maxlength="5000" required
+        aria-describedby="err-message"></textarea>
+      <span class="erreur" id="err-message" data-erreur="message" hidden>{t.erreurMessage}</span>
+    </p>
+
+    {/*
+      Le piège. `hidden` seul ne suffit pas : certains robots lisent le CSS et
+      évitent ce qui est masqué. On le sort de l'écran et du parcours clavier,
+      et `autocomplete="off"` empêche le navigateur de le remplir tout seul —
+      ce qui ferait passer un visiteur légitime pour un robot.
+    */}
+    <p class="leurre" aria-hidden="true">
+      <label for="contact-site">{t.leurre}</label>
+      <input id="contact-site" name="site" type="text" tabindex="-1" autocomplete="off" />
+    </p>
+    <input type="hidden" name="t" data-horodatage value="" />
+
+    {/*
+      Les libellés du script passent par des attributs `data-` : un <script>
+      Astro est un module client, compilé à part, qui ne voit pas `t`. Les
+      écrire en dur dedans les figerait en une seule langue.
+    */}
+    <button class="btn btn-primary" type="submit" data-envoyer data-encours={t.envoiEnCours}>
+      {t.envoyer}
+    </button>
+  </fieldset>
+
+  {/* `alert` : le résultat est annoncé sans que le visiteur ait à le chercher. */}
+  <p class="retour" role="alert" data-retour hidden data-succes={t.succes} data-echec={t.erreurEnvoi}></p>
+</form>
+
+<style>
+  .contact-form {
+    width: min(34rem, 100%);
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .contact-form fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .champ {
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .champ label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .champ input,
+  .champ textarea {
+    font: inherit;
+    padding: 0.7rem 0.85rem;
+    border: 2px solid rgb(18 19 31 / 0.18);
+    border-radius: var(--radius-s);
+    background: var(--paper-raised);
+    color: var(--ink);
+  }
+
+  .champ textarea {
+    resize: vertical;
+  }
+
+  .champ input:focus-visible,
+  .champ textarea:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Le rouge ne porte pas l'information à lui seul : le texte de l'erreur
+     l'énonce, et le champ le signale aussi par `aria-invalid`. Un daltonien
+     comme un lecteur d'écran reçoivent la même chose. */
+  .champ input[aria-invalid='true'],
+  .champ textarea[aria-invalid='true'] {
+    border-color: #b3261e;
+  }
+
+  .erreur {
+    font-size: 0.85rem;
+    color: #b3261e;
+  }
+
+  /* Hors de l'écran plutôt que `display: none` : reste dans l'arbre pour les
+     robots qui inspectent le CSS, invisible et inatteignable pour les humains. */
+  .leurre {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .visuellement-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .contact-form button {
+    width: 100%;
+  }
+
+  .retour {
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  .retour[data-etat='succes'] {
+    color: #1a7a4c;
+  }
+
+  .retour[data-etat='echec'] {
+    color: #b3261e;
+  }
+</style>
+
+<script>
+  /**
+   * Confort seulement : sans ce script, le formulaire poste normalement.
+   *
+   * Il évite le rechargement, annonce le résultat, et pose l'horodatage qui
+   * sert de second garde anti-robot côté serveur.
+   */
+  document.querySelectorAll<HTMLFormElement>('[data-contact]').forEach((form) => {
+    const horodatage = form.querySelector<HTMLInputElement>('[data-horodatage]');
+    const retour = form.querySelector<HTMLElement>('[data-retour]');
+    const bouton = form.querySelector<HTMLButtonElement>('[data-envoyer]');
+    if (!horodatage || !retour || !bouton) return;
+
+    // Posé par le script, donc à l'affichage réel de la page.
+    horodatage.value = String(Date.now());
+
+    const messages = {
+      succes: retour.dataset.succes ?? '',
+      echec: retour.dataset.echec ?? '',
+    };
+
+    const marquer = (nom: string, fautif: boolean): void => {
+      const champ = form.querySelector<HTMLElement>(`[name="${nom}"]`);
+      const erreur = form.querySelector<HTMLElement>(`[data-erreur="${nom}"]`);
+      if (!champ || !erreur) return;
+      erreur.hidden = !fautif;
+      if (fautif) champ.setAttribute('aria-invalid', 'true');
+      else champ.removeAttribute('aria-invalid');
+    };
+
+    const afficher = (etat: 'succes' | 'echec', texte: string): void => {
+      retour.textContent = texte;
+      retour.dataset.etat = etat;
+      retour.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ['nom', 'email', 'message'].forEach((n) => marquer(n, false));
+      retour.hidden = true;
+
+      bouton.disabled = true;
+      const libelle = bouton.textContent;
+      bouton.textContent = bouton.dataset.encours ?? libelle;
+
+      try {
+        const reponse = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const corps = await reponse.json().catch(() => ({}));
+
+        if (corps?.ok) {
+          form.reset();
+          horodatage.value = String(Date.now());
+          afficher('succes', messages.succes);
+          // Le focus part sur le message : un lecteur d'écran l'annonce, et le
+          // visiteur au clavier n'a pas à remonter la page pour le chercher.
+          retour.setAttribute('tabindex', '-1');
+          retour.focus();
+        } else if (corps?.erreurs) {
+          Object.keys(corps.erreurs).forEach((n) => marquer(n, true));
+          form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        } else {
+          afficher('echec', messages.echec);
+        }
+      } catch {
+        afficher('echec', messages.echec);
+      } finally {
+        bouton.disabled = false;
+        bouton.textContent = libelle;
+      }
+    });
+  });
+</script>

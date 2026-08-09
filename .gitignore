@@ -24,3 +24,4 @@ dist/
 .impeccable/hook.pending.json
 .impeccable/config.local.json
 .icones-avant/
+.vercel/

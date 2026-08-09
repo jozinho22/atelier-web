@@ -1,5 +1,6 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
+import { SERVEUR_DISPONIBLE } from '../lib/cible';
 
 /**
  * Textes de la page « Mentions légales ».
@@ -68,15 +69,27 @@ export const legal = {
       {
         heading: 'Hébergement',
         blocs: [
-          [
-            { text: 'Ce site est hébergé par :' },
-            { br: true },
-            { text: 'GitHub, Inc.' },
-            { br: true },
-            { text: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis' },
-            { br: true },
-            { link: 'github.com', href: 'https://github.com' },
-          ],
+          // L'hébergeur est une mention obligatoire : il doit désigner celui qui
+          // sert RÉELLEMENT la page. Le site vise deux cibles, il en a donc deux.
+          SERVEUR_DISPONIBLE
+            ? [
+                { text: 'Ce site est hébergé par :' },
+                { br: true },
+                { text: 'Vercel Inc.' },
+                { br: true },
+                { text: '340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis' },
+                { br: true },
+                { link: 'vercel.com', href: 'https://vercel.com' },
+              ]
+            : [
+                { text: 'Ce site est hébergé par :' },
+                { br: true },
+                { text: 'GitHub, Inc.' },
+                { br: true },
+                { text: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis' },
+                { br: true },
+                { link: 'github.com', href: 'https://github.com' },
+              ],
         ],
       },
       {
@@ -94,12 +107,32 @@ export const legal = {
         blocs: [
           [
             {
-              text: "Ce site ne collecte aucune donnée personnelle : pas de formulaire, pas de cookie de suivi, pas d'outil de mesure d'audience. Les échanges se font uniquement par e-mail ou téléphone, à votre initiative.",
+              text: "Ce site ne dépose aucun cookie de suivi et n'emploie aucun outil de mesure d'audience.",
             },
           ],
+          ...(SERVEUR_DISPONIBLE
+            ? [
+                [
+                  {
+                    text: 'Le formulaire de contact collecte trois données : votre nom, votre adresse e-mail et le message que vous écrivez. Elles servent uniquement à vous répondre et à préparer un éventuel devis — jamais à de la prospection, et elles ne sont ni vendues ni transmises à des tiers à cette fin. La base légale est votre demande elle-même, c’est-à-dire l’exécution de mesures précontractuelles prises à votre initiative (article 6.1.b du RGPD).',
+                  },
+                ],
+                [
+                  {
+                    text: 'L’acheminement du message est confié à Resend, prestataire d’envoi d’e-mails, qui agit comme sous-traitant. Le message est ensuite conservé dans la boîte de réception du responsable de traitement pendant trois ans à compter du dernier échange, puis supprimé.',
+                  },
+                ],
+              ]
+            : [
+                [
+                  {
+                    text: 'Cette version du site ne comporte aucun formulaire : les échanges se font uniquement par e-mail ou téléphone, à votre initiative.',
+                  },
+                ],
+              ]),
           [
             {
-              text: 'Conformément au RGPD, vous pouvez exercer vos droits (accès, rectification, suppression) sur les données échangées par e-mail en écrivant à ',
+              text: 'Conformément au RGPD, vous pouvez exercer vos droits (accès, rectification, suppression, opposition) en écrivant à ',
             },
             {
               link: 'josselin.douineau.1987@gmail.com',
@@ -166,15 +199,25 @@ export const legal = {
       {
         heading: 'Hosting',
         blocs: [
-          [
-            { text: 'This site is hosted by:' },
-            { br: true },
-            { text: 'GitHub, Inc.' },
-            { br: true },
-            { text: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, United States' },
-            { br: true },
-            { link: 'github.com', href: 'https://github.com' },
-          ],
+          SERVEUR_DISPONIBLE
+            ? [
+                { text: 'This site is hosted by:' },
+                { br: true },
+                { text: 'Vercel Inc.' },
+                { br: true },
+                { text: '340 S Lemon Ave #4133, Walnut, CA 91789, United States' },
+                { br: true },
+                { link: 'vercel.com', href: 'https://vercel.com' },
+              ]
+            : [
+                { text: 'This site is hosted by:' },
+                { br: true },
+                { text: 'GitHub, Inc.' },
+                { br: true },
+                { text: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, United States' },
+                { br: true },
+                { link: 'github.com', href: 'https://github.com' },
+              ],
         ],
       },
       {
@@ -192,12 +235,32 @@ export const legal = {
         blocs: [
           [
             {
-              text: 'This site collects no personal data: no forms, no tracking cookies, no audience analytics. All communication happens by email or phone, and only at your initiative.',
+              text: 'This site sets no tracking cookies and uses no audience analytics.',
             },
           ],
+          ...(SERVEUR_DISPONIBLE
+            ? [
+                [
+                  {
+                    text: 'The contact form collects three items: your name, your email address, and the message you write. They are used solely to reply to you and to prepare a possible quote — never for marketing, and they are neither sold nor passed to third parties for that purpose. The legal basis is your own request, that is, pre-contractual steps taken at your initiative (Article 6(1)(b) GDPR).',
+                  },
+                ],
+                [
+                  {
+                    text: 'Delivery of the message is handled by Resend, an email delivery provider acting as a processor. The message is then kept in the controller’s mailbox for three years from the last exchange, and deleted thereafter.',
+                  },
+                ],
+              ]
+            : [
+                [
+                  {
+                    text: 'This version of the site has no form: all communication happens by email or phone, and only at your initiative.',
+                  },
+                ],
+              ]),
           [
             {
-              text: 'In accordance with the GDPR, you may exercise your rights (access, rectification, erasure) over the data exchanged by email by writing to ',
+              text: 'In accordance with the GDPR, you may exercise your rights (access, rectification, erasure, objection) by writing to ',
             },
             {
               link: 'josselin.douineau.1987@gmail.com',
@@ -223,4 +286,4 @@ export const legal = {
       },
     ],
   },
-} as const satisfies Record<Lang, DocumentLegalTexte>;
+} satisfies Record<Lang, DocumentLegalTexte>;

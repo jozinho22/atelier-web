@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 import { loadEnv } from 'vite';
 
 // Les fichiers .env ne sont pas chargés automatiquement dans la config Astro :
@@ -32,10 +33,48 @@ const vercelHost = env.VERCEL ? env.VERCEL_PROJECT_PRODUCTION_URL : undefined;
 const SITE = env.SITE_URL || (vercelHost ? `https://${vercelHost}` : 'https://www.studio-caducee.example');
 const BASE = env.SITE_BASE || '/';
 
+/**
+ * Y a-t-il un serveur pour répondre ?
+ *
+ * Vrai sur Vercel et en développement, faux sur GitHub Pages — qui sert des
+ * fichiers et ne reçoit aucun POST. Cette seule valeur commande trois choses :
+ * l'adaptateur, l'existence de la route `/api/contact`, et le repli du
+ * formulaire vers `mailto:` (voir src/lib/cible.ts).
+ *
+ * `astro dev` monte un vrai serveur : le formulaire est donc testable en local
+ * sans rien déployer, à condition d'avoir une clé Resend dans .env.
+ */
+const SERVEUR = Boolean(env.VERCEL) || process.argv.includes('dev');
+
+/**
+ * La route serveur est INJECTÉE plutôt que posée dans `src/pages/`.
+ *
+ * Un fichier de `src/pages/` est routé d'office. Marqué `prerender = false`, il
+ * ferait échouer tout build sans adaptateur — donc celui de GitHub Pages, avec
+ * une erreur qui n'apparaîtrait qu'en CI. En le gardant hors de `src/pages/` et
+ * en ne l'injectant que lorsqu'un serveur existe, le build statique ignore son
+ * existence au lieu de s'y casser.
+ */
+const routeContact = {
+  name: 'route-contact',
+  hooks: {
+    'astro:config:setup': ({ injectRoute }) => {
+      injectRoute({
+        pattern: '/api/contact',
+        entrypoint: './src/server/contact.ts',
+        prerender: false,
+      });
+    },
+  },
+};
+
 export default defineConfig({
   site: SITE,
   base: BASE,
   output: 'static',
+  // L'adaptateur ne s'active que là où un serveur tourne : sur GitHub Pages, sa
+  // présence changerait la forme du build (`.vercel/output` au lieu de `dist`).
+  ...(SERVEUR ? { adapter: vercel() } : {}),
   // Français à la racine (URLs historiques inchangées), anglais sous /en/.
   i18n: {
     defaultLocale: 'fr',
@@ -43,6 +82,7 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
+    ...(SERVEUR ? [routeContact] : []),
     sitemap({
       // Avec une base en sous-dossier, l'intégration ajoute la racine sans
       // slash final en plus de la page d'accueil : on écarte ce doublon.

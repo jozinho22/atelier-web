@@ -302,6 +302,55 @@ Il refuse d'écrire plutôt que de produire une icône fausse — si le glyphe d
 de la zone sûre, ou si le pourtour du disque n'est pas uni. Le jeu actuel passe à
 195,4 px de rayon pour 204,8 de zone sûre.
 
+## Formulaire de contact — la seule route serveur
+
+Le site reste statique. **Une** route échappe à la règle, injectée par
+[astro.config.mjs](astro.config.mjs) : `POST /api/contact`
+([src/server/contact.ts](src/server/contact.ts)).
+
+| cible | serveur | formulaire |
+| --- | --- | --- |
+| `npm run dev` | oui | affiché, fonctionnel |
+| Vercel | oui | affiché, fonctionnel |
+| GitHub Pages | **non** | **absent** — liens `mailto:` et `tel:` seuls |
+
+Un serveur de fichiers ne reçoit pas de POST : sur la démo, un formulaire
+perdrait le message après que le visiteur l'a écrit. `SERVEUR_DISPONIBLE`
+([src/lib/cible.ts](src/lib/cible.ts)) commande son affichage, comme `enLigne`
+commande celui des réalisations. Les liens directs, eux, restent visibles sur
+les trois cibles.
+
+Le fichier de la route vit **hors de `src/pages/`**. Posé dedans, il serait routé
+d'office et, marqué `prerender = false`, ferait échouer le build sans adaptateur
+— celui de GitHub Pages, avec une erreur n'apparaissant qu'en CI.
+
+### Ce qu'il faut configurer
+
+Trois variables, décrites dans [.env.example](.env.example) : `RESEND_API_KEY`,
+`CONTACT_EXPEDITEUR`, `CONTACT_DESTINATAIRE`. En production elles se déclarent
+dans Vercel, jamais dans un fichier. Absentes, la route répond « indisponible » :
+elle ne prétend jamais avoir envoyé.
+
+⚠️ **Un domaine ne porte qu'un seul enregistrement SPF.** Si Google Workspace
+gère déjà la messagerie du domaine, faire envoyer Resend depuis un **sous-domaine**
+(`send.mondomaine.fr`) : deux SPF sur le même domaine s'annulent, et les deux flux
+partent en indésirables.
+
+### Anti-spam sans sous-traitant
+
+Un champ leurre invisible et un horodatage — un humain met plus de trois secondes
+à écrire. Les deux répondent **200 comme si tout allait bien** : un robot à qui
+l'on répond « rejeté » recommence en ajustant. Pas de CAPTCHA, donc aucune donnée
+envoyée à un tiers et rien de plus à déclarer au RGPD.
+
+### Conséquence juridique
+
+Les mentions légales affirmaient « aucune donnée personnelle, pas de formulaire ».
+La section « Données personnelles » a été réécrite : finalité, base légale
+(article 6.1.b), sous-traitant nommé, durée de conservation, droits. **Un
+formulaire ajouté sans toucher à ce texte en ferait un mensonge sur une page
+légale.**
+
 ## Déploiement — trois cibles, un seul code
 
 Convention (commune à tous les projets Astro) : **le défaut décrit la cible

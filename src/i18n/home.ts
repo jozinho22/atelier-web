@@ -271,8 +271,27 @@ export const home = {
       titleEm: 'votre',
       titleAfter: 'site ?',
       lede: 'Racontez-moi votre activité, je vous réponds sous 24 h avec des idées concrètes. Le devis est gratuit, le café aussi.',
-      email: 'contact@studio-caducee.example',
-      phone: '06 00 00 00 00',
+      // Objet du mail : traduit, donc il reste ici. Les coordonnées elles-mêmes
+      // sont dans src/data/contact.ts — elles ne dépendent pas de la langue.
+      emailSujet: 'Demande de devis — création de site',
+      formulaire: {
+        legende: 'Décrivez votre projet',
+        nom: 'Votre nom',
+        email: 'Votre e-mail',
+        message: 'Votre projet en quelques lignes',
+        // Le champ leurre a un libellé réel : masqué à l'écran, il reste lu par
+        // les lecteurs d'écran, et « Laissez ce champ vide » leur évite de
+        // remplir un piège tendu aux robots.
+        leurre: 'Laissez ce champ vide',
+        envoyer: 'Envoyer',
+        envoiEnCours: 'Envoi…',
+        succes: 'Message envoyé. Je vous réponds sous 24 h.',
+        erreurEnvoi: 'L’envoi a échoué. Écrivez-moi directement à l’adresse ci-dessous.',
+        erreurNom: 'Merci d’indiquer votre nom.',
+        erreurEmail: 'Cette adresse e-mail semble incomplète.',
+        erreurMessage: 'Merci de décrire votre projet, même brièvement.',
+        ou: 'ou directement :',
+      },
     },
   },
   en: {
@@ -540,8 +559,22 @@ export const home = {
       titleEm: 'your',
       titleAfter: 'website?',
       lede: 'Tell me about your business and I’ll get back to you within 24 hours with concrete ideas. The quote is free — so is the coffee.',
-      email: 'contact@studio-caducee.example',
-      phone: '06 00 00 00 00',
+      emailSujet: 'Quote request — website design',
+      formulaire: {
+        legende: 'Tell me about your project',
+        nom: 'Your name',
+        email: 'Your email',
+        message: 'Your project in a few lines',
+        leurre: 'Leave this field empty',
+        envoyer: 'Send',
+        envoiEnCours: 'Sending…',
+        succes: 'Message sent. I’ll reply within 24 hours.',
+        erreurEnvoi: 'Sending failed. Please write to me directly at the address below.',
+        erreurNom: 'Please tell me your name.',
+        erreurEmail: 'This email address looks incomplete.',
+        erreurMessage: 'Please describe your project, even briefly.',
+        ou: 'or directly:',
+      },
     },
   },
 } as const satisfies Record<Lang, unknown>;

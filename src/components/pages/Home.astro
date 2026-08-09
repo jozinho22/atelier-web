@@ -10,6 +10,9 @@ import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
 import { ACCENTS, ACCENTS_TEXTE } from '../../data/modeles';
 import { REALISATIONS, estVisible, resoudreRealisation } from '../../data/realisations';
+import { CONTACT_PUBLIC, telHref, mailtoHref } from '../../data/contact';
+import { SERVEUR_DISPONIBLE } from '../../lib/cible';
+import FormulaireContact from '../FormulaireContact.astro';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = home[lang];
@@ -21,8 +24,9 @@ const jsonLd = {
   name: 'Studio Caducée',
   description: t.description,
   url: new URL(localePath(lang, ''), Astro.site).href,
-  email: 'contact@studio-caducee.example',
-  telephone: '+33600000000',
+  email: CONTACT_PUBLIC.email,
+  // Le JSON-LD attend le format international, sans le préfixe `tel:`.
+  telephone: telHref(CONTACT_PUBLIC.telephone).replace('tel:', ''),
   priceRange: '€€',
   areaServed: 'France',
   serviceType: t.hero.kicker,
@@ -569,12 +573,39 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
           {t.contact.titleBefore} <em>{t.contact.titleEm}</em> {t.contact.titleAfter}
         </h2>
         <p class="contact-lede">{t.contact.lede}</p>
+
+        {/*
+          Le formulaire n'apparaît que là où une route serveur existe. Sur la
+          démonstration GitHub Pages, `/api/contact` n'est pas construite : un
+          formulaire y perdrait le message après que le visiteur l'a écrit.
+          Les liens directs, eux, marchent sur les trois cibles — ils restent
+          donc affichés dans tous les cas, sous le formulaire quand il y en a un.
+        */}
+        {SERVEUR_DISPONIBLE && (
+          <div class="contact-formulaire">
+            <FormulaireContact t={t.contact.formulaire} />
+            <p class="contact-ou">{t.contact.formulaire.ou}</p>
+          </div>
+        )}
+
         <div class="contact-actions">
-          <a class="btn btn-primary contact-btn" href={`mailto:${t.contact.email}`}>
-            ✉️ {t.contact.email}
+          {/*
+            L'adresse et le numéro sont écrits EN TOUTES LETTRES sur le bouton,
+            et pas seulement portés par le lien : sur un poste sans client mail
+            configuré, `mailto:` ne fait rien du tout, et le visiteur doit
+            pouvoir recopier l'adresse.
+          */}
+          <a
+            class="btn btn-primary contact-btn"
+            href={mailtoHref(CONTACT_PUBLIC.email, t.contact.emailSujet)}
+          >
+            ✉️ {CONTACT_PUBLIC.email}
           </a>
-          <a class="btn btn-ghost contact-btn contact-tel" href="tel:+33600000000">
-            📞 {t.contact.phone}
+          <a
+            class="btn btn-ghost contact-btn contact-tel"
+            href={telHref(CONTACT_PUBLIC.telephone)}
+          >
+            📞 {CONTACT_PUBLIC.telephone}
           </a>
         </div>
       </div>
@@ -1876,6 +1907,18 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
   }
 
   /* ------------------------------- Contact ------------------------------ */
+
+  .contact-formulaire {
+    margin: 2rem auto 1.5rem;
+  }
+
+  /* Sépare le formulaire des liens directs sans les opposer : ce n'est pas un
+     repli, c'est un autre chemin vers la même boîte. */
+  .contact-ou {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
 
   .contact-section {
     position: relative;
