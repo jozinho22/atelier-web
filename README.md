@@ -327,14 +327,28 @@ d'office et, marqué `prerender = false`, ferait échouer le build sans adaptate
 ### Ce qu'il faut configurer
 
 Trois variables, décrites dans [.env.example](.env.example) : `RESEND_API_KEY`,
-`CONTACT_EXPEDITEUR`, `CONTACT_DESTINATAIRE`. En production elles se déclarent
-dans Vercel, jamais dans un fichier. Absentes, la route répond « indisponible » :
-elle ne prétend jamais avoir envoyé.
+`EMAIL_FROM`, `NOTIFY_EMAIL`. En production elles se déclarent dans Vercel,
+jamais dans un fichier. Absentes, la route répond « indisponible » : elle ne
+prétend jamais avoir envoyé.
 
-⚠️ **Un domaine ne porte qu'un seul enregistrement SPF.** Si Google Workspace
-gère déjà la messagerie du domaine, faire envoyer Resend depuis un **sous-domaine**
-(`send.mondomaine.fr`) : deux SPF sur le même domaine s'annulent, et les deux flux
-partent en indésirables.
+Mêmes noms et même convention que `expert-maths-lycee.fr` et
+`french-overseas.com` — **la même adresse des deux côtés**, `EMAIL_FROM` portant
+en plus un nom d'affichage :
+
+```
+EMAIL_FROM=Studio Caducée <josselin.douineau@studio-caducee.com>
+NOTIFY_EMAIL=josselin.douineau@studio-caducee.com
+```
+
+Elles restent deux parce qu'elles ne jouent pas le même rôle. `EMAIL_FROM` est
+une **identité** : Resend refuse d'expédier depuis un domaine dont on n'a pas
+publié les enregistrements DNS, et c'est ce qui empêche un tiers d'écrire en ton
+nom. `NOTIFY_EMAIL` n'est qu'une boîte aux lettres, libre de changer sans rien
+revérifier.
+
+L'adresse du visiteur ne va **jamais** dans `EMAIL_FROM` : ce serait une
+usurpation, SPF et DKIM échoueraient et le message partirait en indésirables.
+Elle part en `Reply-To`, si bien qu'un simple « Répondre » lui écrit.
 
 ### Anti-spam sans sous-traitant
 

@@ -52,8 +52,8 @@ const emailPlausible = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 export const POST: APIRoute = async ({ request }) => {
   // ---- 1. configuration présente ? ---------------------------------------
   const cle = import.meta.env.RESEND_API_KEY;
-  const expediteur = import.meta.env.CONTACT_EXPEDITEUR;
-  const destinataire = import.meta.env.CONTACT_DESTINATAIRE;
+  const expediteur = import.meta.env.EMAIL_FROM;
+  const destinataire = import.meta.env.NOTIFY_EMAIL;
   if (!cle || !expediteur || !destinataire) {
     // Le détail reste dans les journaux du serveur : dire au visiteur QUELLE
     // variable manque renseignerait un attaquant sur l'infrastructure.
