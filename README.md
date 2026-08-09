@@ -76,10 +76,28 @@ répond plus**.
 | `depotRepli` | dépôt GitHub Pages montré à sa place quand elle ne répond pas |
 | `iconeVerifiee` | l'icône a-t-elle pu être confrontée à la production ? |
 
-Quand `enLigne` vaut `false` et qu'un `depotRepli` est déclaré, le lien bascule
-sur `https://jozinho22.github.io/<depotRepli>/` — le visiteur voit le travail au
-lieu d'une erreur de résolution. **Le domaine affiché suit le lien** : annoncer
-« api-jawa.fr » sous un lien qui mène ailleurs tromperait le lecteur.
+Quand `enLigne` vaut `false`, ce qui se passe dépend de l'endroit où le site
+tourne :
+
+| | réalisation hors ligne |
+| --- | --- |
+| `astro dev` | le lien bascule sur `https://jozinho22.github.io/<depotRepli>/` |
+| tout **build** — y compris la démo github.io | **la carte n'apparaît pas** |
+
+Le repli est un outil d'atelier, pas un contenu : il permet de travailler la
+section quand un domaine ne répond plus. Un visiteur, lui, n'a que faire d'un
+lien de secours vers un dépôt — ou le site est en ligne et on le montre, ou il ne
+l'est pas et il n'a pas sa place dans une vitrine de travaux livrés.
+
+La démonstration github.io suit la règle du build, et non celle du développement :
+elle est tout aussi publique.
+
+En développement, **le domaine affiché suit le lien** — voir
+`jozinho22.github.io/...` sous une carte est le signe qu'on regarde un repli.
+Annoncer « api-jawa.fr » sous un lien qui mène ailleurs tromperait le lecteur.
+
+Si toutes les réalisations passent hors ligne, la section entière s'efface :
+mieux vaut pas de section qu'un titre au-dessus d'un carrousel vide.
 
 Les icônes, elles, sont de toute façon **locales** dans `public/portfolio/` : la
 page ne fait aucune requête externe, et une icône ne peut pas disparaître si un

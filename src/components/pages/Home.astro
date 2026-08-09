@@ -9,7 +9,7 @@ import { splitPath, localePath } from '../../lib/i18n';
 import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
 import { ACCENTS, ACCENTS_TEXTE } from '../../data/modeles';
-import { REALISATIONS, resoudreRealisation } from '../../data/realisations';
+import { REALISATIONS, estVisible, resoudreRealisation } from '../../data/realisations';
 
 const { lang } = splitPath(Astro.url.pathname);
 const t = home[lang];
@@ -161,12 +161,17 @@ const libelleDemo = (l: { un: string; plusieurs: string }, n: number) =>
  * Les entrées, leurs icônes et leurs replis vivent dans
  * [src/data/realisations.ts](../../data/realisations.ts) — c'est là que se
  * déclare l'état de chaque site, et là seulement. La page se contente de
- * demander où mène chaque lien.
+ * demander où mène chaque lien, et si la carte a lieu d'être.
+ *
+ * Le tri vient APRÈS l'appariement, et il le faut : les textes sont associés par
+ * POSITION à `t.portfolio.items`. Écarter une réalisation d'abord décalerait
+ * toutes les suivantes, et chaque site hériterait de la description du voisin —
+ * une panne muette, que ni le typage ni le build ne verraient passer.
  */
 const portfolio = REALISATIONS.map((r, i) => {
   const { href, domaine, enRepli } = resoudreRealisation(r);
   return { ...r, ...t.portfolio.items[i], href, domaine, enRepli };
-});
+}).filter((p) => estVisible(p, import.meta.env.DEV));
 
 /**
  * Les quatre étapes forment un circuit fermé : la mise en ligne d'un site
@@ -433,55 +438,63 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
     </section>
 
     <!-- =========================== PORTFOLIO =========================== -->
-    <section id="portfolio" class="section portfolio-section surface rupture" style="--ton: var(--mur-3)">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">{t.portfolio.eyebrow}</p>
-          <h2 class="section-title">{t.portfolio.title}</h2>
-          <p class="section-lede">{t.portfolio.lede}</p>
-        </div>
+    {/*
+      Rien à montrer, rien à annoncer : si toutes les réalisations sont hors
+      ligne, la section entière s'efface plutôt que de laisser un titre au-dessus
+      d'un carrousel vide. Le cas n'arrive que dans un build — en développement
+      tout reste affiché.
+    */}
+    {portfolio.length > 0 && (
+      <section id="portfolio" class="section portfolio-section surface rupture" style="--ton: var(--mur-3)">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="eyebrow">{t.portfolio.eyebrow}</p>
+            <h2 class="section-title">{t.portfolio.title}</h2>
+            <p class="section-lede">{t.portfolio.lede}</p>
+          </div>
 
-        <div class="carrousel reveal" data-carrousel>
-          <button class="carrousel-fleche" type="button" data-carrousel-prec aria-label={t.portfolio.precedent}>
-            <span aria-hidden="true">←</span>
-          </button>
+          <div class="carrousel reveal" data-carrousel>
+            <button class="carrousel-fleche" type="button" data-carrousel-prec aria-label={t.portfolio.precedent}>
+              <span aria-hidden="true">←</span>
+            </button>
 
-          <ul class="carrousel-piste" data-carrousel-piste>
-            {portfolio.map((p) => (
-              <li class="carrousel-item" style={`--accent-card: ${p.accent}; --accent-card-text: ${p.accentTexte}`}>
-                <a class="projet" href={p.href} target="_blank" rel="noopener noreferrer">
-                  {p.icone ? (
-                    <img
-                      class="projet-icone"
-                      src={withBase(`portfolio/${p.icone}`)}
-                      alt=""
-                      width="48"
-                      height="48"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <span class="projet-icone projet-monogramme" aria-hidden="true">
-                      {p.name.charAt(0)}
+            <ul class="carrousel-piste" data-carrousel-piste>
+              {portfolio.map((p) => (
+                <li class="carrousel-item" style={`--accent-card: ${p.accent}; --accent-card-text: ${p.accentTexte}`}>
+                  <a class="projet" href={p.href} target="_blank" rel="noopener noreferrer">
+                    {p.icone ? (
+                      <img
+                        class="projet-icone"
+                        src={withBase(`portfolio/${p.icone}`)}
+                        alt=""
+                        width="48"
+                        height="48"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="projet-icone projet-monogramme" aria-hidden="true">
+                        {p.name.charAt(0)}
+                      </span>
+                    )}
+                    <p class="projet-nom">{p.name}</p>
+                    <p class="projet-domaine">{p.domaine}</p>
+                    <p class="projet-desc">{p.desc}</p>
+                    <span class="projet-lien">
+                      {t.portfolio.visiter} <span class="arrow" aria-hidden="true">↗</span>
                     </span>
-                  )}
-                  <p class="projet-nom">{p.name}</p>
-                  <p class="projet-domaine">{p.domaine}</p>
-                  <p class="projet-desc">{p.desc}</p>
-                  <span class="projet-lien">
-                    {t.portfolio.visiter} <span class="arrow" aria-hidden="true">↗</span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+                  </a>
+                </li>
+              ))}
+            </ul>
 
-          <button class="carrousel-fleche" type="button" data-carrousel-suiv aria-label={t.portfolio.suivant}>
-            <span aria-hidden="true">→</span>
-          </button>
+            <button class="carrousel-fleche" type="button" data-carrousel-suiv aria-label={t.portfolio.suivant}>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    )}
 
     <!-- ============================ TARIFS ============================= -->
     <section id="tarifs" class="section surface rupture" style="--ton: var(--mur-4)">
@@ -2227,6 +2240,24 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
       piste.dataset.clone = 'oui';
     };
 
+    /**
+     * Retire les copies et remet l'index dans la série d'origine.
+     *
+     * Nécessaire depuis qu'une piste peut cesser d'être défilable en cours de
+     * route : un téléphone tourné en paysage, une fenêtre élargie, ou une
+     * réalisation en moins — trois fiches tiennent dans la largeur d'un écran de
+     * bureau là où quatre débordaient. Sans ce nettoyage, les neuf fiches
+     * restaient en piste alors que les flèches venaient d'être masquées et le
+     * minuteur arrêté : un carrousel figé sur un rail toujours long de trois
+     * séries, où l'on retrouvait les mêmes projets en glissant à la main.
+     */
+    const declonner = (): void => {
+      if (piste.dataset.clone !== 'oui') return;
+      piste.querySelectorAll('[data-clone]').forEach((c) => c.remove());
+      delete piste.dataset.clone;
+      index = ((index % N) + N) % N;
+    };
+
     const marquer = (i: number): void => {
       fiches().forEach((f, j) => {
         if (j === i) f.setAttribute('data-courante', '');
@@ -2489,10 +2520,15 @@ const etapes = t.methode.steps.map((e, i) => ({ ...e, num: String(i + 1).padStar
       const peutDefiler = defilable();
       carrousel.dataset.defilable = peutDefiler ? 'oui' : 'non';
       // Les clones n'ont d'objet que si la série déborde : à quatre fiches
-      // tenant dans la largeur, il n'y a rien à enchaîner.
-      if (peutDefiler && piste.dataset.clone !== 'oui') {
-        cloner();
-        index = N; // on se place d'emblée dans le jeu du milieu
+      // tenant dans la largeur, il n'y a rien à enchaîner. Et l'inverse est
+      // vrai — dès que la piste cesse de déborder, ils doivent repartir.
+      if (peutDefiler) {
+        if (piste.dataset.clone !== 'oui') {
+          cloner();
+          index = N; // on se place d'emblée dans le jeu du milieu
+        }
+      } else {
+        declonner();
       }
       centrer(index, false);
       dernierX = piste.scrollLeft;

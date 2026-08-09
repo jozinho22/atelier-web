@@ -16,18 +16,27 @@
  * L'état est donc DÉCLARÉ ici, à la main, et `npm run verifier-realisations` dit
  * quand il ne correspond plus à la réalité. La sonde informe, elle ne décide pas.
  *
- * ── Les deux replis ───────────────────────────────────────────────────────
+ * ── Le repli est un OUTIL D'ATELIER, pas un contenu ───────────────────────
  *
- * • L'URL — quand `enLigne` vaut `false`, le lien pointe vers la copie publiée
- *   sur GitHub Pages, `https://jozinho22.github.io/<depotRepli>/`. Le visiteur
- *   voit le travail au lieu d'une erreur de résolution.
+ * Quand `enLigne` vaut `false`, le sort de la réalisation dépend de l'endroit
+ * où le site tourne — voir `estVisible()` :
  *
- * • L'ICÔNE — elle est de toute façon locale, donc insensible à la panne. Le
- *   champ `iconeVerifiee` note simplement si elle a pu être confrontée à la
- *   production : un `false` signale une icône venue du dépôt, à revérifier.
+ * • en DÉVELOPPEMENT, le lien bascule sur la copie publiée sur GitHub Pages,
+ *   `https://jozinho22.github.io/<depotRepli>/`. On peut ainsi travailler la
+ *   section même quand un domaine ne répond plus.
+ *
+ * • DÈS QUE LE SITE EST CONSTRUIT, la réalisation DISPARAÎT. Un visiteur n'a
+ *   que faire d'un lien de secours vers un dépôt : ou le site est en ligne et
+ *   on le montre, ou il ne l'est pas et il n'a pas sa place dans une vitrine
+ *   de travaux livrés.
+ *
+ * L'ICÔNE, elle, est locale dans tous les cas, donc insensible à la panne. Le
+ * champ `iconeVerifiee` note simplement si elle a pu être confrontée à la
+ * production : un `false` signale une icône venue du dépôt, à revérifier.
  *
  * Le domaine AFFICHÉ suit le lien : annoncer « api-jawa.fr » sous un lien qui
- * mène ailleurs tromperait le visiteur.
+ * mène ailleurs tromperait le visiteur — et en développement, voir
+ * `jozinho22.github.io/...` sous la carte est le signe qu'on regarde un repli.
  */
 
 export interface Realisation {
@@ -54,8 +63,9 @@ export interface Realisation {
 
 export const REALISATIONS: readonly Realisation[] = [
   {
-    // `api-jawa.fr` ne résout plus. Le lien bascule donc sur la copie GitHub
-    // Pages, et l'icône vient du dépôt faute d'avoir pu être confrontée au site.
+    // `api-jawa.fr` ne résout plus. En développement, le lien bascule donc sur
+    // la copie GitHub Pages ; dans le site construit, la carte n'apparaît pas.
+    // L'icône vient du dépôt, faute d'avoir pu être confrontée au site.
     url: 'https://api-jawa.fr',
     depotRepli: 'api-jawa',
     icone: 'api-jawa.webp',
@@ -95,6 +105,21 @@ export const REALISATIONS: readonly Realisation[] = [
 /** L'adresse d'une copie publiée sur GitHub Pages. */
 export const lienDepot = (depot: string): string => `https://jozinho22.github.io/${depot}/`;
 
+/**
+ * Une réalisation doit-elle apparaître ?
+ *
+ * Le paramètre est passé par l'appelant plutôt que lu ici : ce module est aussi
+ * importé par `scripts/verifier-realisations.mjs`, qui tourne sous Node où
+ * `import.meta.env` n'existe pas. La page d'accueil lui donne
+ * `import.meta.env.DEV`, vrai sous `astro dev` et faux dans tout build.
+ *
+ * Conséquence à connaître : la démonstration github.io est un BUILD. Une
+ * réalisation hors ligne y disparaît comme en production — c'est voulu, elle est
+ * tout aussi publique.
+ */
+export const estVisible = (r: Realisation, developpement: boolean): boolean =>
+  developpement || r.enLigne;
+
 export interface RealisationResolue {
   /** Adresse vers laquelle le lien mène réellement. */
   href: string;
@@ -106,6 +131,10 @@ export interface RealisationResolue {
 
 /**
  * Décide, pour une réalisation, où mène le lien et ce qu'on écrit dessous.
+ *
+ * Le repli ne sort d'ici qu'en développement : dans un build, `estVisible()` a
+ * déjà écarté les réalisations hors ligne, et cette fonction ne voit plus que
+ * des sites joignables, sur leur vraie adresse.
  *
  * Une réalisation hors ligne SANS dépôt de repli garde son URL de production :
  * mieux vaut un lien qui échoue franchement qu'un lien inventé.

@@ -95,13 +95,18 @@ for (const r of REALISATIONS) {
     const { href } = resoudreRealisation(r);
     dit(
       'ecart',
-      `LA PRODUCTION RÉPOND À NOUVEAU — passer \`enLigne: true\` ; le lien montre encore ${href}`
+      `LA PRODUCTION RÉPOND À NOUVEAU — passer \`enLigne: true\` ; la carte est ` +
+        `absente du site construit, et pointe sur ${href} en développement`
     );
   } else if (!prod.oui && r.enLigne) {
     const repli = r.depotRepli ? lienDepot(r.depotRepli) : 'aucun dépôt de repli déclaré';
-    dit('ecart', `INJOIGNABLE (${prod.cause}) — passer \`enLigne: false\` ; repli : ${repli}`);
+    dit(
+      'ecart',
+      `INJOIGNABLE (${prod.cause}) — passer \`enLigne: false\` pour la retirer du ` +
+        `site construit ; repli affiché en développement : ${repli}`
+    );
   } else if (!prod.oui && !r.enLigne) {
-    dit('ok', `hors ligne comme déclaré — le lien montre le repli`);
+    dit('ok', 'hors ligne comme déclaré — retirée du site construit, repli en développement');
   } else {
     dit('ok', 'en ligne comme déclaré');
   }
