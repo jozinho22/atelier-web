@@ -1,6 +1,6 @@
-# Atelier Web — Site vitrine de création de sites web
+# Studio Caducée — Site vitrine de création de sites web
 
-Site vitrine (nom placeholder : **Atelier Web**) pour une activité de création de
+Site vitrine (nom placeholder : **Studio Caducée**) pour une activité de création de
 sites web à destination des professionnels et associations, avec huit modèles
 de démonstration par métier.
 
@@ -213,7 +213,7 @@ npm run preview  # prévisualiser le build
 ## Écran d'accueil mobile
 
 Ajouté à l'écran d'accueil d'un téléphone, le site s'affiche sous le libellé
-**« Atelier Web »** et avec une vraie icône, non un favicon 32×32 agrandi.
+**« Studio Caducée »** et avec une vraie icône, non un favicon 32×32 agrandi.
 Deux déclarations le permettent, et il faut les deux :
 
 - `short_name` du manifeste
@@ -224,7 +224,7 @@ Deux déclarations le permettent, et il faut les deux :
   manifeste**. Sans elle, iOS retombe sur le `<title>` — une phrase entière,
   tronquée à quelques caractères.
 
-Les deux valent « Atelier Web » (11 caractères, sous la limite de troncature
+Les deux valent « Studio Caducée » (11 caractères, sous la limite de troncature
 d'environ 12). Les modifier ensemble, jamais l'une sans l'autre.
 
 Le champ `id` du manifeste, lui, **ne doit jamais changer** : il est l'identité
@@ -315,14 +315,14 @@ suivent automatiquement.
 
 Ces deux derniers sont des **routes générées** et non des fichiers de
 `public/` : un fichier statique figerait des chemins absolus, valides à la
-racine et rompus sous `/atelier-web/`. Pour le manifeste la panne serait
+racine et rompus sous `/studio-caducee/`. Pour le manifeste la panne serait
 silencieuse — un `scope` qui ne contient pas la page courante l'invalide en
 entier, et l'icône reperdrait son libellé sans autre symptôme.
 
 | Cible | Comment | URL |
 | --- | --- | --- |
 | **Local** (développement) | `npm run dev` | `http://localhost:4321/` |
-| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml), `DOMAINE` vide | `https://jozinho22.github.io/atelier-web/` |
+| **GitHub Pages** (démo client) | push sur `main` → workflow [deploy.yml](.github/workflows/deploy.yml), `DOMAINE` vide | `https://jozinho22.github.io/studio-caducee/` |
 | **GitHub Pages + domaine** (production) | renseigner `DOMAINE` dans [deploy.yml](.github/workflows/deploy.yml) | `https://www.mondomaine.fr/` |
 
 Passage en production (domaine acheté chez un registrar) :
@@ -341,7 +341,7 @@ Passage en production (domaine acheté chez un registrar) :
 Note : un même dépôt sert soit la démo `github.io`, soit le domaine (l'URL
 github.io redirige vers le domaine une fois branché) — la phase démo précède
 simplement la mise en production. Pour reproduire localement le build démo :
-`SITE_URL=https://jozinho22.github.io SITE_BASE=/atelier-web/ npm run build`
+`SITE_URL=https://jozinho22.github.io SITE_BASE=/studio-caducee/ npm run build`
 — ou via un fichier `.env` (toutes les variables sont documentées dans
 [.env.example](.env.example), le shell restant prioritaire).
 
@@ -357,7 +357,7 @@ besoins serveur. Tout autre hébergeur statique reste possible via
    [deploy.yml](.github/workflows/deploy.yml) et le domaine par défaut dans
    [astro.config.mjs](astro.config.mjs) — canonical, sitemap et robots.txt
    suivent au build suivant (voir la section Déploiement ci-dessus).
-2. **Identité** : nom « Atelier Web », e-mail `contact@atelier-web.example`,
+2. **Identité** : nom « Studio Caducée », e-mail `contact@studio-caducee.example`,
    téléphone `06 00 00 00 00` — présents dans
    [Footer.astro](src/components/Footer.astro),
    [Home.astro](src/components/pages/Home.astro),

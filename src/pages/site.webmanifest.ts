@@ -5,7 +5,7 @@ import { home } from '../i18n/home';
 /**
  * Manifeste d'application, généré au build plutôt que déposé dans `public/`.
  *
- * C'est `start_url` et `scope` qui l'imposent : ils valent `/atelier-web/` sur
+ * C'est `start_url` et `scope` qui l'imposent : ils valent `/studio-caducee/` sur
  * la démonstration github.io et `/` sur le domaine final. Un fichier statique
  * figerait l'un des deux, et Chrome refuserait l'installation sur l'autre —
  * un `scope` qui ne contient pas la page courante invalide tout le manifeste.
@@ -21,8 +21,17 @@ export const GET: APIRoute = () => {
   const url = (chemin: string) => withBase(chemin);
 
   const manifeste = {
-    name: 'Atelier Web',
-    short_name: 'Atelier Web',
+    name: 'Studio Caducée',
+    /**
+     * Le texte SOUS l'icône, sur l'écran d'accueil. Environ douze caractères
+     * avant troncature : « Studio Caducée » en fait quatorze et s'afficherait
+     * « Studio Cadu… ». On garde le mot qui identifie, pas celui qui qualifie.
+     *
+     * ⚠️ À tenir identique à <meta name="apple-mobile-web-app-title"> dans
+     * Base.astro : iOS ignore le manifeste et ne lit que cette balise. Les
+     * modifier ensemble, jamais l'une sans l'autre.
+     */
+    short_name: 'Caducée',
     description: home.fr.description,
     lang: 'fr',
     dir: 'ltr',

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-08-05T00:00:00Z",
-  "title": "Design System: Atelier Web",
+  "title": "Design System: Studio Caducée",
   "extensions": {
     "colorMeta": {
       "indigo-profond": {
@@ -487,7 +487,7 @@
   ],
   "narrative": {
     "northStar": "La galerie éclairée",
-    "overview": "Atelier Web vend des sites vitrines en montrant des sites vitrines. Le site n'est donc pas la vitrine : il est la salle qui les accroche. Le fond crème est le mur, les cartes blanches sont les cadres, les fonds aurora en mouvement lent sont l'éclairage de la salle — présents, jamais regardés. Six mondes visuels entièrement différents cohabitent derrière les liens, et le rôle du site est de les mettre en valeur sans jamais rivaliser avec eux.\n\nCela impose une retenue précise. La salle a du caractère — un indigo saturé, une typographie large, des angles très arrondis — mais elle ne prend jamais le pas sur ce qu'elle expose. Chaque fois qu'un choix hésite entre « affirmer le site » et « servir les modèles », il tranche pour le second.\n\nLe registre reste chaleureux plutôt qu'institutionnel. La clientèle est faite d'artisans, d'indépendants et d'associations : la densité est basse, le texte respire, les formes sont douces.",
+    "overview": "Studio Caducée vend des sites vitrines en montrant des sites vitrines. Le site n'est donc pas la vitrine : il est la salle qui les accroche. Le fond crème est le mur, les cartes blanches sont les cadres, les fonds aurora en mouvement lent sont l'éclairage de la salle — présents, jamais regardés. Six mondes visuels entièrement différents cohabitent derrière les liens, et le rôle du site est de les mettre en valeur sans jamais rivaliser avec eux.\n\nCela impose une retenue précise. La salle a du caractère — un indigo saturé, une typographie large, des angles très arrondis — mais elle ne prend jamais le pas sur ce qu'elle expose. Chaque fois qu'un choix hésite entre « affirmer le site » et « servir les modèles », il tranche pour le second.\n\nLe registre reste chaleureux plutôt qu'institutionnel. La clientèle est faite d'artisans, d'indépendants et d'associations : la densité est basse, le texte respire, les formes sont douces.",
     "keyCharacteristics": [
       "Un seul accent structurel, l'indigo, sur un fond papier crème",
       "Angles très arrondis (jusqu'à 28 px) et boutons en pilule totale",

@@ -7,9 +7,9 @@ import type { Lang } from '../lib/i18n';
 export const esthetique = {
   fr: {
     meta: {
-      title: "Modèle beauté & bien-être — L'Écrin de Soi | Atelier Web",
+      title: "Modèle beauté & bien-être — L'Écrin de Soi | Studio Caducée",
       description:
-        "Exemple de site vitrine pour institut de beauté : soins, tarifs, horaires et réservation par téléphone. Un modèle Atelier Web doux et raffiné.",
+        "Exemple de site vitrine pour institut de beauté : soins, tarifs, horaires et réservation par téléphone. Un modèle Studio Caducée doux et raffiné.",
     },
     demoBar: 'Beauté & bien-être',
     header: {
@@ -107,9 +107,9 @@ export const esthetique = {
   },
   en: {
     meta: {
-      title: "Beauty & wellness template — L'Écrin de Soi | Atelier Web",
+      title: "Beauty & wellness template — L'Écrin de Soi | Studio Caducée",
       description:
-        'A sample website for a beauty institute: treatments, prices, hours, and booking by phone. A soft, refined template by Atelier Web.',
+        'A sample website for a beauty institute: treatments, prices, hours, and booking by phone. A soft, refined template by Studio Caducée.',
     },
     demoBar: 'Beauty & wellness',
     header: {

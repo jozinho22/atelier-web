@@ -16,18 +16,18 @@ import type { Lang } from '../lib/i18n';
 export const equipe = {
   fr: {
     meta: {
-      title: 'Qui sommes-nous ? — Atelier Web',
+      title: 'Qui sommes-nous ? — Studio Caducée',
       description:
-        'Les deux associés d’Atelier Web : qui écrit vos sites, qui les dessine, et pourquoi ils sont faits à la main.',
+        'Les deux associés de Studio Caducée : qui écrit vos sites, qui les dessine, et pourquoi ils sont faits à la main.',
     },
-    eyebrow: 'L’atelier',
+    eyebrow: 'Le studio',
     title: 'Qui sommes-nous ?',
     lede: 'Deux associés, un seul métier : écrire des sites qui durent plus longtemps que la mode qui les a vus naître.',
     membres: [
       {
         prenom: 'Josselin',
-        role: 'Développeur, fondateur de l’atelier',
-        alt: 'Portrait de Josselin, fondateur de l’atelier',
+        role: 'Développeur, fondateur du studio',
+        alt: 'Portrait de Josselin, fondateur du studio',
         bio: 'Josselin code des sites depuis douze ans, dont les six dernières à son compte. Il a commencé par des applications métier — de la gestion de stock, des plates-formes de cours — avant de constater que les artisans autour de lui payaient cher des sites qu’ils ne pouvaient pas modifier. Il écrit tout à la main, sans constructeur ni greffon : c’est plus long à faire, et beaucoup plus rapide à charger. Quand il ne code pas, il court, mal mais régulièrement.',
       },
       {
@@ -41,9 +41,9 @@ export const equipe = {
   /** ⚠️ Biographies fictives — voir l'avertissement sur la version française. */
   en: {
     meta: {
-      title: 'Who are we? — Atelier Web',
+      title: 'Who are we? — Studio Caducée',
       description:
-        'The two partners behind Atelier Web: who writes your website, who designs it, and why it is built by hand.',
+        'The two partners behind Studio Caducée: who writes your website, who designs it, and why it is built by hand.',
     },
     eyebrow: 'The studio',
     title: 'Who are we?',

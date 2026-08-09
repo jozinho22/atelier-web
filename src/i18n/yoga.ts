@@ -7,9 +7,9 @@ import type { Lang } from '../lib/i18n';
  */
 export const yoga = {
   fr: {
-    title: 'Modèle cours de yoga — Souffle | Atelier Web',
+    title: 'Modèle cours de yoga — Souffle | Studio Caducée',
     description:
-      "Exemple de site vitrine pour un studio de yoga : cours, postures animées, professeure et infos pratiques. Un modèle Atelier Web en noir et blanc, tout en lenteur.",
+      "Exemple de site vitrine pour un studio de yoga : cours, postures animées, professeure et infos pratiques. Un modèle Studio Caducée en noir et blanc, tout en lenteur.",
     demoLabel: 'Cours de yoga',
     nav: {
       flow: 'Le flow',
@@ -102,9 +102,9 @@ export const yoga = {
     },
   },
   en: {
-    title: 'Yoga class template — Souffle | Atelier Web',
+    title: 'Yoga class template — Souffle | Studio Caducée',
     description:
-      'Example website for a yoga studio: classes, animated postures, teacher and practical details. An Atelier Web template in black and white, all about slowing down.',
+      'Example website for a yoga studio: classes, animated postures, teacher and practical details. A Studio Caducée template in black and white, all about slowing down.',
     demoLabel: 'Yoga classes',
     nav: {
       flow: 'The flow',

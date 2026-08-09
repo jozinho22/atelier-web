@@ -11,9 +11,9 @@ import type { DocumentLegalTexte } from './document-legal';
 export const legal = {
   fr: {
     meta: {
-      title: 'Mentions légales — Atelier Web',
+      title: 'Mentions légales — Studio Caducée',
       description:
-        "Mentions légales du site Atelier Web : éditeur, hébergement et données personnelles.",
+        "Mentions légales du site Studio Caducée : éditeur, hébergement et données personnelles.",
     },
     eyebrow: 'Informations légales',
     title: 'Mentions légales',
@@ -22,7 +22,7 @@ export const legal = {
         heading: 'Éditeur du site',
         blocs: [
           [
-            { text: 'Atelier Web — [Nom Prénom]' },
+            { text: 'Studio Caducée — [Nom Prénom]' },
             { br: true },
             { text: 'Entrepreneur individuel' },
             { br: true },
@@ -31,7 +31,7 @@ export const legal = {
             { text: 'SIRET : [à compléter]' },
             { br: true },
             { text: 'Contact : ' },
-            { link: 'contact@atelier-web.example', href: 'mailto:contact@atelier-web.example' },
+            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
             { text: ' — ' },
             { link: '06 00 00 00 00', href: 'tel:+33600000000' },
           ],
@@ -57,7 +57,7 @@ export const legal = {
         blocs: [
           [
             {
-              text: "L'ensemble du contenu de ce site (textes, visuels, mise en page) est la propriété d'Atelier Web, sauf mention contraire. Toute reproduction, même partielle, est soumise à autorisation préalable.",
+              text: "L'ensemble du contenu de ce site (textes, visuels, mise en page) est la propriété de Studio Caducée, sauf mention contraire. Toute reproduction, même partielle, est soumise à autorisation préalable.",
             },
           ],
         ],
@@ -74,22 +74,22 @@ export const legal = {
             {
               text: 'Conformément au RGPD, vous pouvez exercer vos droits (accès, rectification, suppression) sur les données échangées par e-mail en écrivant à ',
             },
-            { link: 'contact@atelier-web.example', href: 'mailto:contact@atelier-web.example' },
+            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
             { text: '.' },
           ],
         ],
       },
       {
         heading: 'Crédits',
-        blocs: [[{ text: 'Conception et réalisation : Atelier Web.' }]],
+        blocs: [[{ text: 'Conception et réalisation : Studio Caducée.' }]],
       },
     ],
   },
   en: {
     meta: {
-      title: 'Legal notice — Atelier Web',
+      title: 'Legal notice — Studio Caducée',
       description:
-        'Legal notice for the Atelier Web site: publisher, hosting, and personal data.',
+        'Legal notice for the Studio Caducée site: publisher, hosting, and personal data.',
     },
     eyebrow: 'Legal information',
     title: 'Legal notice',
@@ -98,7 +98,7 @@ export const legal = {
         heading: 'Site publisher',
         blocs: [
           [
-            { text: 'Atelier Web — [Full name]' },
+            { text: 'Studio Caducée — [Full name]' },
             { br: true },
             { text: 'Sole proprietor' },
             { br: true },
@@ -107,7 +107,7 @@ export const legal = {
             { text: 'SIRET: [to be completed]' },
             { br: true },
             { text: 'Contact: ' },
-            { link: 'contact@atelier-web.example', href: 'mailto:contact@atelier-web.example' },
+            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
             { text: ' — ' },
             { link: '06 00 00 00 00', href: 'tel:+33600000000' },
           ],
@@ -133,7 +133,7 @@ export const legal = {
         blocs: [
           [
             {
-              text: 'All content on this site (text, visuals, layout) is the property of Atelier Web unless stated otherwise. Any reproduction, in whole or in part, requires prior permission.',
+              text: 'All content on this site (text, visuals, layout) is the property of Studio Caducée unless stated otherwise. Any reproduction, in whole or in part, requires prior permission.',
             },
           ],
         ],
@@ -150,14 +150,14 @@ export const legal = {
             {
               text: 'In accordance with the GDPR, you may exercise your rights (access, rectification, erasure) over the data exchanged by email by writing to ',
             },
-            { link: 'contact@atelier-web.example', href: 'mailto:contact@atelier-web.example' },
+            { link: 'contact@studio-caducee.example', href: 'mailto:contact@studio-caducee.example' },
             { text: '.' },
           ],
         ],
       },
       {
         heading: 'Credits',
-        blocs: [[{ text: 'Design and development: Atelier Web.' }]],
+        blocs: [[{ text: 'Design and development: Studio Caducée.' }]],
       },
     ],
   },

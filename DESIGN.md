@@ -1,5 +1,5 @@
 ---
-name: Atelier Web
+name: Studio Caducée
 description: Sites vitrines pour artisans, indépendants et associations
 colors:
   indigo-profond: "#5352d1"
@@ -120,13 +120,13 @@ components:
     typography: "{typography.label}"
 ---
 
-# Design System: Atelier Web
+# Design System: Studio Caducée
 
 ## Overview
 
 **Creative North Star: « La galerie éclairée »**
 
-Atelier Web vend des sites vitrines en montrant des sites vitrines. Le site n'est
+Studio Caducée vend des sites vitrines en montrant des sites vitrines. Le site n'est
 donc pas la vitrine : il est la salle qui les accroche. Tout part de là. Le fond
 crème est le mur, les cartes blanches sont les cadres, les fonds aurora en
 mouvement lent sont l'éclairage de la salle — présents, jamais regardés. Six

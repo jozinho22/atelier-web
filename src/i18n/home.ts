@@ -7,7 +7,7 @@ import type { Lang } from '../lib/i18n';
  */
 export const home = {
   fr: {
-    title: 'Atelier Web — Sites vitrines pour artisans, indépendants et associations',
+    title: 'Studio Caducée — Sites vitrines pour artisans, indépendants et associations',
     description:
       "Création de sites vitrines élégants et rapides pour professionnels et associations : soyez visible sur Google et joignable en un clic. Devis gratuit, à partir de 890 €.",
     hero: {
@@ -271,12 +271,12 @@ export const home = {
       titleEm: 'votre',
       titleAfter: 'site ?',
       lede: 'Racontez-moi votre activité, je vous réponds sous 24 h avec des idées concrètes. Le devis est gratuit, le café aussi.',
-      email: 'contact@atelier-web.example',
+      email: 'contact@studio-caducee.example',
       phone: '06 00 00 00 00',
     },
   },
   en: {
-    title: 'Atelier Web — Showcase websites for artisans, freelancers and local clubs',
+    title: 'Studio Caducée — Showcase websites for artisans, freelancers and local clubs',
     description:
       'Elegant, fast showcase websites for professionals and local clubs: get found on Google and reached in one click. Free quote, from €890.',
     hero: {
@@ -540,7 +540,7 @@ export const home = {
       titleEm: 'your',
       titleAfter: 'website?',
       lede: 'Tell me about your business and I’ll get back to you within 24 hours with concrete ideas. The quote is free — so is the coffee.',
-      email: 'contact@atelier-web.example',
+      email: 'contact@studio-caducee.example',
       phone: '06 00 00 00 00',
     },
   },

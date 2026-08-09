@@ -8,9 +8,9 @@ import type { Lang } from '../lib/i18n';
  */
 export const restaurant = {
   fr: {
-    title: 'Modèle restaurant italien — L’Anima | Atelier Web',
+    title: 'Modèle restaurant italien — L’Anima | Studio Caducée',
     description:
-      "Exemple de site vitrine pour un restaurant italien haut de gamme : carte, four à bois, cave de vins et whiskies, réservation. Un modèle Atelier Web chaleureux et feutré.",
+      "Exemple de site vitrine pour un restaurant italien haut de gamme : carte, four à bois, cave de vins et whiskies, réservation. Un modèle Studio Caducée chaleureux et feutré.",
     demoLabel: 'Restaurant italien',
     nav: {
       carte: 'La carte',
@@ -127,9 +127,9 @@ export const restaurant = {
     footer: { baseline: 'Cucina italiana — Lyon', droits: 'Tous droits réservés.' },
   },
   en: {
-    title: 'Italian restaurant template — L’Anima | Atelier Web',
+    title: 'Italian restaurant template — L’Anima | Studio Caducée',
     description:
-      'Example website for a high-end Italian restaurant: menu, wood-fired oven, wine and whisky cellar, booking. A warm, hushed Atelier Web template.',
+      'Example website for a high-end Italian restaurant: menu, wood-fired oven, wine and whisky cellar, booking. A warm, hushed Studio Caducée template.',
     demoLabel: 'Italian restaurant',
     nav: {
       carte: 'Menu',

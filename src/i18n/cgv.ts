@@ -24,7 +24,7 @@ import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '..
  * abonnement d'hébergement sans engagement de durée.
  */
 
-const CONTACT = 'contact@atelier-web.example';
+const CONTACT = 'contact@studio-caducee.example';
 const TELEPHONE = { texte: '06 00 00 00 00', href: 'tel:+33600000000' };
 
 /** Date de la version en vigueur, affichée sous le titre. */
@@ -44,9 +44,9 @@ export function cgv(lang: Lang): DocumentLegalTexte {
   function versionFr(): DocumentLegalTexte {
     return {
       meta: {
-        title: 'Conditions générales de vente — Atelier Web',
+        title: 'Conditions générales de vente — Studio Caducée',
         description:
-          "Conditions générales de vente d'Atelier Web : devis, prix, paiement, droit de rétractation, propriété intellectuelle et médiation.",
+          "Conditions générales de vente de Studio Caducée : devis, prix, paiement, droit de rétractation, propriété intellectuelle et médiation.",
       },
       eyebrow: 'Informations légales',
       title: 'Conditions générales de vente',
@@ -57,7 +57,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'Les présentes conditions générales de vente (« les CGV ») régissent les prestations de création, de refonte et de maintenance de sites internet fournies par Atelier Web (« le Prestataire ») à ses clients (« le Client »).',
+                text: 'Les présentes conditions générales de vente (« les CGV ») régissent les prestations de création, de refonte et de maintenance de sites internet fournies par Studio Caducée (« le Prestataire ») à ses clients (« le Client »).',
               },
             ],
             [
@@ -76,7 +76,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           heading: 'Article 2 — Identité du prestataire',
           blocs: [
             [
-              { text: 'Atelier Web — [Nom Prénom]' },
+              { text: 'Studio Caducée — [Nom Prénom]' },
               { br: true },
               { text: 'Entrepreneur individuel' },
               { br: true },
@@ -421,9 +421,9 @@ export function cgv(lang: Lang): DocumentLegalTexte {
   function versionEn(): DocumentLegalTexte {
     return {
       meta: {
-        title: 'Terms and conditions of sale — Atelier Web',
+        title: 'Terms and conditions of sale — Studio Caducée',
         description:
-          'Atelier Web’s terms and conditions of sale: quotes, prices, payment, right of withdrawal, intellectual property, and mediation.',
+          'Studio Caducée’s terms and conditions of sale: quotes, prices, payment, right of withdrawal, intellectual property, and mediation.',
       },
       eyebrow: 'Legal information',
       title: 'Terms and conditions of sale',
@@ -434,7 +434,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'These terms and conditions of sale (“the Terms”) govern the website design, redesign, and maintenance services provided by Atelier Web (“the Provider”) to its clients (“the Client”).',
+                text: 'These terms and conditions of sale (“the Terms”) govern the website design, redesign, and maintenance services provided by Studio Caducée (“the Provider”) to its clients (“the Client”).',
               },
             ],
             [
@@ -453,7 +453,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           heading: 'Article 2 — Provider identity',
           blocs: [
             [
-              { text: 'Atelier Web — [Full name]' },
+              { text: 'Studio Caducée — [Full name]' },
               { br: true },
               { text: 'Sole proprietor' },
               { br: true },

@@ -7,9 +7,9 @@ import type { Lang } from '../lib/i18n';
 export const batiment = {
   fr: {
     meta: {
-      title: 'Modèle métiers du bâtiment — Moreau Rénovation | Atelier Web',
+      title: 'Modèle métiers du bâtiment — Moreau Rénovation | Studio Caducée',
       description:
-        "Exemple de site vitrine pour artisan du bâtiment : services, réalisations, zone d'intervention et demande de devis. Un modèle Atelier Web robuste et efficace.",
+        "Exemple de site vitrine pour artisan du bâtiment : services, réalisations, zone d'intervention et demande de devis. Un modèle Studio Caducée robuste et efficace.",
     },
     demoLabel: 'Métiers du bâtiment',
     header: {
@@ -114,9 +114,9 @@ export const batiment = {
   },
   en: {
     meta: {
-      title: 'Building trades template — Moreau Rénovation | Atelier Web',
+      title: 'Building trades template — Moreau Rénovation | Studio Caducée',
       description:
-        'Sample website for a building contractor: services, past projects, service area, and quote requests. A sturdy, effective Atelier Web template.',
+        'Sample website for a building contractor: services, past projects, service area, and quote requests. A sturdy, effective Studio Caducée template.',
     },
     demoLabel: 'Building trades',
     header: {

@@ -29,7 +29,7 @@ const vercelHost = env.VERCEL ? env.VERCEL_PROJECT_PRODUCTION_URL : undefined;
 // builds locaux — en CI, le workflow passe toujours SITE_URL explicitement).
 // `||` et non `??` : une variable présente mais vide (SITE_URL=) compte
 // comme absente — le .env.example est ainsi copiable tel quel.
-const SITE = env.SITE_URL || (vercelHost ? `https://${vercelHost}` : 'https://www.atelier-web.example');
+const SITE = env.SITE_URL || (vercelHost ? `https://${vercelHost}` : 'https://www.studio-caducee.example');
 const BASE = env.SITE_BASE || '/';
 
 export default defineConfig({

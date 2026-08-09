@@ -9,9 +9,9 @@ import type { Lang } from '../lib/i18n';
 export const artiste = {
   fr: {
     meta: {
-      title: 'Modèle dessinatrice au fusain — Élise Martin | Atelier Web',
+      title: 'Modèle dessinatrice au fusain — Élise Martin | Studio Caducée',
       description:
-        "Exemple de site vitrine pour une artiste dessinatrice au fusain : galerie, démarche, atelier et commandes. Un modèle Atelier Web d'inspiration années 1940.",
+        "Exemple de site vitrine pour une artiste dessinatrice au fusain : galerie, démarche, atelier et commandes. Un modèle Studio Caducée d'inspiration années 1940.",
     },
     demoLabel: 'Dessinatrice au fusain',
     nav: {
@@ -118,9 +118,9 @@ export const artiste = {
   },
   en: {
     meta: {
-      title: 'Charcoal artist template — Élise Martin | Atelier Web',
+      title: 'Charcoal artist template — Élise Martin | Studio Caducée',
       description:
-        'Example website for a charcoal artist: gallery, method, studio and commissions. An Atelier Web template drawn from the 1940s.',
+        'Example website for a charcoal artist: gallery, method, studio and commissions. A Studio Caducée template drawn from the 1940s.',
     },
     demoLabel: 'Charcoal artist',
     nav: {

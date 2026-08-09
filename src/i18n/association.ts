@@ -7,9 +7,9 @@ import type { Lang } from '../lib/i18n';
 export const association = {
   fr: {
     meta: {
-      title: 'Modèle association sportive & culturelle — AS Les Cigales | Atelier Web',
+      title: 'Modèle association sportive & culturelle — AS Les Cigales | Studio Caducée',
       description:
-        "Exemple de site vitrine pour association sportive et culturelle : activités, horaires, actualités et adhésion. Un modèle Atelier Web personnalisable aux couleurs de votre club.",
+        "Exemple de site vitrine pour association sportive et culturelle : activités, horaires, actualités et adhésion. Un modèle Studio Caducée personnalisable aux couleurs de votre club.",
     },
     demoLabel: 'Association sportive & culturelle',
     header: {
@@ -144,9 +144,9 @@ export const association = {
   },
   en: {
     meta: {
-      title: 'Sports & cultural club template — AS Les Cigales | Atelier Web',
+      title: 'Sports & cultural club template — AS Les Cigales | Studio Caducée',
       description:
-        "Sample website for a sports and cultural club: activities, schedules, news, and membership. An Atelier Web template ready to wear your club's colors.",
+        "Sample website for a sports and cultural club: activities, schedules, news, and membership. A Studio Caducée template ready to wear your club's colors.",
     },
     demoLabel: 'Sports & cultural club',
     header: {
