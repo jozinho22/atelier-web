@@ -24,7 +24,7 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 | `/modeles/boulangerie` · `/en/…` | Démo « Le Fournil de Kerlann » — boulangerie-pâtisserie |
 | `/mentions-legales` · `/en/…` | Mentions légales |
 | `/cgv` · `/en/…` | Conditions générales de vente (à faire relire) |
-| `/qui-sommes-nous` · `/en/…` | Présentation de l'atelier (biographies fictives) |
+| `/qui-sommes-nous` · `/en/…` | Présentation du studio |
 
 ## Le modèle « Boulangerie »
 
@@ -175,9 +175,11 @@ du disque et la moitié basse ne montrait que la chemise. Un agrandissement de
 1,25 depuis le bord haut le porte à 72 % du disque, centré à 40 %. Sous 600 px le
 portrait repasse dans le flux, centré au-dessus de la biographie.
 
-**⚠️ Biographies fictives**, à remplacer avant la mise en ligne — et à
-réconcilier avec les mentions légales et les CGV, qui déclarent un
-« entrepreneur individuel » au singulier.
+La biographie est **réelle**, et l'anglaise en est la traduction — pas un second
+texte. La contradiction avec les mentions légales est levée aussi : le second
+membre est commenté dans [equipe.ts](src/i18n/equipe.ts), et le studio se
+présente au singulier comme le font les CGV. Le rétablir, c'est décommenter deux
+objets et intervertir trois phrases laissées à côté des nouvelles.
 
 ## Internationalisation (FR/EN)
 

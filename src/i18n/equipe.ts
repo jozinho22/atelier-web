@@ -6,8 +6,10 @@ import type { Lang } from '../lib/i18n';
  * Séparés de home.ts depuis que la présentation de l'atelier a sa propre page :
  * elle n'est plus une section de l'accueil, seulement un lien du pied de page.
  *
- * ⚠️ Biographies FICTIVES, à remplacer par les vraies avant la mise en ligne.
- * Elles sont là pour donner sa forme définitive à la page, pas son contenu.
+ * L'anglaise est une TRADUCTION de la française, pas un second texte. Modifier
+ * l'une sans l'autre ferait raconter au visiteur anglophone une autre histoire —
+ * c'est arrivé : la version anglaise a gardé une biographie inventée plusieurs
+ * jours après la réécriture du français.
  *
  * ── Second membre mis en sommeil ──────────────────────────────────────────
  *
@@ -39,7 +41,7 @@ export const equipe = {
         prenom: "Josselin",
         role: "Développeur, fondateur du studio",
         alt: "Portrait de Josselin, fondateur du studio",
-        bio: "Développeur et aussi professeur de mathématiques, le souci du détail fait partie de mon quotidien. De même, la satisfaction du client est ma priorité.",
+        bio: "Je suis professeur de mathématiques et développeur. Les deux métiers demandent la même chose : traduire. En cours, une notion en mots simples ; ici, votre savoir-faire en un site que vos clients saisissent du premier coup. Et vous n’avez pas besoin de savoir ce que vous voulez techniquement — c’est mon travail de le trouver en vous écoutant.",
       },
       // Second membre en sommeil — décommenter pour le rétablir.
       // {
@@ -50,7 +52,6 @@ export const equipe = {
       // },
     ],
   },
-  /** ⚠️ Biographies fictives — voir l'avertissement sur la version française. */
   en: {
     meta: {
       title: "Who are we? — Studio Caducée",
@@ -67,7 +68,7 @@ export const equipe = {
         prenom: "Josselin",
         role: "Developer, founder of the studio",
         alt: "Portrait of Josselin, founder of the studio",
-        bio: "Josselin has been building websites for twelve years, the last six of them freelance. He started with business software — stock management, tutoring platforms — before noticing that the tradespeople around him were paying a lot for websites they could not change. He writes everything by hand, with no page builder and no plugins: slower to make, far faster to load. When he is not coding, he runs — badly, but regularly.",
+        bio: "I am a mathematics teacher and a developer. Both jobs ask the same thing: translating. In class, an idea into plain words; here, your craft into a website your customers grasp at first glance. And you don’t need to know what you want technically — working that out by listening to you is my job.",
       },
       // Second membre en sommeil — décommenter pour le rétablir.
       // {
