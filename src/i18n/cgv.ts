@@ -37,6 +37,37 @@ import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '..
  * Paramètres retenus (choisis par l'éditeur, ils déterminent plusieurs
  * articles) : franchise en base de TVA, vente aux consommateurs incluse,
  * abonnement d'hébergement sans engagement de durée.
+ *
+ * ── Défaut de paiement de l'abonnement (article 11) ───────────────────────
+ *
+ * Trois clauses qui se tiennent, et dont l'ordre importe :
+ *
+ * • la SUSPENSION n'intervient qu'après mise en demeure restée sans effet
+ *   quinze jours, sur le modèle de l'article 5 ;
+ * • elle n'emporte AUCUNE SUPPRESSION, et la réversibilité joue même en cas de
+ *   défaut de paiement. Retenir les fichiers d'un client mauvais payeur serait
+ *   un moyen de pression, non un droit — les sommes dues se réclament par les
+ *   voies prévues à l'article 5, pas en prenant son site en otage ;
+ * • le NOM DE DOMAINE est le vrai danger. Il est enregistré par le Prestataire
+ *   et expire tout seul : sans préavis, un client qui cesse de payer perdrait
+ *   une adresse parfois vieille de plusieurs années, et souvent irrécupérable
+ *   une fois reprise par un tiers. D'où l'information trente jours avant.
+ *
+ * ── Moyens de paiement ────────────────────────────────────────────────────
+ *
+ * L'article 5 admet le virement ET la carte, par lien de paiement Stripe. Deux
+ * mentions n'y sont pas décoratives :
+ *
+ * • « aucun frais supplémentaire en raison du moyen de paiement » — l'article
+ *   L112-12 du code monétaire et financier interdit de répercuter la commission
+ *   sur une carte européenne courante. La clause dit ce que la loi impose de
+ *   toute façon, et évite au Client de se poser la question.
+ *
+ * • « aucune donnée de carte ne transite par le Prestataire » — c'est exact
+ *   TANT QUE le paiement se fait hors du site, par lien envoyé avec la facture.
+ *   Intégrer un tunnel de paiement dans le site changerait cela, et ferait de
+ *   Stripe un sous-traitant à déclarer dans les mentions légales, aux côtés de
+ *   Resend et Cloudflare.
  */
 
 const CONTACT = 'josselin.douineau@studio-caducee.com';
@@ -52,7 +83,7 @@ const TELEPHONE = {
 } as const;
 
 /** Date de la version en vigueur, affichée sous le titre. */
-const MISE_A_JOUR = { fr: '9 août 2026', en: '9 August 2026' } as const;
+const MISE_A_JOUR = { fr: '11 août 2026', en: '11 August 2026' } as const;
 
 export function cgv(lang: Lang): DocumentLegalTexte {
   const lien = { link: CONTACT, href: `mailto:${CONTACT}` } as const;
@@ -130,7 +161,12 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'Toute demande sortant du périmètre décrit au devis fait l’objet d’un devis complémentaire, accepté dans les mêmes formes avant exécution.',
+                text: 'Pour le pack Signature, ainsi que pour toute prestation dont le devis excède 3 000 €, un cahier des charges est annexé au devis. Il décrit l’arborescence, les fonctionnalités attendues, les contenus fournis par le Client et ceux produits par le Prestataire. Signé dans les mêmes formes, il fait partie intégrante du contrat et définit le périmètre auquel se réfèrent les articles 7 et 9.',
+              },
+            ],
+            [
+              {
+                text: 'Toute demande sortant du périmètre ainsi décrit fait l’objet d’un devis complémentaire, accepté dans les mêmes formes avant exécution.',
               },
             ],
           ],
@@ -173,7 +209,28 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: `Un acompte de ${ACOMPTE_POURCENT} % du montant total est exigible à la commande. Le solde est exigible à la livraison, avant mise en ligne. Le règlement s’effectue par virement bancaire, à trente (30) jours date de facture.`,
+                text: `Un acompte de ${ACOMPTE_POURCENT} % du montant total est exigible à la commande. Le solde est exigible à la livraison, avant mise en ligne.`,
+              },
+            ],
+            [{ text: 'Le règlement s’effectue, au choix du Client :' }],
+            {
+              liste: [
+                [{ text: 'par virement bancaire, à trente (30) jours date de facture ;' }],
+                [
+                  {
+                    text: 'par carte bancaire, au moyen d’un lien de paiement sécurisé adressé avec la facture — le règlement est alors immédiat.',
+                  },
+                ],
+              ],
+            },
+            [
+              {
+                text: 'Les paiements par carte sont traités par Stripe, prestataire de services de paiement. Aucune donnée de carte ne transite par le Prestataire, qui n’en conserve aucune.',
+              },
+            ],
+            [
+              {
+                text: 'Aucun frais supplémentaire n’est appliqué en raison du moyen de paiement retenu.',
               },
             ],
             [{ text: 'Aucun escompte n’est accordé pour paiement anticipé.' }],
@@ -316,6 +373,21 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
+                text: 'En cas de défaut de paiement, le Prestataire adresse une mise en demeure. Restée sans effet pendant quinze (15) jours, elle l’autorise à suspendre l’affichage du site ; l’abonnement est résilié de plein droit trente (30) jours après la mise en demeure.',
+              },
+            ],
+            [
+              {
+                text: 'La suspension n’emporte aucune suppression : les données et les fichiers du Client sont conservés pendant les trente (30) jours suivant la résiliation, période durant laquelle il peut en obtenir la remise. La réversibilité prévue ci-dessous s’applique quel que soit le motif de la résiliation, y compris le défaut de paiement — les sommes dues restant exigibles par ailleurs.',
+              },
+            ],
+            [
+              {
+                text: 'Le Prestataire informe le Client de l’échéance du nom de domaine au moins trente (30) jours avant celle-ci. À défaut de renouvellement de l’abonnement, il appartient au Client d’en reprendre la gestion avant expiration, faute de quoi le nom de domaine peut être perdu.',
+              },
+            ],
+            [
+              {
                 text: 'En cas de résiliation, le Prestataire remet au Client les fichiers sources du site et procède au transfert du nom de domaine vers le prestataire de son choix.',
               },
             ],
@@ -389,6 +461,11 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             [
               {
                 text: 'Les données communiquées par le Client (nom, adresse électronique, numéro de téléphone, adresse de facturation) sont traitées aux seules fins d’exécution du contrat et d’établissement de la facturation. Elles sont conservées pendant la durée légale applicable aux documents comptables et ne font l’objet d’aucune cession à des tiers.',
+              },
+            ],
+            [
+              {
+                text: 'Le présent article ne vise que les données du Client lui-même. Lorsque le Prestataire héberge un site collectant des données pour le compte du Client, celui-ci devient responsable de traitement et le Prestataire son sous-traitant : cette relation est régie par l’annexe RGPD de sous-traitance, jointe au devis et publiée sur le présent site.',
               },
             ],
             [
@@ -513,7 +590,12 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'Any request falling outside the scope described in the quote is covered by a supplementary quote, accepted in the same manner before work begins.',
+                text: 'For the Signature package, and for any engagement quoted above €3,000, a specification document is annexed to the quote. It sets out the site structure, the expected features, the content supplied by the Client and that produced by the Provider. Signed in the same manner, it forms an integral part of the contract and defines the scope referred to in Articles 7 and 9.',
+              },
+            ],
+            [
+              {
+                text: 'Any request falling outside the scope so described is covered by a supplementary quote, accepted in the same manner before work begins.',
               },
             ],
           ],
@@ -556,7 +638,28 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: `A deposit of ${ACOMPTE_POURCENT}% of the total is payable on order. The balance falls due on delivery, before the site goes live. Payment is made by bank transfer within thirty (30) days of the invoice date.`,
+                text: `A deposit of ${ACOMPTE_POURCENT}% of the total is payable on order. The balance falls due on delivery, before the site goes live.`,
+              },
+            ],
+            [{ text: 'The Client may pay by either of the following means:' }],
+            {
+              liste: [
+                [{ text: 'bank transfer, within thirty (30) days of the invoice date;' }],
+                [
+                  {
+                    text: 'card, through a secure payment link sent with the invoice — payment is then immediate.',
+                  },
+                ],
+              ],
+            },
+            [
+              {
+                text: 'Card payments are handled by Stripe, a payment service provider. No card details pass through the Provider, who stores none.',
+              },
+            ],
+            [
+              {
+                text: 'No surcharge is applied on account of the payment method chosen.',
               },
             ],
             [{ text: 'No discount is granted for early payment.' }],
@@ -693,6 +796,21 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
+                text: 'Where payment is not made, the Provider sends a formal notice. If it goes unanswered for fifteen (15) days, the Provider may suspend display of the site; the subscription is terminated as of right thirty (30) days after the notice.',
+              },
+            ],
+            [
+              {
+                text: 'Suspension entails no deletion: the Client’s data and files are kept for the thirty (30) days following termination, during which they may be handed over. The reversibility set out below applies whatever the reason for termination, including non-payment — sums due remaining payable in any event.',
+              },
+            ],
+            [
+              {
+                text: 'The Provider informs the Client of the domain name’s expiry at least thirty (30) days beforehand. Should the subscription not be renewed, it falls to the Client to take over its management before expiry, failing which the domain name may be lost.',
+              },
+            ],
+            [
+              {
                 text: 'On termination, the Provider hands over the site’s source files and transfers the domain name to the provider of the Client’s choice.',
               },
             ],
@@ -766,6 +884,11 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             [
               {
                 text: 'Data supplied by the Client (name, email address, telephone number, billing address) is processed solely to perform the contract and issue invoices. It is retained for the statutory retention period applicable to accounting records and is never sold or shared with third parties.',
+              },
+            ],
+            [
+              {
+                text: 'This article covers only the Client’s own data. Where the Provider hosts a website collecting data on the Client’s behalf, the Client becomes the controller and the Provider its processor: that relationship is governed by the GDPR processing annex, attached to the quote and published on this site.',
               },
             ],
             [

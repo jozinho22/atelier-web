@@ -38,6 +38,7 @@ export const common = {
       },
       legal: 'Mentions légales',
       cgv: 'Conditions générales de vente',
+      cgvAnnexe: 'Annexe RGPD',
       equipe: 'Qui sommes-nous ?',
       rights: 'Tous droits réservés.',
     },
@@ -50,6 +51,7 @@ export const common = {
       accueil: 'Retour à l’accueil',
       versCgv: 'Voir les conditions générales de vente',
       versLegal: 'Voir les mentions légales',
+      versSousTraitance: 'Voir l’annexe RGPD — sous-traitance',
     },
     demo: {
       label: 'Modèle de démonstration',
@@ -89,6 +91,7 @@ export const common = {
       },
       legal: 'Legal notice',
       cgv: 'Terms and conditions of sale',
+      cgvAnnexe: 'GDPR annex',
       equipe: 'Who are we?',
       rights: 'All rights reserved.',
     },
@@ -96,6 +99,7 @@ export const common = {
       accueil: 'Back to home',
       versCgv: 'Read the terms and conditions of sale',
       versLegal: 'Read the legal notice',
+      versSousTraitance: 'Read the GDPR processing annex',
     },
     demo: {
       label: 'Demo template',

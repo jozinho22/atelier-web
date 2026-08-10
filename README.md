@@ -24,6 +24,7 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 | `/modeles/boulangerie` · `/en/…` | Démo « Le Fournil de Kerlann » — boulangerie-pâtisserie |
 | `/mentions-legales` · `/en/…` | Mentions légales |
 | `/cgv` · `/en/…` | Conditions générales de vente (à faire relire) |
+| `/sous-traitance` · `/en/…` | Annexe RGPD de sous-traitance (article 28) |
 | `/qui-sommes-nous` · `/en/…` | Présentation du studio |
 
 ## Le modèle « Boulangerie »
@@ -122,12 +123,34 @@ sont en ligne et à jour.
 
 ## Pages juridiques
 
-Les mentions légales et les CGV partagent un gabarit unique,
+**Trois** documents partagent un gabarit unique,
 [src/components/DocumentLegal.astro](src/components/DocumentLegal.astro) : même
 largeur de colonne, même hiérarchie de titres, mêmes styles de lien et de
-liste. Les deux pages ne diffèrent que par leur dictionnaire —
-[legal.ts](src/i18n/legal.ts) et [cgv.ts](src/i18n/cgv.ts) — tous deux typés par
-[document-legal.ts](src/i18n/document-legal.ts).
+liste. Ils ne diffèrent que par leur dictionnaire — [legal.ts](src/i18n/legal.ts),
+[cgv.ts](src/i18n/cgv.ts) et [sous-traitance.ts](src/i18n/sous-traitance.ts) —
+tous typés par [document-legal.ts](src/i18n/document-legal.ts). Chaque page
+renvoie aux deux autres : la navigation était binaire tant qu'ils n'étaient que
+deux, un lien unique aurait rendu le troisième inatteignable depuis l'un d'eux.
+
+### L'annexe RGPD de sous-traitance
+
+Elle règle une relation que les CGV ne peuvent pas couvrir. Dès que le
+Prestataire héberge un site qui collecte des données, **les rôles s'inversent** :
+le client devient responsable de traitement, et Studio Caducée son
+**sous-traitant** au sens de l'article 28 du RGPD — qui impose un acte écrit
+comportant une liste précise de mentions.
+
+L'article 15 des CGV ne traite que les données du client *en tant que client* :
+nom, adresse, facturation. Deux relations distinctes, deux textes ; le premier
+renvoie désormais au second.
+
+C'est exactement la relation que ce site entretient avec Resend et Cloudflare,
+vue de l'autre côté.
+
+Ce qui varie d'un client à l'autre — catégories de données réellement
+collectées, liste des sous-traitants ultérieurs, lieux d'établissement — est
+renvoyé **au devis**, parce que cela dépend du site livré : un texte générique
+qui l'inventerait serait faux.
 
 Les CGV sont le seul dictionnaire qui soit une **fonction** de la langue plutôt
 qu'un objet : les montants (packs, acompte, allers-retours, abonnement) sont lus

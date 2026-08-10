@@ -53,7 +53,7 @@ export const legal = {
             { br: true },
             { text: 'SIRET : 98108366000028' },
             { br: true },
-            { text: 'TVA non applicable, article 293 B du Code général des impôts' },
+            { text: 'TVA non applicable, article 293 B du code général des impôts' },
             { br: true },
             { text: 'Contact : ' },
             {
@@ -187,7 +187,7 @@ export const legal = {
             // Le régime français n'a pas d'équivalent britannique ou américain :
             // on nomme le dispositif, on ne le traduit pas en « VAT exempt ».
             {
-              text: 'VAT not applicable under article 293 B of the French General Tax Code (small-business exemption)',
+              text: 'VAT not applicable under Article 293 B of the French General Tax Code (small-business exemption)',
             },
             { br: true },
             { text: 'Contact: ' },

@@ -1,8 +1,9 @@
 ---
 /**
- * Gabarit commun aux documents juridiques : mentions légales et CGV.
+ * Gabarit commun aux documents juridiques : mentions légales, CGV et annexe
+ * RGPD de sous-traitance.
  *
- * Les deux pages ne diffèrent que par leur texte. Les garder sur un seul
+ * Les trois pages ne diffèrent que par leur texte. Les garder sur un seul
  * gabarit évite qu'elles divergent de mise en forme au fil des retouches —
  * c'est justement leur ressemblance qui les rend lisibles comme un ensemble.
  */
@@ -15,19 +16,33 @@ import { estListe, type DocumentLegalTexte } from '../i18n/document-legal';
 
 interface Props {
   texte: DocumentLegalTexte;
-  /** Identifie la page courante : l'autre document devient sa page jumelle. */
-  doc: 'mentions-legales' | 'cgv';
+  /** Identifie la page courante : les deux autres deviennent ses voisines. */
+  doc: CleDoc;
 }
+
+type CleDoc = 'mentions-legales' | 'cgv' | 'sous-traitance';
 
 const { texte, doc } = Astro.props;
 const { lang } = splitPath(Astro.url.pathname);
 const t = common[lang];
 
-// La page jumelle : les CGV renvoient aux mentions légales, et réciproquement.
-const jumelle =
-  doc === 'cgv'
-    ? { href: localePath(lang, 'mentions-legales'), label: t.juridique.versLegal }
-    : { href: localePath(lang, 'cgv'), label: t.juridique.versCgv };
+/**
+ * Chaque document renvoie aux DEUX autres.
+ *
+ * La version précédente n'en connaissait qu'un — « la page jumelle » —, ce qui
+ * marchait tant qu'ils n'étaient que deux. Avec l'annexe RGPD, un lien unique
+ * aurait laissé un document inaccessible depuis l'un des deux autres.
+ */
+const DOCS: { cle: CleDoc; chemin: string; label: keyof typeof t.juridique }[] = [
+  { cle: 'mentions-legales', chemin: 'mentions-legales', label: 'versLegal' },
+  { cle: 'cgv', chemin: 'cgv', label: 'versCgv' },
+  { cle: 'sous-traitance', chemin: 'sous-traitance', label: 'versSousTraitance' },
+];
+
+const voisines = DOCS.filter((d) => d.cle !== doc).map((d) => ({
+  href: localePath(lang, d.chemin),
+  label: t.juridique[d.label],
+}));
 
 const accueil = { href: localePath(lang), label: t.juridique.accueil };
 const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigation';
@@ -44,7 +59,9 @@ const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigatio
           <span class="bouton-retour-fleche" aria-hidden="true">←</span>
           {accueil.label}
         </a>
-        <a class="legal-nav-jumelle" href={jumelle.href}>{jumelle.label}</a>
+        {voisines.map((v) => (
+            <a class="legal-nav-jumelle" href={v.href}>{v.label}</a>
+          ))}
       </nav>
 
       <p class="eyebrow">{texte.eyebrow}</p>
@@ -95,7 +112,9 @@ const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigatio
           <span class="bouton-retour-fleche" aria-hidden="true">←</span>
           {accueil.label}
         </a>
-        <a class="legal-nav-jumelle" href={jumelle.href}>{jumelle.label}</a>
+        {voisines.map((v) => (
+            <a class="legal-nav-jumelle" href={v.href}>{v.label}</a>
+          ))}
       </nav>
     </div>
   </main>

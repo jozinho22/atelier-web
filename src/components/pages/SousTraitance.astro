@@ -1,0 +1,17 @@
+---
+/**
+ * Annexe RGPD de sous-traitance — troisième document juridique.
+ *
+ * Publiée sur le site plutôt que jointe au seul devis : le client doit pouvoir
+ * la lire AVANT de signer, et la retrouver ensuite sans fouiller ses courriels.
+ * Les éléments qui varient d'un client à l'autre restent au devis (voir
+ * l'avertissement en tête de src/i18n/sous-traitance.ts).
+ */
+import DocumentLegal from '../DocumentLegal.astro';
+import { splitPath } from '../../lib/i18n';
+import { sousTraitance } from '../../i18n/sous-traitance';
+
+const { lang } = splitPath(Astro.url.pathname);
+---
+
+<DocumentLegal texte={sousTraitance(lang)} doc="sous-traitance" />
