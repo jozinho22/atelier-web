@@ -35,7 +35,7 @@ import type { DocumentLegalTexte } from './document-legal';
 const CONTACT = 'josselin.douineau@studio-caducee.com';
 
 /** Date de la version en vigueur, affichée sous le titre. */
-const MISE_A_JOUR = { fr: '10 août 2026', en: '10 August 2026' } as const;
+const MISE_A_JOUR = { fr: '12 août 2026', en: '12 August 2026' } as const;
 
 export function sousTraitance(lang: Lang): DocumentLegalTexte {
   const lien = { link: CONTACT, href: `mailto:${CONTACT}` } as const;
@@ -228,7 +228,7 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'Au terme de l’abonnement d’hébergement et de maintenance, le Prestataire remet au Responsable de traitement, au choix de ce dernier, l’ensemble des données et des fichiers sources, ou les supprime. Cette remise s’articule avec la réversibilité prévue à l’article 11 des conditions générales de vente — fichiers sources et transfert du nom de domaine.',
+                text: 'Au terme de l’abonnement d’hébergement et de maintenance, le Prestataire remet au Responsable de traitement, au choix de ce dernier, l’ensemble des données et des fichiers sources, ou les supprime. Cette remise s’articule avec la réversibilité prévue à l’article 11 des conditions générales de vente. Le nom de domaine, lui, appartient déjà au Responsable de traitement et n’appelle aucune restitution.',
               },
             ],
             [
@@ -461,7 +461,7 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'At the end of the hosting and maintenance subscription, the Provider returns all data and source files to the Controller, or deletes them, at the Controller’s choice. This dovetails with the reversibility set out in Article 11 of the terms of sale — source files and domain name transfer.',
+                text: 'At the end of the hosting and maintenance subscription, the Provider returns all data and source files to the Controller, or deletes them, at the Controller’s choice. This dovetails with the reversibility set out in Article 11 of the terms of sale. The domain name already belongs to the Controller and calls for no return.',
               },
             ],
             [

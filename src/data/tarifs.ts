@@ -60,7 +60,15 @@ export const PACK_COURRIEL: Record<ClePack, { nom: string; couleur: string }> = 
   signature: { nom: 'Signature', couleur: '#7d5a06' },
 };
 
-/** Abonnement mensuel : hébergement, nom de domaine et maintenance. */
+/**
+ * Abonnement mensuel : hébergement et maintenance.
+ *
+ * Le nom de domaine n'y figure plus. Il est souscrit par le client, à son nom —
+ * c'est son identité, et son actif le plus durable. Le détenir à sa place
+ * faisait porter au Prestataire le risque le plus lourd du contrat : une
+ * échéance oubliée, et le client perd une adresse souvent irrécupérable, pour
+ * un préjudice sans commune mesure avec le montant de l'abonnement.
+ */
 export const HEBERGEMENT = { montant: 59, periode: 'mois' } as const;
 
 /** Nombre d'allers-retours de relecture inclus dans tous les packs. */

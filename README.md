@@ -165,6 +165,55 @@ fichier local étant un dérivé encodé autrement.
 `jozinho22.github.io/api-jawa` et son icône vient du dépôt. Les trois autres
 sont en ligne et à jour.
 
+## Documents hors site
+
+Deux fichiers à la racine ne sont pas publiés : ils accompagnent le contrat.
+
+| fichier | rôle |
+| --- | --- |
+| [DEROULE-CLIENT.md](DEROULE-CLIENT.md) | le parcours du prospect à la mise en ligne, chaque étape renvoyée à son article des CGV |
+| [FORMULAIRE-RETRACTATION.md](FORMULAIRE-RETRACTATION.md) | modèle réglementaire, **à joindre à tout devis adressé à un consommateur** |
+
+### Les mettre en A4
+
+```bash
+npm run generer-documents
+```
+
+Produit huit PDF A4 dans `documents/` — CGV, annexe RGPD et mentions légales
+dans les deux langues, plus le formulaire de rétractation et le déroulé client.
+Pagination en pied de page : sur un contrat, pouvoir dire « article 5, page 2 »
+compte.
+
+Les documents juridiques sont rendus **depuis `src/i18n/`**, la même source que
+les pages du site. Un PDF recopié à la main divergerait de la page publiée dès
+la première retouche — et c'est la version signée par le client qui ferait foi.
+Les montants viennent de `src/data/tarifs.ts` : une hausse de prix se répercute
+sur le site comme sur le PDF joint au devis.
+
+`documents/` est ignoré par git : ce sont des sorties, régénérables à tout
+moment.
+
+⚠️ **Deux limites de l'installation TeX de ce poste**, contournées dans le
+script : LuaLaTeX échoue faute des Latin Modern OpenType — d'où pdfLaTeX —, et
+`babel` n'a pas le fichier de langue française, donc l'option `lang` n'est pas
+passée. Seules les espaces fines automatiques avant `: ; ! ?` sont perdues.
+Installer `texlive-lang-french` permettrait de les rétablir.
+
+Quelques caractères sont substitués avant conversion (`⚠️`, `→`, les exposants
+de « 1ᵉʳ ») : pdfLaTeX ne sait pas les composer en encodage T1. Ils sont
+**remplacés, jamais supprimés** — un avertissement dont on efface le pictogramme
+avertit encore, mais une flèche disparue laisse une phrase bancale.
+
+Le second comble un manque : l'article 6 des CGV affirmait qu'un formulaire type
+était joint au devis, alors qu'il n'existait nulle part. Sa formulation reprend
+l'annexe à l'article R221-1 du code de la consommation et **ne doit pas être
+retouchée** — c'est au modèle réglementaire qu'un client se référera, pas à la
+version qu'on en aurait faite.
+
+⚠️ Omettre ce formulaire pour un consommateur prolonge son délai de rétractation
+de **douze mois**.
+
 ## Pages juridiques
 
 **Trois** documents partagent un gabarit unique,

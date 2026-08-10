@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "verifier-realisations": "node --experimental-strip-types scripts/verifier-realisations.mjs",
     "generer-maskable": "node scripts/generer-maskable.mjs",
-    "generer-minis": "node scripts/generer-minis.mjs"
+    "generer-minis": "node scripts/generer-minis.mjs",
+    "generer-documents": "esbuild scripts/generer-documents.mjs --bundle --platform=node --format=esm --outfile=node_modules/.cache/generer-documents.mjs --log-level=error && node node_modules/.cache/generer-documents.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",

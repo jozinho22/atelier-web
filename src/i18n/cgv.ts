@@ -48,10 +48,14 @@ import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '..
  *   défaut de paiement. Retenir les fichiers d'un client mauvais payeur serait
  *   un moyen de pression, non un droit — les sommes dues se réclament par les
  *   voies prévues à l'article 5, pas en prenant son site en otage ;
- * • le NOM DE DOMAINE est le vrai danger. Il est enregistré par le Prestataire
- *   et expire tout seul : sans préavis, un client qui cesse de payer perdrait
- *   une adresse parfois vieille de plusieurs années, et souvent irrécupérable
- *   une fois reprise par un tiers. D'où l'information trente jours avant.
+ * • le NOM DE DOMAINE ne fait plus partie de l'abonnement, et c'est ce qui
+ *   retire au contrat son risque le plus lourd. Détenu par le Prestataire, il
+ *   expirait tout seul : un client cessant de payer perdait une adresse parfois
+ *   vieille de plusieurs années, souvent irrécupérable une fois reprise par un
+ *   tiers — un préjudice sans commune mesure avec 59 €, et que le plafond de
+ *   responsabilité de l'article 14 ne couvre pas face à un consommateur.
+ *   Le Client en est désormais titulaire ; le Prestataire n'assure que la
+ *   configuration technique, et signale les échéances par courtoisie.
  *
  * ── Moyens de paiement ────────────────────────────────────────────────────
  *
@@ -83,7 +87,7 @@ const TELEPHONE = {
 } as const;
 
 /** Date de la version en vigueur, affichée sous le titre. */
-const MISE_A_JOUR = { fr: '11 août 2026', en: '11 August 2026' } as const;
+const MISE_A_JOUR = { fr: '12 août 2026', en: '12 August 2026' } as const;
 
 export function cgv(lang: Lang): DocumentLegalTexte {
   const lien = { link: CONTACT, href: `mailto:${CONTACT}` } as const;
@@ -187,7 +191,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
                 [{ text: `Pack Signature — à partir de ${signature}` }],
                 [
                   {
-                    text: `Hébergement, nom de domaine et maintenance — ${hebergement} par mois, en option (article 11)`,
+                    text: `Hébergement et maintenance — ${hebergement} par mois, en option (article 11)`,
                   },
                 ],
               ],
@@ -199,7 +203,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'Les frais de nom de domaine, d’hébergement, de licences de polices ou d’images payantes, lorsqu’ils sont nécessaires, sont soit refacturés à l’euro près sur justificatif, soit souscrits directement par le Client en son nom.',
+                text: 'Le nom de domaine est souscrit par le Client, à son nom (article 11). Les autres frais — licences de polices ou d’images payantes, services tiers — lorsqu’ils sont nécessaires, sont soit refacturés à l’euro près sur justificatif, soit souscrits directement par le Client.',
               },
             ],
           ],
@@ -363,7 +367,12 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: `Le Client peut souscrire un abonnement mensuel de ${hebergement}, comprenant l’hébergement du site, le nom de domaine et les mises à jour techniques.`,
+                text: `Le Client peut souscrire un abonnement mensuel de ${hebergement}, comprenant l’hébergement du site et les mises à jour techniques.`,
+              },
+            ],
+            [
+              {
+                text: `Le nom de domaine est souscrit par le Client, EN SON NOM PROPRE, et demeure sa propriété. Le Prestataire l’assiste lors de l’enregistrement et assure ensuite la configuration technique — zone DNS, raccordement au site, certificat. Le Client n’a pas à intervenir sur ces réglages.`,
               },
             ],
             [
@@ -383,12 +392,12 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'Le Prestataire informe le Client de l’échéance du nom de domaine au moins trente (30) jours avant celle-ci. À défaut de renouvellement de l’abonnement, il appartient au Client d’en reprendre la gestion avant expiration, faute de quoi le nom de domaine peut être perdu.',
+                text: 'Par courtoisie et sans que cela constitue une obligation contractuelle, le Prestataire signale au Client l’échéance de son nom de domaine lorsqu’il en a connaissance. Le renouvellement demeure à la charge du Client, seul titulaire.',
               },
             ],
             [
               {
-                text: 'En cas de résiliation, le Prestataire remet au Client les fichiers sources du site et procède au transfert du nom de domaine vers le prestataire de son choix.',
+                text: 'En cas de résiliation, le Prestataire remet au Client les fichiers sources du site. Le nom de domaine, déjà détenu par le Client, n’appelle aucun transfert : il lui suffit de le faire pointer vers son nouvel hébergeur, ce à quoi le Prestataire l’assiste sur demande.',
               },
             ],
             [
@@ -616,7 +625,7 @@ export function cgv(lang: Lang): DocumentLegalTexte {
                 [{ text: `Signature package — from ${signature}` }],
                 [
                   {
-                    text: `Hosting, domain name, and maintenance — ${hebergement} per month, optional (Article 11)`,
+                    text: `Hosting and maintenance — ${hebergement} per month, optional (Article 11)`,
                   },
                 ],
               ],
@@ -786,7 +795,12 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: `The Client may take out a monthly subscription of ${hebergement}, covering site hosting, the domain name, and technical updates.`,
+                text: `The Client may take out a monthly subscription of ${hebergement}, covering site hosting and technical updates.`,
+              },
+            ],
+            [
+              {
+                text: `The domain name is registered by the Client, IN THEIR OWN NAME, and remains their property. The Provider assists with registration and thereafter handles the technical configuration — DNS zone, connection to the site, certificate. The Client need never touch those settings.`,
               },
             ],
             [
@@ -806,12 +820,12 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'The Provider informs the Client of the domain name’s expiry at least thirty (30) days beforehand. Should the subscription not be renewed, it falls to the Client to take over its management before expiry, failing which the domain name may be lost.',
+                text: 'As a courtesy, and without this constituting a contractual obligation, the Provider flags the domain name’s expiry to the Client whenever aware of it. Renewal remains the responsibility of the Client, its sole registrant.',
               },
             ],
             [
               {
-                text: 'On termination, the Provider hands over the site’s source files and transfers the domain name to the provider of the Client’s choice.',
+                text: 'On termination, the Provider hands over the site’s source files. The domain name, already held by the Client, requires no transfer: the Client need only point it at their new host, with the Provider’s assistance on request.',
               },
             ],
             [

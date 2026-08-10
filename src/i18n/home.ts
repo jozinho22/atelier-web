@@ -264,7 +264,7 @@ export const home = {
         cta: 'Demander un devis',
         demo: { un: 'Voir le site complet', plusieurs: 'Voir les {n} sites complets' },
       },
-      note: { avant: 'Hébergement, nom de domaine et maintenance : ', apres: ' — votre site reste votre propriété, sans engagement.' },
+      note: { avant: 'Hébergement et maintenance : ', apres: ' — votre nom de domaine reste à votre nom, votre site votre propriété, sans engagement.' },
     },
     contact: {
       titleBefore: 'Et si on parlait de',
@@ -558,7 +558,7 @@ export const home = {
         cta: 'Request a quote',
         demo: { un: 'See the full site', plusieurs: 'See the {n} full sites' },
       },
-      note: { avant: 'Hosting, domain name and maintenance: ', apres: ' — your website remains your property, with no commitment.' },
+      note: { avant: 'Hosting and maintenance: ', apres: ' — your domain name stays in your name, your website stays yours, with no commitment.' },
     },
     contact: {
       titleBefore: 'Shall we talk about',
