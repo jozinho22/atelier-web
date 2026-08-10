@@ -208,20 +208,40 @@ const packsFormulaire = PACKS.map((cle) => ({
     <!-- ============================== HERO ============================== -->
     <section class="hero" aria-label={t.hero.ariaLabel}>
       <div class="hero-bg" aria-hidden="true">
+        {/*
+          Deux sources, WebM d'abord : le navigateur retient la première qu'il
+          sait lire, et le VP9 pèse ici 271 Ko de moins que le H.264. Le MP4
+          reste indispensable — Safari ne lit pas le VP9 partout.
+
+          `data-boucle` n'est pas décoratif : c'est par lui que le script du
+          gabarit de base arrête la boucle et rend les commandes quand le
+          visiteur a demandé un mouvement réduit. Une vidéo de fond qui tourne
+          sans fin est précisément ce que ce réglage vise.
+
+          Chemins via `withBase()` et non en absolu : sous /studio-caducee/, un
+          `/accueil/…` pointerait à la racine du domaine et la vidéo manquerait,
+          sans que le développement local, servi depuis /, ne le révèle jamais.
+        */}
         <video
           class="hero-video"
-          src={withBase('accueil/dark-coder.mp4')}
-          poster={withBase('accueil/dark-coder-affiche.webp')}
+          poster={withBase('accueil/hero-carousel-poster.webp')}
           autoplay
           muted
           loop
           playsinline
           preload="metadata"
           data-boucle
-        ></video>
-        <!-- Voile indispensable : la vidéo comporte des zones très claires —
-             l'écran, la lampe — sur lesquelles le texte blanc du hero se
-             perdrait. Il est plus dense à gauche, là où le texte se trouve. -->
+        >
+          <source src={withBase('accueil/hero-carousel.webm')} type="video/webm" />
+          <source src={withBase('accueil/hero-carousel.mp4')} type="video/mp4" />
+        </video>
+        <!-- Voile indispensable : une vidéo de fond change d'image toutes les
+             quelques secondes, et le texte doit tenir sur la PLUS CLAIRE, pas
+             sur la moyenne. Il est plus dense à gauche, là où le texte se
+             trouve. Mesuré sur trente-cinq images du carrousel, une toutes les
+             deux secondes : le pire cas donne 12,5:1 pour le texte blanc, très
+             au-dessus des 4,5 exigés. La marge tient à ce que ce montage est
+             plus sombre que l'ancien plan d'écran et de lampe. -->
         <span class="hero-voile"></span>
       </div>
       <div class="container hero-inner">
