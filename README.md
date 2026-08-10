@@ -64,6 +64,50 @@ efficacement compressée, et tout réencodage à qualité comparable l'alourdiss
 (1 016 Ko à CRF 29). Un passage en 960 × 540 ne gagnait que 15 % pour un SSIM
 de 0,971.
 
+## La vidéo du hero
+
+Carrousel de captures de sites qui défile horizontalement, servi en WebM avec un
+MP4 de repli pour Safari. Chemins via `withBase()`, et `data-boucle` pour que le
+gabarit de base arrête la boucle en mouvement réduit.
+
+**Réencodée**, et le gain est net :
+
+| | webm | mp4 | total |
+| --- | --- | --- | --- |
+| source fournie | 2 604 Ko | 2 875 Ko | 5 479 Ko |
+| servie — 960×540, flou 0,6 | 1 563 Ko | 1 708 Ko | **3 271 Ko** |
+
+**À pleine résolution, il n'y a rien à gagner.** La source est déjà efficacement
+encodée, et trois tentatives sont ressorties plus lourdes qu'elle :
+
+| tentative, en 1280×720 | poids |
+| --- | --- |
+| CRF 40, sans flou | 3 020 Ko |
+| CRF 38, flou 0,4 | 2 990 Ko |
+| CRF 34, deux passes, sans flou | 4 467 Ko |
+| *source* | *2 604 Ko* |
+
+Le seul levier est donc la **résolution** — et c'est précisément ce qui coûte de
+la netteté, le montage étant plein de texte fin en mouvement. Une version à
+854×480 pesait 1 867 Ko (−66 %) mais a été jugée trop molle à l'œil ; 960×540 est
+le compromis retenu. Le GOP passe au passage de 2 s à 10 s : une boucle de fond
+ne se parcourt jamais.
+
+⚠️ **Leçon de méthode** : l'écart moyen sous le voile donnait 0,49 sur 255 pour la
+version à 854×480, ce qui laissait croire la perte invisible. Une moyenne sur
+toute l'image noie exactement ce qui se dégrade — du texte fin en mouvement sur
+quelques pour cent de la surface. L'œil sur un vrai écran a tranché autrement.
+
+**Le vrai gain est en amont** : réexporter le carrousel depuis son projet source
+directement en 960×540 rendrait le texte net à cette taille, au lieu de le
+rééchantillonner. Aucun réencodage ne peut égaler cela.
+
+Le voile lui-même a été revérifié sur trente-cinq images du montage — pire cas
+12,5:1 pour le texte blanc du hero, seuil AA à 4,5.
+
+Les fichiers d'origine sont conservés dans `.medias-avant/`, ignoré par git : une
+fois réencodés, on ne peut plus revenir en arrière sans master.
+
 ## Réalisations — replis d'URL et d'icône
 
 Chaque réalisation est décrite dans

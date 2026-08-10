@@ -210,8 +210,19 @@ const packsFormulaire = PACKS.map((cle) => ({
       <div class="hero-bg" aria-hidden="true">
         {/*
           Deux sources, WebM d'abord : le navigateur retient la première qu'il
-          sait lire, et le VP9 pèse ici 271 Ko de moins que le H.264. Le MP4
+          sait lire, et le VP9 pèse ici 190 Ko de moins que le H.264. Le MP4
           reste indispensable — Safari ne lit pas le VP9 partout.
+
+          Les deux fichiers sont RÉENCODÉS : 960×540 avec un flou gaussien de
+          0,6 avant compression, ce qui ramène l'ensemble de 5 479 à 3 271 Ko.
+
+          À pleine résolution, il n'y a rien à gagner — la source est déjà bien
+          encodée, et trois tentatives sont ressorties PLUS LOURDES qu'elle. Le
+          seul levier est donc la résolution, et c'est précisément ce qui coûte
+          de la netteté : une version à 854×480 a été jugée trop molle à l'œil.
+          960×540 est le compromis retenu.
+
+          Les masters sont dans .medias-avant/ — un réencodage ne se remonte pas.
 
           `data-boucle` n'est pas décoratif : c'est par lui que le script du
           gabarit de base arrête la boucle et rend les commandes quand le
