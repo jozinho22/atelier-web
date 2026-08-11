@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 import { loadEnv } from 'vite';
+import { DOMAINE_FINAL } from './src/data/site.ts';
 
 // Les fichiers .env ne sont pas chargés automatiquement dans la config Astro :
 // on les lit explicitement (voir .env.example), le shell restant prioritaire.
@@ -30,7 +31,7 @@ const vercelHost = env.VERCEL ? env.VERCEL_PROJECT_PRODUCTION_URL : undefined;
 // builds locaux — en CI, le workflow passe toujours SITE_URL explicitement).
 // `||` et non `??` : une variable présente mais vide (SITE_URL=) compte
 // comme absente — le .env.example est ainsi copiable tel quel.
-const SITE = env.SITE_URL || (vercelHost ? `https://${vercelHost}` : 'https://www.studio-caducee.example');
+const SITE = env.SITE_URL || (vercelHost ? `https://${vercelHost}` : DOMAINE_FINAL);
 const BASE = env.SITE_BASE || '/';
 
 /**

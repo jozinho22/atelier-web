@@ -1,6 +1,7 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
 import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '../data/tarifs';
+import { CONTACT_PUBLIC } from '../data/contact';
 
 /**
  * Conditions générales de vente.
@@ -74,7 +75,7 @@ import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '..
  *   Resend et Cloudflare.
  */
 
-const CONTACT = 'josselin.douineau@studio-caducee.com';
+const CONTACT = CONTACT_PUBLIC.email;
 /**
  * Le numéro s'écrit autrement selon la langue : un lecteur français lit
  * « 06 25 45 01 76 », un lecteur étranger a besoin de l'indicatif pour appeler.

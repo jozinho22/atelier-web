@@ -1,6 +1,9 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
 import { SERVEUR_DISPONIBLE } from '../lib/cible';
+import { CONTACT_PUBLIC } from '../data/contact';
+
+const CONTACT = CONTACT_PUBLIC.email;
 
 /**
  * Textes de la page « Mentions légales ».
@@ -57,8 +60,8 @@ export const legal = {
             { br: true },
             { text: 'Contact : ' },
             {
-              link: 'josselin.douineau@studio-caducee.com',
-              href: 'mailto:josselin.douineau@studio-caducee.com',
+              link: CONTACT,
+              href: `mailto:${CONTACT}`,
             },
             { text: ' — ' },
             { link: '06 25 45 01 76', href: 'tel:+33625450176' },
@@ -163,8 +166,8 @@ export const legal = {
             { br: true },
             { text: 'Contact: ' },
             {
-              link: 'josselin.douineau@studio-caducee.com',
-              href: 'mailto:josselin.douineau@studio-caducee.com',
+              link: CONTACT,
+              href: `mailto:${CONTACT}`,
             },
             { text: ' — ' },
             { link: '+33 6 25 45 01 76', href: 'tel:+33625450176' },

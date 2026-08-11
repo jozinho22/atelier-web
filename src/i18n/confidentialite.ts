@@ -1,6 +1,7 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
 import { SERVEUR_DISPONIBLE } from '../lib/cible';
+import { CONTACT_PUBLIC } from '../data/contact';
 
 /**
  * Politique de confidentialité — information des visiteurs au sens de
@@ -36,7 +37,7 @@ import { SERVEUR_DISPONIBLE } from '../lib/cible';
  * d'un formulaire absent serait annoncer un traitement qui n'a pas lieu.
  */
 
-const CONTACT = 'josselin.douineau@studio-caducee.com';
+const CONTACT = CONTACT_PUBLIC.email;
 
 /** Date de la version en vigueur, affichée sous le titre. */
 const MISE_A_JOUR = { fr: '11 août 2026', en: '11 August 2026' } as const;
@@ -157,7 +158,7 @@ const FR: DocumentLegalTexte = {
       blocs: [
         [
           {
-            text: 'La présente politique ne couvre que le site studio-caducee.com. Lorsque Studio Caducée héberge le site d’un client, les rôles s’inversent : c’est le client qui répond des données collectées sur son site, et Studio Caducée n’agit que sur ses instructions, comme sous-traitant.',
+            text: 'La présente politique ne couvre que le présent site. Lorsque Studio Caducée héberge le site d’un client, les rôles s’inversent : c’est le client qui répond des données collectées sur son site, et Studio Caducée n’agit que sur ses instructions, comme sous-traitant.',
           },
         ],
         [
@@ -284,7 +285,7 @@ const EN: DocumentLegalTexte = {
       blocs: [
         [
           {
-            text: 'This policy covers only studio-caducee.com. Where Studio Caducée hosts a client’s website, the roles reverse: the client answers for the data collected on their site, and Studio Caducée acts only on their instructions, as a processor.',
+            text: 'This policy covers only the present site. Where Studio Caducée hosts a client’s website, the roles reverse: the client answers for the data collected on their site, and Studio Caducée acts only on their instructions, as a processor.',
           },
         ],
         [

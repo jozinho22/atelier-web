@@ -1,4 +1,5 @@
 import type { Lang } from '../lib/i18n';
+import { EN_LIGNE } from './site';
 
 /**
  * Coordonnées du studio — source unique.
@@ -22,8 +23,31 @@ import type { Lang } from '../lib/i18n';
  * serait fautif — on y lirait un indicatif à trois chiffres, qui n'existe pas
  * pour la France.
  */
+/**
+ * L'adresse définitive, sur le domaine du studio.
+ *
+ * Elle suppose deux choses : le domaine enregistré, et la boîte créée côté
+ * Google Workspace. Aucune des deux n'est faite tant que `EN_LIGNE` est faux.
+ */
+const EMAIL_DEFINITIF = 'josselin.douineau@studio-caducee.com';
+
+/**
+ * L'adresse employée tant que le domaine ne sert pas le site.
+ *
+ * ⚠️ Ce n'est pas une précaution cosmétique. Afficher `@studio-caducee.com`
+ * sur la démonstration GitHub Pages publierait une adresse qui REFUSE les
+ * messages : le visiteur écrit, croit avoir écrit, et son message revient en
+ * erreur — ou pire, disparaît sans qu'il le sache. Une adresse d'attente qui
+ * fonctionne vaut mieux qu'une adresse définitive qui n'existe pas.
+ *
+ * Elle disparaît d'elle-même le jour où le domaine est branché : rien à
+ * remplacer à la main, dans aucun des documents qui la citent.
+ */
+const EMAIL_ATTENTE = 'josselin.douineau.1987@gmail.com';
+
 export const CONTACT_PUBLIC = {
-  email: 'josselin.douineau@studio-caducee.com',
+  /** Définitive une fois le domaine branché, d'attente avant. Voir ci-dessus. */
+  email: EN_LIGNE ? EMAIL_DEFINITIF : EMAIL_ATTENTE,
   /** Forme canonique : celle du lien `tel:`, la seule qui compose partout. */
   telephone: '+33625450176',
   /** Libellé affiché, par langue. */

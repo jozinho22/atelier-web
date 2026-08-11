@@ -211,15 +211,48 @@ Les montants viennent de `src/data/tarifs.ts` : une hausse de prix se répercute
 sur le site comme sur le PDF joint au devis.
 
 Les adresses du site écrites dans ces documents sont **résolues à la
-génération**, par [src/data/site.ts](src/data/site.ts) : tant que le domaine de
-production ne répond pas, elles renvoient vers la copie GitHub Pages. Même
-mécanisme que pour les réalisations, et pour la même raison — un lien mort dans
-un contrat renvoie à un texte que l'article 1 des CGV dit « consultable à tout
-moment ».
+génération**, par [src/data/site.ts](src/data/site.ts) : tant que le domaine ne
+sert pas le site, elles renvoient vers la copie GitHub Pages. Même mécanisme que
+pour les réalisations, et pour la même raison — un lien mort dans un contrat
+renvoie à un texte que l'article 1 des CGV dit « consultable à tout moment ».
 
-L'état est **déclaré**, jamais sondé : sonder au moment de générer ferait
-dépendre le contenu d'un contrat de l'état du réseau, et deux générations du
-même commit ne donneraient pas le même document.
+### `EN_LIGNE` — le domaine sert-il le site ?
+
+Le drapeau est **déduit de la configuration, jamais sondé**. Sonder au moment de
+générer ferait dépendre le contenu d'un contrat de l'état du réseau : deux
+générations du même commit ne donneraient pas le même document, et un incident
+DNS passager suffirait à imprimer une adresse de repli sur une pièce signée.
+
+Il compare l'adresse pour laquelle on construit à une liste d'**hôtes
+d'attente** — `github.io`, `vercel.app`, et le `.example` du domaine réservé :
+
+| construction | `EN_LIGNE` | adresses des documents | adresse de contact |
+| --- | --- | --- | --- |
+| défaut, sans variable | faux | repli GitHub Pages | `…1987@gmail.com` |
+| `SITE_URL=https://jozinho22.github.io` | faux | repli GitHub Pages | `…1987@gmail.com` |
+| Vercel, domaine non branché | faux | repli GitHub Pages | `…1987@gmail.com` |
+| `SITE_URL=https://www.studio-caducee.com` | **vrai** | domaine définitif | `…@studio-caducee.com` |
+
+**L'adresse de contact en dépend, et ce n'est pas cosmétique.** Afficher
+`…@studio-caducee.com` avant que le domaine existe publierait une boîte qui
+**refuse les messages** : le visiteur écrit, croit avoir écrit, et son message
+revient en erreur. Une adresse d'attente qui fonctionne vaut mieux qu'une
+adresse définitive qui n'existe pas. Elle bascule d'elle-même — voir
+[contact.ts](src/data/contact.ts) —, dans le pied de page, les quatre documents
+juridiques, les PDF et l'en-tête du modèle de facture à la fois.
+
+**D'où vient l'adresse configurée**, selon qui lit le module :
+
+| lecteur | source | pourquoi pas l'autre |
+| --- | --- | --- |
+| le site | `import.meta.env.SITE` | la valeur déjà résolue par `astro.config.mjs`, qui a lu `.env.local`, reconnu Vercel et appliqué le défaut |
+| les scripts de `scripts/` | `process.env.SITE_URL` | ils tournent dans Node : ni `import.meta.env`, ni lecture des fichiers `.env` |
+
+⚠️ `import.meta.env.SITE_URL` ne marche **pas** : Vite n'inline dans les modules
+que les variables préfixées `PUBLIC_`. Mesuré — une sonde en frontmatter rend
+`undefined` pour `SITE_URL` comme pour `process.env.SITE_URL`. Seule `SITE`,
+posée par Astro lui-même, traverse. C'est le même piège que le préfixe
+`PUBLIC_` du formulaire de contact, vu d'un autre côté.
 
 ⚠️ Les adresses sont écrites **en toutes lettres**, jamais cachées derrière un
 lien. Un contrat se lit sur papier : vérification faite, `strings` ne trouvait
@@ -692,8 +725,10 @@ besoins serveur. Tout autre hébergeur statique reste possible via
    [astro.config.mjs](astro.config.mjs) — canonical, sitemap et robots.txt
    suivent au build suivant (voir la section Déploiement ci-dessus).
 2. **Boîte de réception** : `josselin.douineau@studio-caducee.com` doit exister
-   côté Google Workspace — elle est affichée publiquement, sert d'adresse de
-   réclamation dans les CGV, et reçoit le formulaire.
+   côté Google Workspace — elle sert d'adresse de réclamation dans les CGV et
+   reçoit le formulaire. Tant que le domaine ne sert pas le site, c'est
+   l'adresse d'attente qui s'affiche partout, automatiquement (voir `EN_LIGNE`
+   ci-dessus) : rien à remplacer à la main le jour venu.
 3. **Resend et Turnstile** : domaine d'envoi vérifié chez Resend, widget créé
    chez Cloudflare, et les cinq variables déclarées dans Vercel.
 4. **Tarifs** : ajuster les montants dans
@@ -708,12 +743,14 @@ besoins serveur. Tout autre hébergeur statique reste possible via
    | ce qui change | piloté par |
    | --- | --- |
    | l'hébergeur des mentions légales, et le fait que la politique de confidentialité décrive ou non le formulaire | `SERVEUR_DISPONIBLE` — vrai si `VERCEL` est défini |
-   | les adresses écrites dans les PDF (production ou repli GitHub Pages) | `SITE.enLigne` dans [src/data/site.ts](src/data/site.ts) |
+   | les adresses de pages et l'adresse de contact écrites dans les PDF | `SITE_URL`, via `EN_LIGNE` — voir [src/data/site.ts](src/data/site.ts) |
 
-   Une fois le domaine branché sur Vercel : passer `SITE.enLigne` à `true`, puis
+   Une fois le domaine branché sur Vercel, remplacer `DOMAINE_FINAL` dans
+   [src/data/site.ts](src/data/site.ts) par le vrai domaine — `astro.config.mjs`
+   l'importe de là, il n'y a plus qu'un endroit à changer —, puis :
 
    ```bash
-   VERCEL=1 npm run generer-documents
+   VERCEL=1 SITE_URL=https://www.studio-caducee.com npm run generer-documents
    ```
 
    Sans quoi les PDF remis au client décriraient un site sans formulaire, hébergé

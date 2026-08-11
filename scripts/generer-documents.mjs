@@ -41,7 +41,8 @@ import { legal } from '../src/i18n/legal.ts';
 import { cgv } from '../src/i18n/cgv.ts';
 import { sousTraitance } from '../src/i18n/sous-traitance.ts';
 import { confidentialite } from '../src/i18n/confidentialite.ts';
-import { urlPublique, SITE } from '../src/data/site.ts';
+import { urlPublique, EN_LIGNE } from '../src/data/site.ts';
+import { CONTACT_PUBLIC } from '../src/data/contact.ts';
 import { DEFAULT_LANG } from '../src/lib/i18n.ts';
 import { genererFacture } from './facture.mjs';
 
@@ -90,6 +91,9 @@ const ADRESSES = [
   [/\{\{URL_MENTIONS\}\}/g, urlPublique('mentions-legales/')],
   [/\{\{URL_ANNEXE\}\}/g, urlPublique('sous-traitance/')],
   [/\{\{URL_SITE\}\}/g, urlPublique()],
+  // L'adresse suit le domaine, comme les URL : avant qu'il serve, la boîte
+  // définitive n'existe pas. Voir src/data/contact.ts.
+  [/\{\{EMAIL\}\}/g, CONTACT_PUBLIC.email],
 ];
 
 const adresser = (v) => ADRESSES.reduce((acc, [de, vers]) => acc.replace(de, vers), v);
@@ -241,8 +245,8 @@ try {
 }
 
 console.log(
-  `\n  adresses écrites dans les documents : ${urlPublique()}` +
-    (SITE.enLigne ? '' : '  (repli GitHub Pages — la production est déclarée hors ligne)')
+  `\n  adresses écrites dans les documents : ${urlPublique()}  ·  ${CONTACT_PUBLIC.email}` +
+    (EN_LIGNE ? '' : '  (repli GitHub Pages — le domaine ne sert pas encore le site)')
 );
 console.log(
   produits === DOCUMENTS.length

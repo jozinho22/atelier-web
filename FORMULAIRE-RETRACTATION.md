@@ -29,7 +29,7 @@ CGV rappelle qu'une déclaration écrite dénuée d'ambiguïté suffit. Ce docum
 >
 > Studio Caducée — Josselin DOUINEAU
 > 9bis Kerscoul, 22540 LOUARGAT
-> josselin.douineau@studio-caducee.com
+> {{EMAIL}}
 > {{URL_SITE}}
 >
 > Je vous notifie par la présente ma rétractation du contrat portant sur la
@@ -61,7 +61,7 @@ CGV rappelle qu'une déclaration écrite dénuée d'ambiguïté suffit. Ce docum
 >
 > Studio Caducée — Josselin DOUINEAU
 > 9bis Kerscoul, 22540 LOUARGAT, France
-> josselin.douineau@studio-caducee.com
+> {{EMAIL}}
 > {{URL_SITE}}
 >
 > I hereby give notice of my withdrawal from the contract for the supply of the
