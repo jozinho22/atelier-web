@@ -32,7 +32,7 @@
  */
 import ExcelJS from 'exceljs';
 
-import { CONTACT_PUBLIC, telephoneAffiche } from '../src/data/contact.ts';
+import { IDENTITE, adresse, telephoneAffiche } from '../src/data/identite.ts';
 import {
   PACKS,
   PACK_COURRIEL,
@@ -42,41 +42,22 @@ import {
   prixHebergement,
 } from '../src/data/tarifs.ts';
 import { urlPublique } from '../src/data/site.ts';
-import { legal } from '../src/i18n/legal.ts';
 
 /**
- * Identité imprimée en tête de facture.
+ * L'identité imprimée en tête vient de [identite.ts](../src/data/identite.ts),
+ * comme celle des mentions légales.
  *
- * Ces valeurs vivent aussi dans les mentions légales, sous une forme faite pour
- * être lue par un navigateur — des segments imbriqués dont on ne peut pas
- * extraire un SIRET sans deviner la structure. Plutôt que de les extraire à
- * l'aveugle, on les déclare, et `verifierIdentite()` refuse de générer le
- * classeur si les deux se mettent à diverger.
- *
- * La mention « EI » n'est pas décorative : depuis la loi du 14 février 2022
- * (article L526-22 du code de commerce), le nom de l'entrepreneur individuel
- * doit en être suivi ou précédé sur tous ses documents professionnels.
+ * Ce fichier en tenait sa propre copie, qui ne tenait que grâce à une assertion
+ * comparant les deux à chaque génération. La copie partie, l'assertion n'a plus
+ * d'objet : deux textes issus du même objet ne peuvent pas diverger.
  */
-const IDENTITE = {
-  enseigne: 'STUDIO CADUCÉE',
-  exploitant: 'Josselin DOUINEAU — Entrepreneur individuel (EI)',
-  adresse: '9bis Kerscoul, 22540 LOUARGAT',
-  siret: '98108366000028',
-  franchise: 'TVA non applicable, article 293 B du code général des impôts',
+const EMETTEUR = {
+  enseigne: IDENTITE.enseigne.toUpperCase(),
+  exploitant: `${IDENTITE.exploitant} — ${IDENTITE.formeJuridique}`,
+  adresse: adresse('fr'),
+  siret: IDENTITE.siret,
+  franchise: IDENTITE.franchiseTva.fr,
 };
-
-/** Le classeur ment-il sur qui émet la facture ? */
-function verifierIdentite() {
-  const mentions = JSON.stringify(legal.fr);
-  const attendus = [IDENTITE.siret, IDENTITE.adresse, CONTACT_PUBLIC.email];
-  const absents = attendus.filter((v) => !mentions.includes(v));
-  if (absents.length) {
-    throw new Error(
-      `identité divergente entre la facture et src/i18n/legal.ts : ${absents.join(', ')}\n` +
-        '  → aligner IDENTITE dans scripts/facture.mjs sur les mentions légales.'
-    );
-  }
-}
 
 const ENCRE = 'FF12131F';
 const ACCENT = 'FF403FB8';
@@ -110,7 +91,7 @@ const ligneAremplir = { bottom: { style: 'thin', color: { argb: TRAIT } } };
  * particulier ne coûte rien — les retirer au cas par cas, si.
  */
 const MENTIONS = [
-  IDENTITE.franchise + '.',
+  EMETTEUR.franchise + '.',
   'Paiement par virement bancaire à trente (30) jours date de facture, ou par lien de paiement Stripe (article 5 des conditions générales de vente).',
   'Conformément aux articles L441-10 et D441-5 du code de commerce, tout retard de paiement entraîne de plein droit, sans rappel préalable, des pénalités égales à trois fois le taux d’intérêt légal, ainsi qu’une indemnité forfaitaire de 40 € pour frais de recouvrement.',
   'Aucun escompte n’est accordé pour paiement anticipé.',
@@ -229,15 +210,15 @@ export function construireFacture(classeur) {
 
   // ── En-tête : qui émet ──────────────────────────────────────────────────
   f.mergeCells('A1:D1');
-  f.getCell('A1').value = IDENTITE.enseigne;
+  f.getCell('A1').value = EMETTEUR.enseigne;
   f.getCell('A1').font = { name: 'Calibri', size: 20, bold: true, color: { argb: ACCENT } };
   f.getRow(1).height = 28;
 
   const entetes = [
-    IDENTITE.exploitant,
-    IDENTITE.adresse,
-    `SIRET ${IDENTITE.siret}`,
-    `${CONTACT_PUBLIC.email} · ${telephoneAffiche('fr')} · ${urlPublique()}`,
+    EMETTEUR.exploitant,
+    EMETTEUR.adresse,
+    `SIRET ${EMETTEUR.siret}`,
+    `${IDENTITE.email} · ${telephoneAffiche('fr')} · ${urlPublique()}`,
   ];
   entetes.forEach((texte, i) => paragraphe(f, 2 + i, texte, { taille: 9, couleur: ENCRE }));
 
@@ -366,7 +347,7 @@ export function construireFacture(classeur) {
   });
   f.mergeCells(`A${RANG.tva}:B${RANG.tva}`);
   const franchise = f.getCell(`A${RANG.tva}`);
-  franchise.value = IDENTITE.franchise;
+  franchise.value = EMETTEUR.franchise;
   franchise.font = { name: 'Calibri', size: 8, italic: true, color: { argb: GRIS } };
   franchise.alignment = { horizontal: 'right', vertical: 'middle' };
   f.getCell(`D${RANG.acompte}`).note =
@@ -494,8 +475,6 @@ function construireRegistre(classeur) {
 
 /** Écrit `documents/modele-facture.xlsx`. Renvoie sa taille en octets. */
 export async function genererFacture(chemin) {
-  verifierIdentite();
-
   const classeur = new ExcelJS.Workbook();
   classeur.creator = 'Studio Caducée';
   classeur.calcProperties.fullCalcOnLoad = true; // sinon un tableur peut afficher les formules non calculées

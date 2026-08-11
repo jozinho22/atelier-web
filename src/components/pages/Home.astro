@@ -10,7 +10,7 @@ import { home } from '../../i18n/home';
 import { prixPack, prixHebergement } from '../../data/tarifs';
 import { ACCENTS, ACCENTS_TEXTE } from '../../data/modeles';
 import { REALISATIONS, estVisible, resoudreRealisation } from '../../data/realisations';
-import { CONTACT_PUBLIC, telHref, telephoneAffiche, mailtoHref } from '../../data/contact';
+import { IDENTITE, telHref, telephoneAffiche, mailtoHref } from '../../data/identite';
 import { SERVEUR_DISPONIBLE } from '../../lib/cible';
 import { PACKS } from '../../data/tarifs';
 import FormulaireContact from '../FormulaireContact.astro';
@@ -25,9 +25,9 @@ const jsonLd = {
   name: 'Studio Caducée',
   description: t.description,
   url: new URL(localePath(lang, ''), Astro.site).href,
-  email: CONTACT_PUBLIC.email,
+  email: IDENTITE.email,
   // Le JSON-LD attend le format international : c'est déjà la forme canonique.
-  telephone: CONTACT_PUBLIC.telephone,
+  telephone: IDENTITE.telephone,
   priceRange: '€€',
   areaServed: 'France',
   serviceType: t.hero.kicker,
@@ -645,9 +645,9 @@ const packsFormulaire = PACKS.map((cle) => ({
           */}
           <a
             class="btn btn-primary contact-btn"
-            href={mailtoHref(CONTACT_PUBLIC.email, t.contact.emailSujet)}
+            href={mailtoHref(IDENTITE.email, t.contact.emailSujet)}
           >
-            ✉️ {CONTACT_PUBLIC.email}
+            ✉️ {IDENTITE.email}
           </a>
           <a
             class="btn btn-ghost contact-btn contact-tel"

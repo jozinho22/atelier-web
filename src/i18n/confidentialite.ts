@@ -1,7 +1,7 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
 import { SERVEUR_DISPONIBLE } from '../lib/cible';
-import { CONTACT_PUBLIC } from '../data/contact';
+import { IDENTITE, RAISON, adresse } from '../data/identite';
 
 /**
  * Politique de confidentialité — information des visiteurs au sens de
@@ -37,7 +37,7 @@ import { CONTACT_PUBLIC } from '../data/contact';
  * d'un formulaire absent serait annoncer un traitement qui n'a pas lieu.
  */
 
-const CONTACT = CONTACT_PUBLIC.email;
+const CONTACT = IDENTITE.email;
 
 /** Date de la version en vigueur, affichée sous le titre. */
 const MISE_A_JOUR = { fr: '11 août 2026', en: '11 August 2026' } as const;
@@ -60,9 +60,9 @@ const FR: DocumentLegalTexte = {
       heading: 'Qui est responsable de vos données',
       blocs: [
         [
-          { text: 'Studio Caducée — Josselin DOUINEAU' },
+          { text: RAISON },
           { br: true },
-          { text: '9bis Kerscoul, 22540 LOUARGAT' },
+          { text: adresse('fr') },
           { br: true },
           { link: CONTACT, href: `mailto:${CONTACT}` },
         ],
@@ -189,9 +189,9 @@ const EN: DocumentLegalTexte = {
       heading: 'Who is responsible for your data',
       blocs: [
         [
-          { text: 'Studio Caducée — Josselin DOUINEAU' },
+          { text: RAISON },
           { br: true },
-          { text: '9bis Kerscoul, 22540 LOUARGAT, France' },
+          { text: adresse('en') },
           { br: true },
           { link: CONTACT, href: `mailto:${CONTACT}` },
         ],

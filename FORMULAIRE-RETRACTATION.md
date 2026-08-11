@@ -27,8 +27,8 @@ CGV rappelle qu'une déclaration écrite dénuée d'ambiguïté suffit. Ce docum
 >
 > À l'attention de :
 >
-> Studio Caducée — Josselin DOUINEAU
-> 9bis Kerscoul, 22540 LOUARGAT
+> {{RAISON}}
+> {{ADRESSE_FR}}
 > {{EMAIL}}
 > {{URL_SITE}}
 >
@@ -59,8 +59,8 @@ CGV rappelle qu'une déclaration écrite dénuée d'ambiguïté suffit. Ce docum
 >
 > To:
 >
-> Studio Caducée — Josselin DOUINEAU
-> 9bis Kerscoul, 22540 LOUARGAT, France
+> {{RAISON}}
+> {{ADRESSE_EN}}
 > {{EMAIL}}
 > {{URL_SITE}}
 >

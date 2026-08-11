@@ -216,6 +216,35 @@ sert pas le site, elles renvoient vers la copie GitHub Pages. Même mécanisme q
 pour les réalisations, et pour la même raison — un lien mort dans un contrat
 renvoie à un texte que l'article 1 des CGV dit « consultable à tout moment ».
 
+### `identite.ts` — qui est Studio Caducée, une seule fois
+
+Raison, exploitant, forme juridique, adresse, SIRET, régime de TVA, adresse
+électronique, téléphone : [src/data/identite.ts](src/data/identite.ts) et nulle
+part ailleurs. Relevé avant regroupement :
+
+| fait | exemplaires avant | après |
+| --- | --- | --- |
+| adresse postale | 5 fichiers | 1 |
+| nom de l'exploitant | 5 fichiers | 1 |
+| SIRET | 3 fichiers | 1 |
+| téléphone | 3 fichiers | 1 |
+
+Sur des mentions légales, la divergence n'est pas cosmétique : c'est un document
+qui se contredit lui-même. `scripts/facture.mjs` en gardait sa propre copie, qui
+ne tenait que grâce à une assertion écrite exprès pour détecter l'écart — le
+garde-fou a disparu avec la copie qu'il surveillait.
+
+**Ce sont du code, pas des variables d'environnement**, et c'est délibéré. Rien
+là-dedans n'est secret : tout s'imprime sur chaque page et dans les PDF, une
+variable ne cacherait rien. En revanche, une variable absente donnerait un
+`mailto:undefined` dans les mentions légales, et ferait dépendre le contenu d'un
+contrat signé du shell qui l'a généré. Ce qui varie vraiment selon le
+déploiement — « le domaine sert-il le site ? » — est en variable, lui.
+
+Les documents Markdown qui sortent du dépôt portent des gabarits,
+`{{RAISON}}` · `{{ADRESSE_FR}}` · `{{ADRESSE_EN}}` · `{{EMAIL}}`, résolus à la
+génération comme les URL.
+
 ### `EN_LIGNE` — le domaine sert-il le site ?
 
 Le drapeau est **déduit de la configuration, jamais sondé**. Sonder au moment de

@@ -1,6 +1,6 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
-import { CONTACT_PUBLIC } from '../data/contact';
+import { IDENTITE } from '../data/identite';
 
 /**
  * Annexe de sous-traitance au sens de l'article 28 du RGPD.
@@ -33,7 +33,7 @@ import { CONTACT_PUBLIC } from '../data/contact';
  * état connu et mérite une relecture professionnelle avant d'engager.
  */
 
-const CONTACT = CONTACT_PUBLIC.email;
+const CONTACT = IDENTITE.email;
 
 /** Date de la version en vigueur, affichée sous le titre. */
 const MISE_A_JOUR = { fr: '12 août 2026', en: '12 August 2026' } as const;

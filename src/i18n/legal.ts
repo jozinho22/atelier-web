@@ -1,9 +1,9 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
 import { SERVEUR_DISPONIBLE } from '../lib/cible';
-import { CONTACT_PUBLIC } from '../data/contact';
+import { IDENTITE, RAISON, adresse, telephoneAffiche } from '../data/identite';
 
-const CONTACT = CONTACT_PUBLIC.email;
+const CONTACT = IDENTITE.email;
 
 /**
  * Textes de la page « Mentions légales ».
@@ -48,15 +48,15 @@ export const legal = {
         heading: 'Éditeur du site',
         blocs: [
           [
-            { text: 'Studio Caducée — Josselin DOUINEAU' },
+            { text: RAISON },
             { br: true },
-            { text: 'Entrepreneur individuel (auto-entreprise)' },
+            { text: IDENTITE.formeJuridique },
             { br: true },
-            { text: '9bis Kerscoul, 22540 LOUARGAT' },
+            { text: adresse('fr') },
             { br: true },
-            { text: 'SIRET : 98108366000028' },
+            { text: `SIRET : ${IDENTITE.siret}` },
             { br: true },
-            { text: 'TVA non applicable, article 293 B du code général des impôts' },
+            { text: IDENTITE.franchiseTva.fr },
             { br: true },
             { text: 'Contact : ' },
             {
@@ -64,9 +64,9 @@ export const legal = {
               href: `mailto:${CONTACT}`,
             },
             { text: ' — ' },
-            { link: '06 25 45 01 76', href: 'tel:+33625450176' },
+            { link: telephoneAffiche('fr'), href: `tel:${IDENTITE.telephone}` },
           ],
-          [{ text: 'Directeur de la publication : Josselin DOUINEAU' }],
+          [{ text: `Directeur de la publication : ${IDENTITE.exploitant}` }],
         ],
       },
       {
@@ -150,18 +150,18 @@ export const legal = {
         heading: 'Site publisher',
         blocs: [
           [
-            { text: 'Studio Caducée — Josselin DOUINEAU' },
+            { text: RAISON },
             { br: true },
             { text: 'Sole proprietor (French auto-entrepreneur)' },
             { br: true },
-            { text: '9bis Kerscoul, 22540 LOUARGAT, France' },
+            { text: adresse('en') },
             { br: true },
-            { text: 'SIRET: 98108366000028' },
+            { text: `SIRET: ${IDENTITE.siret}` },
             { br: true },
             // Le régime français n'a pas d'équivalent britannique ou américain :
             // on nomme le dispositif, on ne le traduit pas en « VAT exempt ».
             {
-              text: 'VAT not applicable under Article 293 B of the French General Tax Code (small-business exemption)',
+              text: IDENTITE.franchiseTva.en,
             },
             { br: true },
             { text: 'Contact: ' },
@@ -170,9 +170,9 @@ export const legal = {
               href: `mailto:${CONTACT}`,
             },
             { text: ' — ' },
-            { link: '+33 6 25 45 01 76', href: 'tel:+33625450176' },
+            { link: telephoneAffiche('en'), href: `tel:${IDENTITE.telephone}` },
           ],
-          [{ text: 'Publication director: Josselin DOUINEAU' }],
+          [{ text: `Publication director: ${IDENTITE.exploitant}` }],
         ],
       },
       {

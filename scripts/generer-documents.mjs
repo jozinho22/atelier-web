@@ -42,7 +42,7 @@ import { cgv } from '../src/i18n/cgv.ts';
 import { sousTraitance } from '../src/i18n/sous-traitance.ts';
 import { confidentialite } from '../src/i18n/confidentialite.ts';
 import { urlPublique, EN_LIGNE } from '../src/data/site.ts';
-import { CONTACT_PUBLIC } from '../src/data/contact.ts';
+import { IDENTITE, RAISON, adresse } from '../src/data/identite.ts';
 import { DEFAULT_LANG } from '../src/lib/i18n.ts';
 import { genererFacture } from './facture.mjs';
 
@@ -93,7 +93,10 @@ const ADRESSES = [
   [/\{\{URL_SITE\}\}/g, urlPublique()],
   // L'adresse suit le domaine, comme les URL : avant qu'il serve, la boîte
   // définitive n'existe pas. Voir src/data/contact.ts.
-  [/\{\{EMAIL\}\}/g, CONTACT_PUBLIC.email],
+  [/\{\{EMAIL\}\}/g, IDENTITE.email],
+  [/\{\{RAISON\}\}/g, RAISON],
+  [/\{\{ADRESSE_FR\}\}/g, adresse('fr')],
+  [/\{\{ADRESSE_EN\}\}/g, adresse('en')],
 ];
 
 const adresser = (v) => ADRESSES.reduce((acc, [de, vers]) => acc.replace(de, vers), v);
@@ -245,7 +248,7 @@ try {
 }
 
 console.log(
-  `\n  adresses écrites dans les documents : ${urlPublique()}  ·  ${CONTACT_PUBLIC.email}` +
+  `\n  adresses écrites dans les documents : ${urlPublique()}  ·  ${IDENTITE.email}` +
     (EN_LIGNE ? '' : '  (repli GitHub Pages — le domaine ne sert pas encore le site)')
 );
 console.log(

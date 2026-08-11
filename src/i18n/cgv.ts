@@ -1,7 +1,7 @@
 import type { Lang } from '../lib/i18n';
 import type { DocumentLegalTexte } from './document-legal';
 import { TARIFS, HEBERGEMENT, ALLERS_RETOURS, ACOMPTE_POURCENT, euros } from '../data/tarifs';
-import { CONTACT_PUBLIC } from '../data/contact';
+import { IDENTITE, RAISON, adresse, telephoneAffiche } from '../data/identite';
 
 /**
  * Conditions générales de vente.
@@ -75,16 +75,12 @@ import { CONTACT_PUBLIC } from '../data/contact';
  *   Resend et Cloudflare.
  */
 
-const CONTACT = CONTACT_PUBLIC.email;
-/**
- * Le numéro s'écrit autrement selon la langue : un lecteur français lit
- * « 06 25 45 01 76 », un lecteur étranger a besoin de l'indicatif pour appeler.
- * Le lien, lui, ne connaît qu'une forme — la seule qui compose partout.
- */
+const CONTACT = IDENTITE.email;
+/** Voir [identite.ts](../data/identite.ts) pour les deux écritures du numéro. */
 const TELEPHONE = {
-  fr: '06 25 45 01 76',
-  en: '+33 6 25 45 01 76',
-  href: 'tel:+33625450176',
+  fr: telephoneAffiche('fr'),
+  en: telephoneAffiche('en'),
+  href: `tel:${IDENTITE.telephone}`,
 } as const;
 
 /** Date de la version en vigueur, affichée sous le titre. */
@@ -136,13 +132,13 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           heading: 'Article 2 — Identité du prestataire',
           blocs: [
             [
-              { text: 'Studio Caducée — Josselin DOUINEAU' },
+              { text: RAISON },
               { br: true },
-              { text: 'Entrepreneur individuel (auto-entreprise)' },
+              { text: IDENTITE.formeJuridique },
               { br: true },
-              { text: '9bis Kerscoul, 22540 LOUARGAT' },
+              { text: adresse('fr') },
               { br: true },
-              { text: 'SIRET : 98108366000028' },
+              { text: `SIRET : ${IDENTITE.siret}` },
               { br: true },
               { text: 'Contact : ' },
               lien,
@@ -574,13 +570,13 @@ export function cgv(lang: Lang): DocumentLegalTexte {
           heading: 'Article 2 — Provider identity',
           blocs: [
             [
-              { text: 'Studio Caducée — Josselin DOUINEAU' },
+              { text: RAISON },
               { br: true },
               { text: 'Sole proprietor (French auto-entrepreneur)' },
               { br: true },
-              { text: '9bis Kerscoul, 22540 LOUARGAT, France' },
+              { text: adresse('en') },
               { br: true },
-              { text: 'SIRET: 98108366000028' },
+              { text: `SIRET: ${IDENTITE.siret}` },
               { br: true },
               { text: 'Contact: ' },
               lien,
