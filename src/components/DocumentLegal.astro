@@ -12,7 +12,7 @@ import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { splitPath, localePath } from '../lib/i18n';
 import { common } from '../i18n/common';
-import { estListe, type DocumentLegalTexte } from '../i18n/document-legal';
+import { estListe, type CleDoc, type DocumentLegalTexte } from '../i18n/document-legal';
 
 interface Props {
   texte: DocumentLegalTexte;
@@ -20,29 +20,48 @@ interface Props {
   doc: CleDoc;
 }
 
-type CleDoc = 'mentions-legales' | 'cgv' | 'sous-traitance';
 
 const { texte, doc } = Astro.props;
 const { lang } = splitPath(Astro.url.pathname);
 const t = common[lang];
 
 /**
- * Chaque document renvoie aux DEUX autres.
+ * Les documents du pied de page, vers lesquels chaque page juridique renvoie.
  *
- * La version précédente n'en connaissait qu'un — « la page jumelle » —, ce qui
- * marchait tant qu'ils n'étaient que deux. Avec l'annexe RGPD, un lien unique
- * aurait laissé un document inaccessible depuis l'un des deux autres.
+ * L'annexe RGPD n'y figure PAS, et c'est délibéré : ce n'est pas une politique
+ * du site mais une annexe contractuelle, qui s'applique au seul client ayant
+ * souscrit l'hébergement. La mettre au même rang alourdissait le pied de page
+ * de mille mots que le visiteur n'a aucune raison de lire.
+ *
+ * Elle reste atteignable — article 15 des CGV, et section dédiée de la
+ * politique de confidentialité. Et comme sa clé n'est pas dans cette liste, le
+ * filtre ci-dessous n'en retire rien : la page de l'annexe, elle, propose bien
+ * les trois autres.
  */
 const DOCS: { cle: CleDoc; chemin: string; label: keyof typeof t.juridique }[] = [
   { cle: 'mentions-legales', chemin: 'mentions-legales', label: 'versLegal' },
+  {
+    cle: 'politique-de-confidentialite',
+    chemin: 'politique-de-confidentialite',
+    label: 'versConfidentialite',
+  },
   { cle: 'cgv', chemin: 'cgv', label: 'versCgv' },
-  { cle: 'sous-traitance', chemin: 'sous-traitance', label: 'versSousTraitance' },
 ];
 
 const voisines = DOCS.filter((d) => d.cle !== doc).map((d) => ({
   href: localePath(lang, d.chemin),
   label: t.juridique[d.label],
 }));
+
+/**
+ * L'adresse d'un renvoi vers un autre document.
+ *
+ * Un renvoi vers la page courante rend `null` : le lien serait un cul-de-sac,
+ * et l'annoncer comme tel à un lecteur d'écran serait pire que de ne rien
+ * annoncer. Le texte du renvoi reste affiché, sans lien.
+ */
+const versPage = (page: CleDoc): string | null =>
+  page === doc ? null : localePath(lang, page);
 
 const accueil = { href: localePath(lang), label: t.juridique.accueil };
 const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigation';
@@ -80,6 +99,12 @@ const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigatio
                       {item.map((segment) =>
                         'br' in segment ? (
                           <br />
+                        ) : 'page' in segment ? (
+                          versPage(segment.page) ? (
+                            <a href={versPage(segment.page)}>{segment.link}</a>
+                          ) : (
+                            segment.link
+                          )
                         ) : 'href' in segment ? (
                           <a href={segment.href}>{segment.link}</a>
                         ) : (
@@ -94,6 +119,12 @@ const etiquette = lang === 'fr' ? 'Navigation du document' : 'Document navigatio
                   {bloc.map((segment) =>
                     'br' in segment ? (
                       <br />
+                    ) : 'page' in segment ? (
+                      versPage(segment.page) ? (
+                        <a href={versPage(segment.page)}>{segment.link}</a>
+                      ) : (
+                        segment.link
+                      )
                     ) : 'href' in segment ? (
                       <a href={segment.href}>{segment.link}</a>
                     ) : (

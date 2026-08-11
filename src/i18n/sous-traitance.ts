@@ -54,12 +54,57 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
       title: 'Annexe RGPD — sous-traitance',
       maj: `Dernière mise à jour : ${MISE_A_JOUR.fr}`,
       sections: [
+        /**
+         * Un préambule en clair, avant les treize articles.
+         *
+         * Le corps du texte est déjà au minimum : ses articles recouvrent un par
+         * un le contenu qu'impose l'article 28.3 du RGPD, il n'y a rien à couper
+         * sans être en défaut. Ce qui décourageait le client, c'était le volume,
+         * pas les obligations — presque toutes pèsent sur le Prestataire.
+         *
+         * D'où ce résumé : il ne retire rien, il dit d'emblée ce que le lecteur
+         * mettrait mille mots à découvrir, à commencer par le fait que le texte
+         * ne le concerne peut-être pas du tout.
+         */
+        {
+          heading: 'En bref — ce que cela change pour vous',
+          blocs: [
+            {
+              liste: [
+                [
+                  {
+                    text: 'Cette annexe ne s’applique QUE si vous souscrivez l’abonnement d’hébergement. Si votre site est hébergé ailleurs, elle ne vous concerne pas.',
+                  },
+                ],
+                [
+                  {
+                    text: 'Elle est obligatoire : l’article 28 du RGPD impose un contrat écrit dès qu’un prestataire héberge un site qui collecte des données. Sans lui, c’est vous, responsable de traitement, qui êtes en défaut — pas votre prestataire.',
+                  },
+                ],
+                [
+                  {
+                    text: 'Presque tout ce qu’elle contient sont des engagements du Prestataire envers vous : sécurité, sauvegardes vérifiées, confidentialité, alerte sous 48 heures en cas d’incident, restitution ou suppression de vos données en fin de contrat.',
+                  },
+                ],
+                [
+                  {
+                    text: 'Ce qu’elle vous demande tient en deux lignes : répondre aux personnes qui exercent leurs droits sur votre site — ce que la loi vous impose de toute façon — et adresser par écrit toute instruction particulière. Rien à installer, rien à déclarer, aucun frais.',
+                  },
+                ],
+              ],
+            },
+          ],
+        },
         {
           heading: 'Article 1 — Objet et articulation avec les CGV',
           blocs: [
             [
               {
-                text: 'La présente annexe complète les conditions générales de vente. Elle définit les conditions dans lesquelles Studio Caducée (« le Prestataire ») traite, pour le compte de son client (« le Responsable de traitement »), des données à caractère personnel, au sens de l’article 28 du règlement (UE) 2016/679 (« RGPD »).',
+                text: 'La présente annexe complète les ',
+              },
+              { link: 'conditions générales de vente', page: 'cgv' },
+              {
+                text: '. Elle définit les conditions dans lesquelles Studio Caducée (« le Prestataire ») traite, pour le compte de son client (« le Responsable de traitement »), des données à caractère personnel, au sens de l’article 28 du règlement (UE) 2016/679 (« RGPD »).',
               },
             ],
             [
@@ -92,7 +137,11 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
                 ],
                 [
                   {
-                    text: 'Durée — celle de l’abonnement d’hébergement et de maintenance prévu à l’article 11 des conditions générales de vente.',
+                    text: 'Durée — celle de l’abonnement d’hébergement et de maintenance prévu à l’',
+                  },
+                  { link: 'article 11 des conditions générales de vente', page: 'cgv' },
+                  {
+                    text: '.',
                   },
                 ],
                 [
@@ -114,7 +163,11 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'Le Prestataire ne traite les données que sur instruction documentée du Responsable de traitement. Le devis accepté, les présentes et les conditions générales de vente constituent les instructions initiales ; toute instruction ultérieure est adressée par écrit.',
+                text: 'Le Prestataire ne traite les données que sur instruction documentée du Responsable de traitement. Le devis accepté, les présentes et les ',
+              },
+              { link: 'conditions générales de vente', page: 'cgv' },
+              {
+                text: ' constituent les instructions initiales ; toute instruction ultérieure est adressée par écrit.',
               },
             ],
             [
@@ -228,7 +281,11 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'Au terme de l’abonnement d’hébergement et de maintenance, le Prestataire remet au Responsable de traitement, au choix de ce dernier, l’ensemble des données et des fichiers sources, ou les supprime. Cette remise s’articule avec la réversibilité prévue à l’article 11 des conditions générales de vente. Le nom de domaine, lui, appartient déjà au Responsable de traitement et n’appelle aucune restitution.',
+                text: 'Au terme de l’abonnement d’hébergement et de maintenance, le Prestataire remet au Responsable de traitement, au choix de ce dernier, l’ensemble des données et des fichiers sources, ou les supprime. Cette remise s’articule avec la réversibilité prévue à l’',
+              },
+              { link: 'article 11 des conditions générales de vente', page: 'cgv' },
+              {
+                text: '. Le nom de domaine, lui, appartient déjà au Responsable de traitement et n’appelle aucune restitution.',
               },
             ],
             [
@@ -292,11 +349,44 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
       maj: `Last updated: ${MISE_A_JOUR.en}`,
       sections: [
         {
+          heading: 'In short — what this means for you',
+          blocs: [
+            {
+              liste: [
+                [
+                  {
+                    text: 'This annex applies ONLY if you take the hosting subscription. If your site is hosted elsewhere, it does not concern you.',
+                  },
+                ],
+                [
+                  {
+                    text: 'It is mandatory: Article 28 GDPR requires a written contract as soon as a provider hosts a website that collects data. Without it, you — the controller — are in breach, not your provider.',
+                  },
+                ],
+                [
+                  {
+                    text: 'Almost everything in it is an undertaking by the Provider towards you: security, verified backups, confidentiality, notification within 48 hours of an incident, return or deletion of your data at the end of the contract.',
+                  },
+                ],
+                [
+                  {
+                    text: 'What it asks of you fits in two lines: answer people who exercise their rights on your site — which the law requires of you anyway — and give any specific instruction in writing. Nothing to install, nothing to declare, no cost.',
+                  },
+                ],
+              ],
+            },
+          ],
+        },
+        {
           heading: 'Article 1 — Purpose and relationship with the terms of sale',
           blocs: [
             [
               {
-                text: 'This annex supplements the terms and conditions of sale. It sets out the conditions under which Studio Caducée (“the Provider”) processes personal data on behalf of its client (“the Controller”), within the meaning of Article 28 of Regulation (EU) 2016/679 (“GDPR”).',
+                text: 'This annex supplements the ',
+              },
+              { link: 'terms and conditions of sale', page: 'cgv' },
+              {
+                text: '. It sets out the conditions under which Studio Caducée (“the Provider”) processes personal data on behalf of its client (“the Controller”), within the meaning of Article 28 of Regulation (EU) 2016/679 (“GDPR”).',
               },
             ],
             [
@@ -329,7 +419,11 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
                 ],
                 [
                   {
-                    text: 'Duration — that of the hosting and maintenance subscription set out in Article 11 of the terms of sale.',
+                    text: 'Duration — that of the hosting and maintenance subscription set out in ',
+                  },
+                  { link: 'Article 11 of the terms of sale', page: 'cgv' },
+                  {
+                    text: '.',
                   },
                 ],
                 [
@@ -351,7 +445,11 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'The Provider processes the data only on documented instructions from the Controller. The accepted quote, this annex and the terms of sale constitute the initial instructions; any later instruction is given in writing.',
+                text: 'The Provider processes the data only on documented instructions from the Controller. The accepted quote, this annex and the ',
+              },
+              { link: 'terms of sale', page: 'cgv' },
+              {
+                text: ' constitute the initial instructions; any later instruction is given in writing.',
               },
             ],
             [
@@ -461,7 +559,11 @@ export function sousTraitance(lang: Lang): DocumentLegalTexte {
           blocs: [
             [
               {
-                text: 'At the end of the hosting and maintenance subscription, the Provider returns all data and source files to the Controller, or deletes them, at the Controller’s choice. This dovetails with the reversibility set out in Article 11 of the terms of sale. The domain name already belongs to the Controller and calls for no return.',
+                text: 'At the end of the hosting and maintenance subscription, the Provider returns all data and source files to the Controller, or deletes them, at the Controller’s choice. This dovetails with the reversibility set out in ',
+              },
+              { link: 'Article 11 of the terms of sale', page: 'cgv' },
+              {
+                text: '. The domain name already belongs to the Controller and calls for no return.',
               },
             ],
             [

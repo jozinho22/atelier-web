@@ -23,8 +23,9 @@ Site bilingue : **français à la racine**, **anglais sous `/en/`** (mêmes page
 | `/modeles/salon-de-the` · `/en/…` | Démo « The Sugar & Steam Diner » — salon de thé |
 | `/modeles/boulangerie` · `/en/…` | Démo « Le Fournil de Kerlann » — boulangerie-pâtisserie |
 | `/mentions-legales` · `/en/…` | Mentions légales |
+| `/politique-de-confidentialite` · `/en/…` | Politique de confidentialité — information des visiteurs (article 13) |
 | `/cgv` · `/en/…` | Conditions générales de vente (à faire relire) |
-| `/sous-traitance` · `/en/…` | Annexe RGPD de sous-traitance (article 28) |
+| `/sous-traitance` · `/en/…` | Annexe RGPD de sous-traitance (article 28) — **hors pied de page**, voir plus bas |
 | `/qui-sommes-nous` · `/en/…` | Présentation du studio |
 
 ## Le modèle « Boulangerie »
@@ -167,10 +168,11 @@ sont en ligne et à jour.
 
 ## Documents hors site
 
-Deux fichiers à la racine ne sont pas publiés : ils accompagnent le contrat.
+Trois fichiers à la racine ne sont pas publiés : ils accompagnent le contrat.
 
 | fichier | rôle |
 | --- | --- |
+| [MODELE-DEVIS.md](MODELE-DEVIS.md) | les blocs contractuels du devis — **le devis est le contrat**, article 3 |
 | [DEROULE-CLIENT.md](DEROULE-CLIENT.md) | le parcours du prospect à la mise en ligne, chaque étape renvoyée à son article des CGV |
 | [FORMULAIRE-RETRACTATION.md](FORMULAIRE-RETRACTATION.md) | modèle réglementaire, **à joindre à tout devis adressé à un consommateur** |
 
@@ -180,16 +182,49 @@ Deux fichiers à la racine ne sont pas publiés : ils accompagnent le contrat.
 npm run generer-documents
 ```
 
-Produit huit PDF A4 dans `documents/` — CGV, annexe RGPD et mentions légales
-dans les deux langues, plus le formulaire de rétractation et le déroulé client.
-Pagination en pied de page : sur un contrat, pouvoir dire « article 5, page 2 »
-compte.
+Produit onze PDF A4 dans `documents/` — CGV, annexe RGPD, politique de
+confidentialité et mentions légales dans les deux langues, plus le formulaire de
+rétractation, le modèle de devis et le déroulé client. Pagination en pied de page : sur un contrat, pouvoir dire
+« article 5, page 2 » compte.
+
+La même commande écrit **`documents/modele-facture.xlsx`**, seule pièce qui ne
+soit pas un PDF. Une facture se calcule : les totaux, la déduction de l'acompte
+et l'échéance à trente jours y sont des formules, pas des nombres recopiés. Deux
+feuilles :
+
+| feuille | rôle |
+| --- | --- |
+| **Facture** | un A4 à remplir, mentions obligatoires comprises — franchise 293 B, pénalités de retard, absence d'escompte, le tout repris mot pour mot de l'article 5 des CGV |
+| **Registre** | la liste des factures émises et le calcul du numéro suivant. La séquence doit être **continue** : ni trou, ni doublon, ni numéro réattribué |
+
+⚠️ Les formules sont écrites **sans valeur en cache**, délibérément. Avec un
+cache, LibreOffice affiche la valeur enregistrée sans recalculer — un total figé
+à 0,00 € sur une facture pourtant remplie, et sans le moindre avertissement.
+`verifierFormules()` refuse par ailleurs qu'une somme se contienne elle-même, et
+`verifierIdentite()` fait échouer la génération si le SIRET ou l'adresse cessent
+de correspondre aux mentions légales du site.
 
 Les documents juridiques sont rendus **depuis `src/i18n/`**, la même source que
 les pages du site. Un PDF recopié à la main divergerait de la page publiée dès
 la première retouche — et c'est la version signée par le client qui ferait foi.
 Les montants viennent de `src/data/tarifs.ts` : une hausse de prix se répercute
 sur le site comme sur le PDF joint au devis.
+
+Les adresses du site écrites dans ces documents sont **résolues à la
+génération**, par [src/data/site.ts](src/data/site.ts) : tant que le domaine de
+production ne répond pas, elles renvoient vers la copie GitHub Pages. Même
+mécanisme que pour les réalisations, et pour la même raison — un lien mort dans
+un contrat renvoie à un texte que l'article 1 des CGV dit « consultable à tout
+moment ».
+
+L'état est **déclaré**, jamais sondé : sonder au moment de générer ferait
+dépendre le contenu d'un contrat de l'état du réseau, et deux générations du
+même commit ne donneraient pas le même document.
+
+⚠️ Les adresses sont écrites **en toutes lettres**, jamais cachées derrière un
+lien. Un contrat se lit sur papier : vérification faite, `strings` ne trouvait
+aucune URL dans le PDF produit, et le formulaire renvoyait donc aux CGV sans
+dire où les trouver.
 
 `documents/` est ignoré par git : ce sont des sorties, régénérables à tout
 moment.
@@ -216,14 +251,60 @@ de **douze mois**.
 
 ## Pages juridiques
 
-**Trois** documents partagent un gabarit unique,
+**Quatre** documents partagent un gabarit unique,
 [src/components/DocumentLegal.astro](src/components/DocumentLegal.astro) : même
 largeur de colonne, même hiérarchie de titres, mêmes styles de lien et de
 liste. Ils ne diffèrent que par leur dictionnaire — [legal.ts](src/i18n/legal.ts),
-[cgv.ts](src/i18n/cgv.ts) et [sous-traitance.ts](src/i18n/sous-traitance.ts) —
-tous typés par [document-legal.ts](src/i18n/document-legal.ts). Chaque page
-renvoie aux deux autres : la navigation était binaire tant qu'ils n'étaient que
-deux, un lien unique aurait rendu le troisième inatteignable depuis l'un d'eux.
+[confidentialite.ts](src/i18n/confidentialite.ts), [cgv.ts](src/i18n/cgv.ts) et
+[sous-traitance.ts](src/i18n/sous-traitance.ts) — tous typés par
+[document-legal.ts](src/i18n/document-legal.ts).
+
+**Trois d'entre eux seulement sont au pied de page.** L'annexe RGPD n'y est pas,
+et c'est délibéré : ce n'est pas une politique du site mais une **annexe
+contractuelle**, qui ne s'applique qu'au client ayant souscrit l'hébergement. La
+poser au même rang que les mentions légales alourdissait le pied de mille mots
+que le visiteur n'a aucune raison de lire. Elle reste publiée et atteinte par
+deux chemins : le lien de l'article 15 des CGV, et une section dédiée de la
+politique de confidentialité.
+
+### Politique de confidentialité et annexe RGPD — à ne pas confondre
+
+Les deux parlent de données personnelles et ce sont des instruments opposés :
+
+| | politique de confidentialité | annexe RGPD |
+| --- | --- | --- |
+| article | 13 | 28 |
+| rôle du studio | **responsable de traitement** de ses visiteurs | **sous-traitant** de son client |
+| nature | information unilatérale | contrat |
+| qui la signe | personne | le client, avec le devis |
+
+L'une ne peut pas absorber l'autre. Une politique de confidentialité qui
+tiendrait lieu de contrat de sous-traitance laisserait le **client** —
+responsable de traitement — en infraction : c'est lui que la CNIL sanctionne
+pour avoir recouru à un sous-traitant sans acte écrit.
+
+Le texte de la politique vivait dans les mentions légales, sous « Données
+personnelles ». Il y était complet mais introuvable : on cherche « politique de
+confidentialité », pas une sous-partie d'un autre document. Les mentions légales
+n'en gardent qu'un renvoi.
+
+### Les renvois d'un document à l'autre
+
+Ces textes se citent constamment — l'annexe s'appuie sur l'article 11 des CGV,
+les CGV renvoient à l'annexe, les mentions légales aux CGV. Un segment
+`{ link, page }` désigne alors la **page visée**, jamais son adresse :
+
+| rendu | résolution | pourquoi pas l'autre |
+| --- | --- | --- |
+| le site | `localePath(lang, page)` | un chemin relatif, préfixé de la base et de la langue |
+| les PDF | `urlPublique(page)` | le document part chez le client : il lui faut une URL absolue |
+
+Un `href` écrit en dur ne peut servir qu'un seul des deux — et c'est le PDF,
+muet sur son lien mort, qui perdrait. Un renvoi vers la page courante s'affiche
+en texte simple, dans les deux rendus : le lien serait un cul-de-sac.
+
+**Convention : un renvoi par article, sur la première mention.** L'annexe cite
+les CGV neuf fois ; les lier toutes ferait du bruit, pas de la navigation.
 
 ### L'annexe RGPD de sous-traitance
 
@@ -244,6 +325,14 @@ Ce qui varie d'un client à l'autre — catégories de données réellement
 collectées, liste des sous-traitants ultérieurs, lieux d'établissement — est
 renvoyé **au devis**, parce que cela dépend du site livré : un texte générique
 qui l'inventerait serait faux.
+
+Elle s'ouvre sur un **« En bref — ce que cela change pour vous »** de quatre
+puces. Le corps du texte, lui, n'a pas été raccourci : ses treize articles
+recouvrent un par un le contenu qu'impose l'article 28.3, et en couper un
+mettrait le client en défaut. Ce qui décourageait à la lecture, c'était le
+volume, pas les obligations — presque toutes pèsent sur le Prestataire. Le
+résumé dit d'emblée ce qu'il fallait mille mots pour découvrir, à commencer par
+le fait que le texte **ne s'applique que si l'hébergement est souscrit**.
 
 Les CGV sont le seul dictionnaire qui soit une **fonction** de la langue plutôt
 qu'un objet : les montants (packs, acompte, allers-retours, abonnement) sont lus
@@ -610,8 +699,25 @@ besoins serveur. Tout autre hébergeur statique reste possible via
 4. **Tarifs** : ajuster les montants dans
    [src/data/tarifs.ts](src/data/tarifs.ts) — source unique, la page d'accueil
    comme les CGV s'y alimentent.
-5. **Relecture juridique** des CGV, et vérification du SIRET (voir « Pages
-   juridiques »).
+5. **Relecture juridique** des CGV et de l'annexe RGPD, et vérification du
+   SIRET (voir « Pages juridiques »).
+6. **Régénérer les documents depuis la cible réelle.** Deux contenus dépendent
+   de l'endroit d'où l'on génère, et `npm run generer-documents` s'exécute par
+   défaut comme un build GitHub Pages :
+
+   | ce qui change | piloté par |
+   | --- | --- |
+   | l'hébergeur des mentions légales, et le fait que la politique de confidentialité décrive ou non le formulaire | `SERVEUR_DISPONIBLE` — vrai si `VERCEL` est défini |
+   | les adresses écrites dans les PDF (production ou repli GitHub Pages) | `SITE.enLigne` dans [src/data/site.ts](src/data/site.ts) |
+
+   Une fois le domaine branché sur Vercel : passer `SITE.enLigne` à `true`, puis
+
+   ```bash
+   VERCEL=1 npm run generer-documents
+   ```
+
+   Sans quoi les PDF remis au client décriraient un site sans formulaire, hébergé
+   par GitHub.
 
 Identité, coordonnées et mentions obligatoires sont **faites** : elles vivent
 dans [src/data/contact.ts](src/data/contact.ts) pour l'affichage public, et dans

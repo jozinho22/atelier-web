@@ -40,6 +40,10 @@ import { join } from 'node:path';
 import { legal } from '../src/i18n/legal.ts';
 import { cgv } from '../src/i18n/cgv.ts';
 import { sousTraitance } from '../src/i18n/sous-traitance.ts';
+import { confidentialite } from '../src/i18n/confidentialite.ts';
+import { urlPublique, SITE } from '../src/data/site.ts';
+import { DEFAULT_LANG } from '../src/lib/i18n.ts';
+import { genererFacture } from './facture.mjs';
 
 /**
  * La racine vient du répertoire courant, et non de `import.meta.url` : ce
@@ -73,33 +77,67 @@ const SUBSTITUTIONS = [
 
 const nettoyer = (v) => SUBSTITUTIONS.reduce((acc, [de, vers]) => acc.replace(de, vers), v);
 
+/**
+ * Adresses publiques injectées dans les documents qui sortent du dépôt.
+ *
+ * Les Markdown portent un gabarit plutôt que l'adresse : un document remis au
+ * client ne peut pas renvoyer vers un fichier source, et l'adresse elle-même
+ * dépend de l'état de la production — voir src/data/site.ts. Un seul endroit
+ * décide, ici comme sur le site.
+ */
+const ADRESSES = [
+  [/\{\{URL_CGV\}\}/g, urlPublique('cgv/')],
+  [/\{\{URL_MENTIONS\}\}/g, urlPublique('mentions-legales/')],
+  [/\{\{URL_ANNEXE\}\}/g, urlPublique('sous-traitance/')],
+  [/\{\{URL_SITE\}\}/g, urlPublique()],
+];
+
+const adresser = (v) => ADRESSES.reduce((acc, [de, vers]) => acc.replace(de, vers), v);
+
 /** Échappe ce que Markdown, puis LaTeX, interpréteraient comme du balisage. */
 const echapper = (v) => v.replace(/([\\`*_[\]{}#+|])/g, '\\$1');
 
+/**
+ * L'adresse d'une page juridique, vue depuis un PDF.
+ *
+ * Le PDF part chez le client : il lui faut une URL absolue. `localePath()` ne
+ * peut pas servir ici — il lit `import.meta.env.BASE_URL`, que Vite substitue
+ * au build du site et qui n'existe pas dans ce script.
+ */
+const adressePage = (page, lang) =>
+  urlPublique(lang === DEFAULT_LANG ? `${page}/` : `${lang}/${page}/`);
+
 /** Un bloc est soit une liste, soit une suite de segments. */
-const rendreBloc = (bloc) => {
+const rendreBloc = (bloc, ctx) => {
   if (bloc.liste) {
-    return bloc.liste.map((item) => `- ${rendreSegments(item)}`).join('\n');
+    return bloc.liste.map((item) => `- ${rendreSegments(item, ctx)}`).join('\n');
   }
-  return rendreSegments(bloc);
+  return rendreSegments(bloc, ctx);
 };
 
-const rendreSegments = (segments) =>
+const rendreSegments = (segments, ctx) =>
   segments
     .map((s) => {
       if (s.br) return '\\\n'; // saut de ligne dur, sans nouveau paragraphe
+      // Un renvoi vers le document courant reste du texte : dans un PDF, le
+      // lien ramènerait le lecteur à la page qu'il est déjà en train de lire.
+      if (s.page) {
+        return s.page === ctx.cle
+          ? echapper(s.link)
+          : `[${echapper(s.link)}](${adressePage(s.page, ctx.lang)})`;
+      }
       if (s.link) return `[${echapper(s.link)}](${s.href})`;
       return echapper(s.text ?? '');
     })
     .join('');
 
 /** Un DocumentLegalTexte devient du Markdown. */
-function versMarkdown(texte) {
+function versMarkdown(texte, ctx) {
   const lignes = [`% ${texte.title}`, '', `**${texte.eyebrow}**`, ''];
   if (texte.maj) lignes.push(`*${texte.maj}*`, '');
   for (const section of texte.sections) {
     lignes.push(`## ${echapper(section.heading)}`, '');
-    for (const bloc of section.blocs) lignes.push(rendreBloc(bloc), '');
+    for (const bloc of section.blocs) lignes.push(rendreBloc(bloc, ctx), '');
   }
   return lignes.join('\n');
 }
@@ -133,13 +171,16 @@ const entete = (titre) => `
 `;
 
 const DOCUMENTS = [
-  { nom: 'cgv-fr', titre: 'Studio Caducée — Conditions générales de vente', lang: 'fr', source: () => versMarkdown(cgv('fr')) },
-  { nom: 'cgv-en', titre: 'Studio Caducée — Terms and conditions of sale', lang: 'en', source: () => versMarkdown(cgv('en')) },
-  { nom: 'annexe-rgpd-fr', titre: 'Studio Caducée — Annexe RGPD de sous-traitance', lang: 'fr', source: () => versMarkdown(sousTraitance('fr')) },
-  { nom: 'annexe-rgpd-en', titre: 'Studio Caducée — GDPR processing annex', lang: 'en', source: () => versMarkdown(sousTraitance('en')) },
-  { nom: 'mentions-legales-fr', titre: 'Studio Caducée — Mentions légales', lang: 'fr', source: () => versMarkdown(legal.fr) },
-  { nom: 'mentions-legales-en', titre: 'Studio Caducée — Legal notice', lang: 'en', source: () => versMarkdown(legal.en) },
+  { nom: 'cgv-fr', titre: 'Studio Caducée — Conditions générales de vente', lang: 'fr', cle: 'cgv', source: (ctx) => versMarkdown(cgv('fr'), ctx) },
+  { nom: 'cgv-en', titre: 'Studio Caducée — Terms and conditions of sale', lang: 'en', cle: 'cgv', source: (ctx) => versMarkdown(cgv('en'), ctx) },
+  { nom: 'annexe-rgpd-fr', titre: 'Studio Caducée — Annexe RGPD de sous-traitance', lang: 'fr', cle: 'sous-traitance', source: (ctx) => versMarkdown(sousTraitance('fr'), ctx) },
+  { nom: 'annexe-rgpd-en', titre: 'Studio Caducée — GDPR processing annex', lang: 'en', cle: 'sous-traitance', source: (ctx) => versMarkdown(sousTraitance('en'), ctx) },
+  { nom: 'confidentialite-fr', titre: 'Studio Caducée — Politique de confidentialité', lang: 'fr', cle: 'politique-de-confidentialite', source: (ctx) => versMarkdown(confidentialite('fr'), ctx) },
+  { nom: 'confidentialite-en', titre: 'Studio Caducée — Privacy policy', lang: 'en', cle: 'politique-de-confidentialite', source: (ctx) => versMarkdown(confidentialite('en'), ctx) },
+  { nom: 'mentions-legales-fr', titre: 'Studio Caducée — Mentions légales', lang: 'fr', cle: 'mentions-legales', source: (ctx) => versMarkdown(legal.fr, ctx) },
+  { nom: 'mentions-legales-en', titre: 'Studio Caducée — Legal notice', lang: 'en', cle: 'mentions-legales', source: (ctx) => versMarkdown(legal.en, ctx) },
   { nom: 'formulaire-retractation', titre: 'Studio Caducée — Formulaire de rétractation', lang: 'fr', fichier: 'FORMULAIRE-RETRACTATION.md' },
+  { nom: 'modele-devis', titre: 'Studio Caducée — Modèle de devis', lang: 'fr', fichier: 'MODELE-DEVIS.md' },
   { nom: 'deroule-client', titre: 'Studio Caducée — Déroulé client', lang: 'fr', fichier: 'DEROULE-CLIENT.md' },
 ];
 
@@ -148,7 +189,11 @@ mkdirSync(TEMP, { recursive: true });
 let produits = 0;
 for (const doc of DOCUMENTS) {
   const md = nettoyer(
-    doc.fichier ? readFileSync(join(RACINE, doc.fichier), 'utf8') : doc.source()
+    adresser(
+      doc.fichier
+        ? readFileSync(join(RACINE, doc.fichier), 'utf8')
+        : doc.source({ lang: doc.lang, cle: doc.cle })
+    )
   );
   const cheminMd = join(TEMP, `${doc.nom}.md`);
   const cheminPdf = join(SORTIE, `${doc.nom}.pdf`);
@@ -177,9 +222,31 @@ for (const doc of DOCUMENTS) {
   }
 }
 
+/**
+ * La facture ferme la marche, et sépare son sort de celui des PDF.
+ *
+ * Elle ne passe ni par pandoc ni par LaTeX : un modèle à remplir se calcule, il
+ * ne se compose pas. Son échec ne doit donc pas se confondre avec celui d'un
+ * contrat — d'où le compteur distinct, et le code de sortie non nul si elle
+ * manque.
+ */
+const CLASSEUR = join(SORTIE, 'modele-facture.xlsx');
+try {
+  await genererFacture(CLASSEUR);
+  const ko = (statSync(CLASSEUR).size / 1024).toFixed(0);
+  console.log(`  ✓ ${'modele-facture.xlsx'.padEnd(26)} ${ko.padStart(5)} Ko`);
+} catch (e) {
+  console.error(`  ✗ modele-facture.xlsx — ${e.message}`);
+  process.exitCode = 1;
+}
+
+console.log(
+  `\n  adresses écrites dans les documents : ${urlPublique()}` +
+    (SITE.enLigne ? '' : '  (repli GitHub Pages — la production est déclarée hors ligne)')
+);
 console.log(
   produits === DOCUMENTS.length
-    ? `\n  ${produits} documents dans documents/`
+    ? `\n  ${produits} documents dans documents/, plus le modèle de facture`
     : `\n  ${produits}/${DOCUMENTS.length} produits — voir les erreurs ci-dessus`
 );
 if (!existsSync(join(RACINE, 'FORMULAIRE-RETRACTATION.md'))) process.exitCode = 1;

@@ -108,9 +108,13 @@ const signature = [
   <div class="container footer-legal">
     <p>© {year} Studio Caducée — {t.rights}</p>
     <nav class="footer-legal-liens" aria-label={t.legal}>
+      <!-- L'annexe RGPD n'est PAS ici : c'est une annexe contractuelle, pas une
+           politique du site. Elle reste publiée, atteinte depuis l'article 15
+           des CGV et depuis la politique de confidentialité, et jointe au devis
+           quand un abonnement d'hébergement est souscrit. -->
       <a href={localePath(lang, 'mentions-legales')}>{t.legal}</a>
+      <a href={localePath(lang, 'politique-de-confidentialite')}>{t.confidentialite}</a>
       <a href={localePath(lang, 'cgv')}>{t.cgv}</a>
-      <a href={localePath(lang, 'sous-traitance')}>{t.cgvAnnexe}</a>
       <a href={localePath(lang, 'qui-sommes-nous')}>{t.equipe}</a>
     </nav>
   </div>

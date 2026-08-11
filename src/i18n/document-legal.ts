@@ -12,6 +12,13 @@
  * `set:html`, un lien passé en chaîne perdrait donc sa couleur.
  */
 
+/** Les trois documents juridiques du pied de page. */
+export type CleDoc =
+  | 'mentions-legales'
+  | 'politique-de-confidentialite'
+  | 'cgv'
+  | 'sous-traitance';
+
 /** Fragment d'un paragraphe. */
 export type SegmentLegal =
   /** Texte brut. */
@@ -19,7 +26,22 @@ export type SegmentLegal =
   /** Retour à la ligne — pour les blocs d'adresse. */
   | { readonly br: true }
   /** Lien (mailto:, tel:, externe), identique dans les deux langues. */
-  | { readonly link: string; readonly href: string };
+  | { readonly link: string; readonly href: string }
+  /**
+   * Renvoi vers un autre document juridique, désigné par sa PAGE et non par
+   * son adresse.
+   *
+   * Ces textes alimentent deux rendus qui n'ont pas la même notion d'adresse :
+   * le site attend un chemin relatif, préfixé de la base et de la langue ; les
+   * PDF partent chez le client et n'ont que des URL absolues. Un `href` écrit
+   * en dur ne peut servir qu'un seul des deux — et c'est le PDF, muet sur son
+   * lien mort, qui perdrait.
+   *
+   * Le segment déclare donc la destination, chaque rendu la résolvant :
+   * `localePath()` pour le site, `urlPublique()` pour les PDF. Un renvoi vers
+   * la page courante s'affiche en texte simple, dans les deux.
+   */
+  | { readonly link: string; readonly page: CleDoc };
 
 /**
  * Bloc de contenu dans une section.

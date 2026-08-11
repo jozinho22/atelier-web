@@ -1,0 +1,16 @@
+---
+/**
+ * Politique de confidentialité — information des visiteurs, article 13 du RGPD.
+ *
+ * À ne pas confondre avec l'annexe RGPD de sous-traitance : ici Studio Caducée
+ * est responsable de traitement de ses propres visiteurs ; là, sous-traitant de
+ * son client. Voir l'en-tête de src/i18n/confidentialite.ts.
+ */
+import DocumentLegal from '../DocumentLegal.astro';
+import { splitPath } from '../../lib/i18n';
+import { confidentialite } from '../../i18n/confidentialite';
+
+const { lang } = splitPath(Astro.url.pathname);
+---
+
+<DocumentLegal texte={confidentialite(lang)} doc="politique-de-confidentialite" />

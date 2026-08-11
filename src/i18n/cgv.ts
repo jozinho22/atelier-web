@@ -474,7 +474,11 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'Le présent article ne vise que les données du Client lui-même. Lorsque le Prestataire héberge un site collectant des données pour le compte du Client, celui-ci devient responsable de traitement et le Prestataire son sous-traitant : cette relation est régie par l’annexe RGPD de sous-traitance, jointe au devis et publiée sur le présent site.',
+                text: 'Le présent article ne vise que les données du Client lui-même. Lorsque le Prestataire héberge un site collectant des données pour le compte du Client, celui-ci devient responsable de traitement et le Prestataire son sous-traitant : cette relation est régie par l’',
+              },
+              { link: 'annexe RGPD de sous-traitance', page: 'sous-traitance' },
+              {
+                text: ', jointe au devis et publiée sur le présent site.',
               },
             ],
             [
@@ -902,7 +906,11 @@ export function cgv(lang: Lang): DocumentLegalTexte {
             ],
             [
               {
-                text: 'This article covers only the Client’s own data. Where the Provider hosts a website collecting data on the Client’s behalf, the Client becomes the controller and the Provider its processor: that relationship is governed by the GDPR processing annex, attached to the quote and published on this site.',
+                text: 'This article covers only the Client’s own data. Where the Provider hosts a website collecting data on the Client’s behalf, the Client becomes the controller and the Provider its processor: that relationship is governed by the ',
+              },
+              { link: 'GDPR processing annex', page: 'sous-traitance' },
+              {
+                text: ', attached to the quote and published on this site.',
               },
             ],
             [

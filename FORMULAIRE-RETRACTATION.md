@@ -1,8 +1,10 @@
 # Formulaire type de rétractation
 
 **À joindre à chaque devis adressé à un client consommateur.** L'article 6 des
-[conditions générales de vente](src/i18n/cgv.ts) en affirme la présence : sans ce
-document, les CGV annoncent une pièce qui n'existe pas.
+conditions générales de vente en affirme la présence : sans ce document, les CGV
+annoncent une pièce qui n'existe pas.
+
+Conditions générales de vente : {{URL_CGV}}
 
 Le texte reprend le modèle fixé par l'annexe à l'article R221-1 du code de la
 consommation. **Sa formulation ne doit pas être modifiée** : elle est
@@ -28,6 +30,7 @@ CGV rappelle qu'une déclaration écrite dénuée d'ambiguïté suffit. Ce docum
 > Studio Caducée — Josselin DOUINEAU
 > 9bis Kerscoul, 22540 LOUARGAT
 > josselin.douineau@studio-caducee.com
+> {{URL_SITE}}
 >
 > Je vous notifie par la présente ma rétractation du contrat portant sur la
 > prestation de services ci-dessous :
@@ -59,6 +62,7 @@ CGV rappelle qu'une déclaration écrite dénuée d'ambiguïté suffit. Ce docum
 > Studio Caducée — Josselin DOUINEAU
 > 9bis Kerscoul, 22540 LOUARGAT, France
 > josselin.douineau@studio-caducee.com
+> {{URL_SITE}}
 >
 > I hereby give notice of my withdrawal from the contract for the supply of the
 > following service:

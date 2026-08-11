@@ -31,11 +31,17 @@ Rien de contractuel. Deux choses à obtenir :
 
 Gratuit, détaillé (périmètre, prix, délai prévisionnel), **valable 30 jours**.
 
+**Le devis EST le contrat** : il n'y a pas d'acte séparé à signer. Les blocs
+contractuels à y faire figurer — mention d'acceptation, « bon pour accord »,
+interlocuteur unique, tarif horaire — sont rassemblés dans
+[MODELE-DEVIS.md](MODELE-DEVIS.md), avec l'arbre de décision des pièces à
+joindre.
+
 Ce qu'il emporte avec lui :
 
 | pièce | quand | article |
 | --- | --- | --- |
-| les CGV | **toujours** | 1 |
+| les CGV, en PDF | client **consommateur** — sinon la mention de renvoi suffit (L441-1) | 1 |
 | [formulaire de rétractation](FORMULAIRE-RETRACTATION.md) | client **consommateur** | 6 |
 | cahier des charges | pack Signature, ou devis > 3 000 € | 3 |
 | annexe RGPD de sous-traitance | si abonnement d'hébergement | 15 |
@@ -96,23 +102,34 @@ Trois choses convergent, et c'est le seul vrai levier du parcours :
 
 Mettre en ligne « en attendant le virement » les fait perdre tous les trois.
 
+La facture se remplit dans `documents/modele-facture.xlsx`
+(`npm run generer-documents`). L'acompte déjà encaissé a fait l'objet de **sa
+propre facture**, avec son propre numéro : la facture de solde le déduit, elle
+ne l'efface pas. Reporter les deux au registre — la séquence des numéros doit
+rester continue.
+
 ## 10 · Mise en ligne
 
 Sur le nom de domaine définitif.
 
 ## 11 · L'abonnement, s'il est souscrit — article 11
 
-59 €/mois : hébergement, nom de domaine, mises à jour techniques. Sans
-engagement, préavis d'un mois, mois entamé dû.
+59 €/mois : hébergement et mises à jour techniques. Sans engagement, préavis
+d'un mois, mois entamé dû.
+
+**Le nom de domaine n'en fait pas partie** : il est souscrit par le client, à son
+nom. Tu l'accompagnes à l'enregistrement, puis tu gères la configuration
+technique — il n'y touche jamais.
 
 C'est à ce moment seulement que le Prestataire devient **sous-traitant RGPD** et
 que l'annexe s'applique.
 
 À tenir :
 
-- **prévenir 30 jours avant l'échéance du domaine.** C'est une obligation de
-  l'article 11, et le risque le plus lourd de tout le contrat : un domaine perdu
-  ne se rattrape pas ;
+- **signaler l'échéance du domaine** quand tu en as connaissance. Ce n'est plus
+  une obligation depuis que le client en est titulaire — et c'est ce changement
+  qui a retiré du contrat son risque le plus lourd : un domaine perdu par ton
+  oubli ne se rattrape pas ;
 - en cas d'impayé, **mise en demeure → 15 jours → suspension → résiliation à
   30 jours**. La suspension n'efface rien, et la réversibilité joue même dans ce
   cas : retenir les fichiers serait un moyen de pression, pas un droit.
@@ -130,8 +147,8 @@ que l'annexe s'applique.
 
 | | pourquoi |
 | --- | --- |
-| modèle de devis numéroté | rien ne le remplace pour former le contrat |
-| modèle de facture conforme | numérotation séquentielle, SIRET, mention 293 B |
+| ~~modèle de devis~~ | **fait** — [MODELE-DEVIS.md](MODELE-DEVIS.md) |
+| ~~modèle de facture~~ | **fait** — `documents/modele-facture.xlsx`, feuilles Facture et Registre |
 | modèle de cahier des charges | pour ne pas l'improviser au premier Signature |
 | compte Stripe et liens de paiement | prévu à l'article 5 |
 | attestation RC Pro | souvent exigée avant signature par les structures un peu grandes |

@@ -107,42 +107,9 @@ export const legal = {
         blocs: [
           [
             {
-              text: "Ce site ne dépose aucun cookie de suivi et n'emploie aucun outil de mesure d'audience.",
+              text: 'Ce site ne dépose aucun cookie de suivi et n’emploie aucun outil de mesure d’audience. Le détail de ce qui est collecté, des destinataires, des durées de conservation et de vos droits figure dans la ',
             },
-          ],
-          ...(SERVEUR_DISPONIBLE
-            ? [
-                [
-                  {
-                    text: 'Le formulaire de contact collecte trois données : votre nom, votre adresse e-mail et le message que vous écrivez. Elles servent uniquement à vous répondre et à préparer un éventuel devis — jamais à de la prospection, et elles ne sont ni vendues ni transmises à des tiers à cette fin. La base légale est votre demande elle-même, c’est-à-dire l’exécution de mesures précontractuelles prises à votre initiative (article 6.1.b du RGPD).',
-                  },
-                ],
-                [
-                  {
-                    text: 'Deux sous-traitants interviennent : Resend, pour l’acheminement du message, et Cloudflare, pour la protection anti-robots du formulaire, qui reçoit à ce titre votre adresse IP. Le message est ensuite conservé dans la boîte de réception du responsable de traitement pendant trois ans à compter du dernier échange, puis supprimé.',
-                  },
-                ],
-                [
-                  {
-                    text: 'Ces prestataires, comme l’hébergeur du site, sont établis aux États-Unis : les données transitant par le site peuvent faire l’objet d’un transfert hors de l’Union européenne, encadré par les clauses contractuelles types de la Commission européenne et/ou le cadre de protection des données UE—États-Unis.',
-                  },
-                ],
-              ]
-            : [
-                [
-                  {
-                    text: 'Cette version du site ne comporte aucun formulaire : les échanges se font uniquement par e-mail ou téléphone, à votre initiative.',
-                  },
-                ],
-              ]),
-          [
-            {
-              text: 'Conformément au RGPD, vous pouvez exercer vos droits (accès, rectification, suppression, opposition) en écrivant à ',
-            },
-            {
-              link: 'josselin.douineau@studio-caducee.com',
-              href: 'mailto:josselin.douineau@studio-caducee.com',
-            },
+            { link: 'politique de confidentialité', page: 'politique-de-confidentialite' },
             { text: '.' },
           ],
         ],
@@ -152,7 +119,11 @@ export const legal = {
         blocs: [
           [
             {
-              text: "Le présent site est soumis au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire, selon les modalités prévues par les conditions générales de vente. À défaut d'accord, les tribunaux français sont seuls compétents.",
+              text: "Le présent site est soumis au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire, selon les modalités prévues par les ",
+            },
+            { link: 'conditions générales de vente', page: 'cgv' },
+            {
+              text: ". À défaut d'accord, les tribunaux français sont seuls compétents.",
             },
           ],
         ],
@@ -240,42 +211,9 @@ export const legal = {
         blocs: [
           [
             {
-              text: 'This site sets no tracking cookies and uses no audience analytics.',
+              text: 'This site sets no tracking cookies and uses no audience analytics. What is collected, who receives it, how long it is kept, and what your rights are, are all set out in the ',
             },
-          ],
-          ...(SERVEUR_DISPONIBLE
-            ? [
-                [
-                  {
-                    text: 'The contact form collects three items: your name, your email address, and the message you write. They are used solely to reply to you and to prepare a possible quote — never for marketing, and they are neither sold nor passed to third parties for that purpose. The legal basis is your own request, that is, pre-contractual steps taken at your initiative (Article 6(1)(b) GDPR).',
-                  },
-                ],
-                [
-                  {
-                    text: 'Two processors are involved: Resend, for delivering the message, and Cloudflare, for the form’s anti-bot protection, which receives your IP address for that purpose. The message is then kept in the controller’s mailbox for three years from the last exchange, and deleted thereafter.',
-                  },
-                ],
-                [
-                  {
-                    text: 'These providers, like the site’s host, are established in the United States: data passing through the site may be transferred outside the European Union, under the European Commission’s standard contractual clauses and/or the EU–US Data Privacy Framework.',
-                  },
-                ],
-              ]
-            : [
-                [
-                  {
-                    text: 'This version of the site has no form: all communication happens by email or phone, and only at your initiative.',
-                  },
-                ],
-              ]),
-          [
-            {
-              text: 'In accordance with the GDPR, you may exercise your rights (access, rectification, erasure, objection) by writing to ',
-            },
-            {
-              link: 'josselin.douineau@studio-caducee.com',
-              href: 'mailto:josselin.douineau@studio-caducee.com',
-            },
+            { link: 'privacy policy', page: 'politique-de-confidentialite' },
             { text: '.' },
           ],
         ],
@@ -285,7 +223,11 @@ export const legal = {
         blocs: [
           [
             {
-              text: 'This site is governed by French law. In the event of a dispute, an amicable settlement will be sought before any legal action, as set out in the terms of sale. Failing agreement, the French courts alone have jurisdiction.',
+              text: 'This site is governed by French law. In the event of a dispute, an amicable settlement will be sought before any legal action, as set out in the ',
+            },
+            { link: 'terms of sale', page: 'cgv' },
+            {
+              text: '. Failing agreement, the French courts alone have jurisdiction.',
             },
           ],
         ],
