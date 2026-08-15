@@ -140,7 +140,7 @@ elle est tout aussi publique.
 
 En développement, **le domaine affiché suit le lien** — voir
 `jozinho22.github.io/...` sous une carte est le signe qu'on regarde un repli.
-Annoncer « api-jawa.fr » sous un lien qui mène ailleurs tromperait le lecteur.
+Annoncer « apijawa.fr » sous un lien qui mène ailleurs tromperait le lecteur.
 
 Si toutes les réalisations passent hors ligne, la section entière s'efface :
 mieux vaut pas de section qu'un titre au-dessus d'un carrousel vide.
@@ -162,7 +162,7 @@ Elle compare les icônes **perceptuellement**, après aplatissement sur blanc et
 remise à la même taille — une comparaison octet à octet serait sans valeur, le
 fichier local étant un dérivé encodé autrement.
 
-**État au dernier passage** : `api-jawa.fr` ne résout pas ; son lien montre
+**État au dernier passage** : `apijawa.fr` ne résout pas ; son lien montre
 `jozinho22.github.io/api-jawa` et son icône vient du dépôt. Les trois autres
 sont en ligne et à jour.
 

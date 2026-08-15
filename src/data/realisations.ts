@@ -34,7 +34,7 @@
  * champ `iconeVerifiee` note simplement si elle a pu être confrontée à la
  * production : un `false` signale une icône venue du dépôt, à revérifier.
  *
- * Le domaine AFFICHÉ suit le lien : annoncer « api-jawa.fr » sous un lien qui
+ * Le domaine AFFICHÉ suit le lien : annoncer « apijawa.fr » sous un lien qui
  * mène ailleurs tromperait le visiteur — et en développement, voir
  * `jozinho22.github.io/...` sous la carte est le signe qu'on regarde un repli.
  */
@@ -63,10 +63,10 @@ export interface Realisation {
 
 export const REALISATIONS: readonly Realisation[] = [
   {
-    // `api-jawa.fr` ne résout plus. En développement, le lien bascule donc sur
+    // `apijawa.fr` ne résout plus. En développement, le lien bascule donc sur
     // la copie GitHub Pages ; dans le site construit, la carte n'apparaît pas.
     // L'icône vient du dépôt, faute d'avoir pu être confrontée au site.
-    url: 'https://api-jawa.fr',
+    url: 'https://apijawa.fr',
     depotRepli: 'api-jawa',
     icone: 'api-jawa.webp',
     accent: '#c98a3f',
